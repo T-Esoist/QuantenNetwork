@@ -1,0 +1,50 @@
+class QuantenKnoten:
+    def __init__(self, name, qubits):
+        self.name = name
+        self.qubits = qubits
+        self.aktiviert = False
+
+    def aktivieren(self):
+        self.aktiviert = True
+        print(f"{self.name} aktiviert.")
+
+    def status(self):
+        status = "aktiviert" if self.aktiviert else "deaktiviert"
+        return f"Knoten: {self.name}, Qubits: {self.qubits}, Status: {status}"
+
+class QuantenNetzwerk:
+    def __init__(self):
+        self.knoten = []
+
+    def knoten_hinzufuegen(self, knoten):
+        self.knoten.append(knoten)
+        print(f"{knoten.name} wurde zum Netzwerk hinzugefügt.")
+
+    def aktivierung_durchfuehren(self):
+        print("Aktivierung des QuantenNetworks...")
+        for knoten in self.knoten:
+            knoten.aktivieren()
+
+    def status_anzeigen(self):
+        print("\nStatus des QuantenNetworks:")
+        for knoten in self.knoten:
+            print(knoten.status())
+
+def main():
+    # Erstellen des QuantenNetzwerks
+    quanten_netzwerk = QuantenNetzwerk()
+
+    # Hinzufügen von Quantenknoten
+    quanten_netzwerk.knoten_hinzufuegen(QuantenKnoten("Knoten 1", 4))
+    quanten_netzwerk.knoten_hinzufuegen(QuantenKnoten("Knoten 2", 5))
+    quanten_netzwerk.knoten_hinzufuegen(QuantenKnoten("Knoten 3", 3))
+
+    # Aktivierung des Netzwerks
+    quanten_netzwerk.aktivierung_durchfuehren()
+
+    # Anzeigen des Status des Netzwerks
+    quanten_netzwerk.status_anzeigen()
+
+# Start des Programms
+if __name__ == "__main__":
+    main()
