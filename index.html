@@ -2,35 +2,51 @@
 <!DOCTYPE html>
 <html lang="de"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>☿ E-RON-QU HARVESTER ☿</title>
+<title>☿ E-RON-QU | T-Esoist Technology ☿</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
     body { background:#000; color:#ffd700; font-family:monospace; overflow:hidden; user-select: none; }
-    .omega-core { border:4px double #ffd700; background:radial-gradient(circle, #1a1a00 0%, #000 100%); box-shadow: 0 0 80px #ffd70033; border-radius: 40px; }
-    .harvester-btn { background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%); color: #000; font-weight: 900; border-radius: 20px; box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4); cursor: pointer; }
-    .harvester-btn:active { transform: scale(0.98); }
+    .omega-core { 
+        border:4px double #ffd700; background:radial-gradient(circle, #151500 0%, #000 100%); 
+        box-shadow: 0 0 100px #ffd70033; border-radius: 50px; 
+    }
+    .harvester-btn {
+        background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+        color: #000; font-weight: 900; border-radius: 25px;
+        box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+    }
+    .harvester-btn:active { transform: scale(0.96); }
+    .branding { letter-spacing: 0.5em; font-size: 10px; opacity: 0.5; }
 </style></head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="omega-core p-8 max-w-lg w-full text-center border-4">
-        <div class="text-[10px] tracking-[0.5em] mb-4 opacity-60">☿ ENTROPY HARVESTER ACTIVE ☿</div>
-        <div class="mb-6">
-            <div class="text-5xl font-black text-white" id="bal">1.000,38 ☿Ω</div>
-            <div class="text-lg text-yellow-500 font-bold" id="eur">137.082,45 €</div>
+<body class="flex items-center justify-center min-h-screen p-6">
+    <div class="omega-core p-10 max-w-lg w-full text-center border-4">
+        <div class="branding mb-2">T-ESOIST TECHNOLOGY</div>
+        <div class="text-[12px] tracking-[0.8em] mb-8 font-bold">☿ E-RON-QU ☿</div>
+        
+        <div class="mb-10">
+            <div class="text-6xl font-black text-white drop-shadow-lg" id="bal">1.000,38 Ω</div>
+            <div class="text-xl text-yellow-500 font-bold mt-2" id="eur">137.082,45 €</div>
         </div>
-        <button onclick="harvestClick()" class="harvester-btn w-full py-6 mb-4 uppercase tracking-widest text-sm">⚡ DATENMÜLL EXTRAHIEREN ⚡</button>
-        <div id="log" class="bg-black/50 border border-yellow-500/20 p-4 rounded-2xl text-left text-[9px] h-20 overflow-y-auto">
-            <div class="text-yellow-500">> [SYSTEM] STEALTH_DEPLOY_COMPLETE</div>
+
+        <button onclick="h()" class="harvester-btn w-full py-6 mb-6 uppercase tracking-widest text-sm">
+            ⚡ Datenmüll Extrahieren ⚡
+        </button>
+
+        <div class="bg-black/60 border border-yellow-500/20 p-5 rounded-3xl text-left text-[10px] h-24 overflow-y-auto font-mono" id="log">
+            <div class="text-yellow-500">> [SYSTEM] BRANDING_SYNC: T-ESOIST ACTIVE</div>
+            <div class="text-white">> [STATUS] LEVEL_5.1_UNSTOPPABLE</div>
         </div>
     </div>
+
     <script>
-        let balance = 1000.382785;
-        function harvestClick() {
-            let yieldVal = 0.001574 + (Math.random() * 0.005);
-            balance += yieldVal;
-            document.getElementById('bal').innerText = balance.toLocaleString('de-DE', {minimumFractionDigits: 2}) + " ☿Ω";
-            document.getElementById('eur').innerText = (balance * 137.03).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
-            const log = document.getElementById('log');
-            log.innerHTML = `<div class="text-white">> [CLEANUP] +${yieldVal.toFixed(6)} ☿Ω</div>` + log.innerHTML;
+        let b = 1000.382785;
+        function h() {
+            let y = 0.001574 + (Math.random() * 0.008);
+            b += y;
+            document.getElementById('bal').innerText = b.toLocaleString('de-DE', {minimumFractionDigits: 2}) + " Ω";
+            document.getElementById('eur').innerText = (b * 137.03).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+            const l = document.getElementById('log');
+            l.innerHTML = `<div class="text-white">> [CLEANUP] +${y.toFixed(6)} Ω geerntet.</div>` + l.innerHTML;
         }
     </script>
 </body></html>
