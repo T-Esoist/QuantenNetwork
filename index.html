@@ -3,59 +3,49 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>T Esoist | Global Quantum Grid</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T Esoist Live Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #020408; color: #00ffcc; font-family: 'Courier New', monospace; }
-        .neon-border { border: 1px solid #00ffcc; box-shadow: 0 0 25px rgba(0,255,204,0.3); }
-        .animate-pulse-fast { animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        body { background: #020408; color: #00ffcc; font-family: monospace; }
+        .neon-border { border: 1px solid #00ffcc; box-shadow: 0 0 15px #00ffcc55; }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen p-5">
-    <div class="neon-border p-8 bg-black/90 rounded-xl max-w-lg w-full text-center">
-        <h1 class="text-2xl font-bold mb-2 tracking-[0.3em] text-white">T ESOIST LIVE</h1>
-        <div class="inline-block px-3 py-1 bg-green-900/30 rounded-full mb-6">
-            <span class="text-xs text-green-400 animate-pulse-fast">● SYSTEM ACTIVE</span>
-        </div>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+    <div class="neon-border p-8 bg-black rounded-xl max-w-md w-full text-center">
+        <h1 class="text-2xl font-bold mb-6 tracking-tighter">T ESOIST QUANTUM GRID</h1>
         
-        <div id="stats" class="space-y-6">
+        <div class="space-y-6">
             <div>
-                <p class="text-[0.6rem] text-gray-500 uppercase tracking-widest">Master Node ID</p>
-                <p id="node-id" class="text-lg font-bold text-pink-500 font-mono">Connecting...</p>
+                <p class="text-xs text-gray-500 uppercase">Guthaben</p>
+                <p id="esi" class="text-4xl font-black text-white">0.0000 ESI</p>
             </div>
-            
-            <div class="py-6 border-y border-gray-800">
-                <p class="text-[0.6rem] text-gray-500 uppercase mb-1">ESI Accumulation</p>
-                <p class="text-5xl font-black"><span id="esi-balance">0.0000</span></p>
-            </div>
-
-            <div class="flex justify-between text-[0.7rem] text-gray-400">
-                <span>BLOCK: <span id="block-height" class="text-white">0</span></span>
-                <span>STATUS: <span class="text-white font-bold">STABLE</span></span>
+            <div class="py-4 border-t border-gray-800">
+                <p class="text-xs text-gray-500 uppercase">Marktwert (Live)</p>
+                <p id="eur" class="text-3xl font-bold text-pink-500">0.00 €</p>
             </div>
         </div>
 
-        <div class="mt-10">
-            <a href="https://twitter.com/intent/tweet?text=Ich+baue+am+T+Esoist+Quantum+Network+mit!+Check+meine+Live-Node:+https://t-esoist.github.io/QuantenNetwork/" 
-               target="_blank" 
-               class="bg-[#1DA1F2] text-white px-4 py-2 rounded-full text-xs font-bold hover:scale-105 transition block">
-               PROJEKT AUF X TEILEN
-            </a>
+        <div class="mt-8 text-[10px] text-gray-600">
+            Node-ID: <span id="node">...</span> | Status: <span class="text-green-500">ACTIVE</span>
         </div>
     </div>
 
     <script>
-        async function fetchStats() {
+        async function sync() {
             try {
-                const r = await fetch('LIVE_MINING_STATS.json?nocache=' + Math.random());
-                const d = await r.json();
-                document.getElementById('node-id').innerText = d.node_id;
-                document.getElementById('esi-balance').innerText = d.total_esi;
-                document.getElementById('block-height').innerText = d.current_height;
-            } catch (e) { console.log("Synchronisiere..."); }
+                const r1 = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
+                const d1 = await r1.json();
+                const r2 = await fetch('MARKET_DATA.json?t=' + Date.now());
+                const d2 = await r2.json();
+                
+                document.getElementById('esi').innerText = d1.total_esi + ' ESI';
+                document.getElementById('eur').innerText = d2.total_value_eur + ' €';
+                document.getElementById('node').innerText = d1.node_id;
+            } catch (e) { console.log("Synchronisiere Daten..."); }
         }
-        setInterval(fetchStats, 5000);
-        fetchStats();
+        setInterval(sync, 5000);
+        sync();
     </script>
 </body>
 </html>
