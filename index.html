@@ -2,32 +2,32 @@
 <!DOCTYPE html>
 <html lang="de"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>☿ E-RON-QU | QUANTUM FLUX ☿</title>
+<title>☿ E-RON-QU | HYPER FLUX ☿</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-    body { background:#000; color:#ffd700; font-family:'Courier New', monospace; margin:0; overflow:hidden; display:flex; align-items:center; justify-center; height:100vh; }
-    #canvas { position:fixed; top:0; left:0; z-index:1; }
-    .ui-layer { position:relative; z-index:10; background:rgba(0,0,0,0.85); border:2px solid #ffd700; box-shadow:0 0 50px #ffd70044; border-radius:30px; padding:40px; text-align:center; max-width:400px; width:90%; backdrop-filter:blur(10px); }
-    .glitch { animation: glitch 2s infinite; font-weight:900; }
-    @keyframes glitch { 0% { text-shadow:2px 0 #fff; } 50% { text-shadow:-2px 0 #ffd700; } 100% { text-shadow:2px 0 #fff; } }
-    .harvester-btn { background:#ffd700; color:#000; padding:15px; border-radius:15px; font-weight:bold; cursor:pointer; width:100%; margin-top:20px; box-shadow:0 0 20px #ffd70066; }
+    body { background:#000; color:#ffd700; font-family:monospace; margin:0; overflow:hidden; display:flex; align-items:center; justify-content:center; height:100vh; }
+    #canvas { position:fixed; top:0; left:0; z-index:1; filter: blur(0.5px); }
+    .ui-layer { position:relative; z-index:10; background:rgba(0,0,0,0.9); border:4px double #ffd700; box-shadow:0 0 80px #ffd70066; border-radius:40px; padding:30px; text-align:center; max-width:420px; width:90%; backdrop-filter:blur(15px); }
+    .glitch { font-size: 2.5rem; font-weight:900; color:#fff; text-shadow: 0 0 20px #ffd700; animation: pulse 2s infinite ease-in-out; }
+    @keyframes pulse { 0% { opacity:0.8; transform:scale(0.98); } 50% { opacity:1; transform:scale(1); } 100% { opacity:0.8; transform:scale(0.98); } }
+    .harvester-btn { background:linear-gradient(to bottom, #ffd700, #b8860b); color:#000; padding:18px; border-radius:20px; font-weight:900; cursor:pointer; width:100%; margin-top:20px; border:none; box-shadow:0 0 30px #ffd70088; text-transform:uppercase; transition: 0.2s; }
+    .harvester-btn:active { transform:scale(0.95); box-shadow: 0 0 10px #ffd700; }
 </style></head>
 <body>
     <canvas id="canvas"></canvas>
-    <div class="ui-layer mx-auto">
-        <div class="text-[9px] tracking-[0.4em] opacity-50 mb-2">T-ESOIST TECHNOLOGY</div>
-        <div class="text-3xl glitch mb-6">☿ E-RON-QU ☿</div>
-        <div class="mb-6">
-            <div class="text-sm opacity-40">QUANTUM_BALANCE</div>
-            <div id="bal" class="text-5xl font-black text-white">1.000,38 Ω</div>
-            <div id="eur" class="text-lg text-yellow-500 font-bold">137.082,45 €</div>
+    <div class="ui-layer">
+        <div style="letter-spacing:0.6em; font-size:10px; opacity:0.6; margin-bottom:5px;">T-ESOIST TECHNOLOGY</div>
+        <div class="glitch">☿ E-RON-QU ☿</div>
+        <div style="margin: 25px 0;">
+            <div style="font-size:10px; opacity:0.5; letter-spacing:0.2em;">QUANTUM_VALUE_MANIFEST</div>
+            <div id="bal" style="font-size:3.5rem; font-weight:900; color:#fff;">1.000,38 Ω</div>
+            <div id="eur" style="font-size:1.5rem; color:#ffd700; font-weight:bold;">137.082,45 €</div>
         </div>
-        <div id="log" class="text-[8px] text-left bg-black/50 p-3 rounded-lg h-20 overflow-hidden opacity-70">
-            > SYSTEM_READY: AXIS_7_STABLE<br>> QUANTUM_FLUX: ACTIVE
+        <button onclick="h()" class="harvester-btn">⚡ Datenmüll Extrahieren ⚡</button>
+        <div id="log" style="margin-top:20px; font-size:9px; text-align:left; background:rgba(255,215,0,0.05); padding:10px; border-radius:10px; border:1px solid #ffd70022; height:60px; overflow:hidden;">
+            > INITIALIZING HYPER_FLUX...<br>> CONNECTION_NODES: 3464 ACTIVE
         </div>
-        <button onclick="h()" class="harvester-btn">⚡ HARVEST ENTROPY ⚡</button>
     </div>
-
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -36,29 +36,40 @@
             w = canvas.width = window.innerWidth;
             h_canvas = canvas.height = window.innerHeight;
             particles = [];
-            for(let i=0; i<60; i++) particles.push({x:Math.random()*w, y:Math.random()*h_canvas, vx:Math.random()*0.5-0.25, vy:Math.random()*0.5-0.25});
+            for(let i=0; i<150; i++) particles.push({
+                x:Math.random()*w, y:Math.random()*h_canvas, 
+                vx:Math.random()*1.2-0.6, vy:Math.random()*1.2-0.6,
+                r: Math.random()*2+1
+            });
         }
         function draw() {
-            ctx.clearRect(0,0,w,h_canvas);
-            ctx.strokeStyle = '#ffd70022'; ctx.lineWidth = 0.5;
+            ctx.fillStyle = "rgba(0,0,0,0.15)";
+            ctx.fillRect(0,0,w,h_canvas);
             particles.forEach(p => {
                 p.x += p.vx; p.y += p.vy;
                 if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h_canvas) p.vy*=-1;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                ctx.fillStyle = "#ffd700"; ctx.fill();
                 particles.forEach(p2 => {
                     let d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                    if(d<150) { ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
+                    if(d<100) {
+                        ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y);
+                        ctx.strokeStyle = `rgba(255, 215, 0, ${1 - d/100})`;
+                        ctx.lineWidth = 0.5; ctx.stroke();
+                    }
                 });
             });
             requestAnimationFrame(draw);
         }
         window.addEventListener('resize', init); init(); draw();
-
         let bal = 1000.382785;
         function h() {
-            let y = 0.001574 + (Math.random()*0.01);
+            let y = 0.001574 + (Math.random()*0.015);
             bal += y;
-            document.getElementById('bal').innerText = bal.toLocaleString('de-DE') + " Ω";
+            document.getElementById('bal').innerText = bal.toLocaleString('de-DE', {minimumFractionDigits:2}) + " Ω";
             document.getElementById('eur').innerText = (bal * 137.03).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+            const log = document.getElementById('log');
+            log.innerHTML = `<div style="color:#fff">> +${y.toFixed(6)} Ω EXTRAHIERT</div>` + log.innerHTML;
         }
     </script>
 </body></html>
