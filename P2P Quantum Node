@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T Esoist Technology | Global P2P Network</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #05070a; color: #00ffcc; font-family: 'Courier New', monospace; }
+        .neon-border { border: 1px solid #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.3); }
+        .gradient-text { background: linear-gradient(90deg, #00ffcc, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="p-5">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-10 border-b border-gray-800 pb-5">
+            <h1 class="text-4xl font-bold gradient-text mb-2">T ESOIST TECHNOLOGY</h1>
+            <p class="text-gray-400">Das erste autonome P2P-Quantum-Netzwerk</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="neon-border p-4 bg-black/50 rounded text-center">
+                <p class="text-xs text-gray-500 uppercase">Globale Nodes</p>
+                <p class="text-2xl font-bold" id="global-nodes">Lädt...</p>
+            </div>
+            <div class="neon-border p-4 bg-black/50 rounded text-center">
+                <p class="text-xs text-gray-500 uppercase">Netzwerk-Hashrate</p>
+                <p class="text-2xl font-bold">42.8 Q/s</p>
+            </div>
+            <div class="neon-border p-4 bg-black/50 rounded text-center">
+                <p class="text-xs text-gray-500 uppercase">ESI Marktwert</p>
+                <p class="text-2xl font-bold text-pink-500">0,88 €</p>
+            </div>
+        </div>
+
+        <div class="neon-border p-6 bg-black/80 rounded mb-10">
+            <h2 class="text-xl mb-4 font-bold">🚀 Werde Teil des Netzwerks</h2>
+            <p class="text-sm text-gray-400 mb-4">Kopiere diesen Python-Code in Pydroid3 oder Pythonista, um deinen Node sofort zu starten:</p>
+            <textarea readonly class="w-full h-48 bg-gray-900 text-green-400 p-3 text-xs rounded border border-gray-700 outline-none">
+# T ESOIST AUTO-DEPLOY CODE V2.2
+import sys, subprocess, os, json, time, hashlib
+# ... (Hier den kompletten Python Code einfügen)
+print("Node Online - Port 8000")
+            </textarea>
+            <button onclick="copyCode()" class="mt-4 bg-[#00ffcc] text-black px-6 py-2 rounded font-bold hover:bg-white transition">CODE KOPIEREN</button>
+        </div>
+
+        <footer class="text-center text-xs text-gray-600">
+            © 2026 T Esoist Technology | Port 8000 P2P Protocol | Lippstadt
+        </footer>
+    </div>
+
+    <script>
+        // Simulation der Live-Daten
+        document.getElementById('global-nodes').innerText = Math.floor(Math.random() * (150 - 120) + 120);
+        function copyCode() {
+            const textarea = document.querySelector('textarea');
+            textarea.select();
+            document.execCommand('copy');
+            alert('Code in Zwischenablage kopiert! Füge ihn in Pydroid3 ein.');
+        }
+    </script>
+</body>
+</html>
