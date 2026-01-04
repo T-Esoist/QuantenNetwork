@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T Esoist - Secure Quantum Wallet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #020617; color: #00ffcc; font-family: 'Courier New', monospace; }
+        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(0, 255, 204, 0.3); }
+        .neon-border { box-shadow: 0 0 20px rgba(0, 255, 204, 0.2); }
+        .scan-anim { border-right: 2px solid #00ffcc; animation: typing 4s steps(40) infinite; overflow: hidden; white-space: nowrap; }
+        @keyframes typing { from { width: 0 } to { width: 100% } }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="glass max-w-lg w-full rounded-[40px] p-8 neon-border relative">
+        <div class="absolute top-4 right-8 flex items-center space-x-2">
+            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span class="text-[10px] text-green-500 font-bold">BIO-AUTH READY</span>
+        </div>
+
+        <h1 class="text-3xl font-black tracking-tighter mb-2 italic">T-ESOIST <span class="text-white">WALLET</span></h1>
+        <p class="text-[9px] text-slate-500 mb-8 tracking-[0.4em] uppercase">Private Cloud Infrastructure v9.2</p>
+
+        <div class="bg-black/40 rounded-3xl p-8 mb-8 border border-white/5 text-center">
+            <span class="text-[10px] text-slate-500 uppercase tracking-widest">Verfügbare Atome</span>
+            <div class="text-5xl font-mono font-bold text-white my-2" id="esi-val">0.000000</div>
+            <div class="text-cyan-400 text-sm font-bold" id="eur-val">0,00 €</div>
+        </div>
+
+        <div class="space-y-4">
+            <button onclick="requestTransfer()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-black py-5 rounded-2xl transition-all transform active:scale-95 shadow-lg shadow-cyan-500/20">
+                TRANSFER INITIALISIEREN
+            </button>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white/5 p-4 rounded-2xl text-center">
+                    <p class="text-[9px] text-slate-500 mb-1 uppercase">Sicherheit</p>
+                    <p class="text-xs font-bold">QUANTEN-HASH</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl text-center">
+                    <p class="text-[9px] text-slate-500 mb-1 uppercase">Status</p>
+                    <p class="text-xs font-bold text-cyan-400">INFO-ONLY</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 p-4 bg-black/60 rounded-xl font-mono text-[10px] text-cyan-700">
+            <p class="scan-anim">SYSTEM: WAITING FOR QUANTUM FINGERPRINT...</p>
+        </div>
+    </div>
+
+    <script>
+        let esi = 0.0;
+        const MASTER_ID = "SEQ-ESOIST-MASTER-001"; // Dein interner Schlüssel
+
+        async function sync() {
+            try {
+                const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
+                const data = await res.json();
+                esi = parseFloat(data.total_esi);
+                document.getElementById('esi-val').innerText = esi.toFixed(6);
+                document.getElementById('eur-val').innerText = (esi * 0.85).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+            } catch(e) { console.log("Cloud Sync..."); }
+        }
+
+        function requestTransfer() {
+            // Jeder darf klicken, aber nur DEIN Fingerabdruck (hier simuliert durch Master-Key) erlaubt den Durchgang
+            let auth = prompt("QUANTUM FINGERPRINT SCANNER: Bitte Master-Key eingeben (Biometrische Verifizierung erfolgt rückwirkend)");
+            
+            if(auth === "T-ESOIST-ADMIN-2026") {
+                alert("✅ BIOMETRIE BESTÄTIGT. Quantenmechanischer Fingerabdruck stimmt mit System-Daten überein. Transfer freigeschaltet.");
+                // Hier würde die Sende-Logik folgen
+            } else {
+                alert("❌ ZUGRIFF VERWEIGERT. Der Fingerabdruck gehört nicht zum System-Architekten. Transfer-Atome bleiben gesperrt.");
+            }
+        }
+
+        setInterval(sync, 5000);
+        sync();
+    </script>
+</body>
+</html>
