@@ -4,95 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>T-Esoist Quantum Relay</title>
+    <title>T-ESOIST QUANTUM WALLET</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #010409; color: #00ffcc; font-family: monospace; overflow-x: hidden; }
-        .vortex-container { border: 2px solid #00ffcc; border-radius: 40px; background: rgba(13, 17, 23, 0.9); box-shadow: 0 0 30px #00ffcc33; }
-        .vacuum-anim { height: 4px; background: linear-gradient(90deg, transparent, #ff00ff, #00ffcc, transparent); background-size: 200% 100%; animation: move 1.5s linear infinite; }
-        @keyframes move { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .currency-box { background: rgba(255, 255, 255, 0.03); border-radius: 15px; padding: 10px; border: 1px solid rgba(0, 255, 204, 0.1); }
+        body { background: #000; color: #00ffcc; font-family: 'Courier New', monospace; }
+        .glow-gold { box-shadow: 0 0 20px #ffd700; border-color: #ffd700; }
+        .progress-bg { background: rgba(255, 255, 255, 0.05); height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #00ffcc, #ff00ff); height: 100%; transition: width 0.5s ease; }
     </style>
 </head>
 <body class="p-4 flex flex-col items-center min-h-screen">
-
-    <div class="vortex-container w-full max-w-md p-6">
-        <h1 class="text-center text-xl font-black italic tracking-tighter">T-ESOIST <span class="text-white font-normal">RELAY</span></h1>
+    <div id="main-card" class="w-full max-w-md border-2 border-cyan-500 rounded-[40px] p-8 bg-zinc-900/90 shadow-2xl mt-10">
+        <h1 class="text-center text-2xl font-black italic italic uppercase">Quantum <span class="text-white">Assets</span></h1>
         
-        <div class="my-4">
-            <p class="text-[8px] uppercase tracking-[0.3em] text-slate-500 mb-1">Inhaling Network Garbage...</p>
-            <div class="vacuum-anim w-full rounded-full"></div>
+        <div class="my-10 text-center">
+            <span class="text-[10px] text-slate-500 uppercase tracking-widest">Available Balance</span>
+            <div id="eur-display" class="text-5xl font-bold text-white my-2">0,00 €</div>
+            <div id="esi-display" class="text-[10px] text-cyan-700 font-mono">0.000000 ESI</div>
         </div>
 
-        <div class="grid grid-cols-1 gap-3 mb-6">
-            <div class="currency-box text-center">
-                <span class="text-[10px] text-slate-500">QUANTUM ESI</span>
-                <div id="esi-val" class="text-3xl font-bold text-white">0.080000</div>
+        <div class="mb-8">
+            <div class="flex justify-between text-[10px] uppercase mb-2">
+                <span>Next Milestone (1,00 €)</span>
+                <span id="percent">0%</span>
             </div>
-            <div class="grid grid-cols-2 gap-2">
-                <div class="currency-box text-center">
-                    <span class="text-[10px] text-slate-500">BITCOIN (BTC)</span>
-                    <div id="btc-val" class="text-sm font-bold text-orange-400">0.00000124</div>
-                </div>
-                <div class="currency-box text-center">
-                    <span class="text-[10px] text-slate-500">FIAT (EUR)</span>
-                    <div id="eur-val" class="text-sm font-bold text-blue-400">0,07 €</div>
-                </div>
+            <div class="progress-bg">
+                <div id="bar" class="progress-fill" style="width: 0%"></div>
             </div>
         </div>
 
-        <button onclick="boostVacuum()" class="w-full bg-white text-black font-black py-4 rounded-2xl mb-4 shadow-lg active:scale-95 transition-all text-xs uppercase tracking-widest">
-            Manual Ingestion Boost
-        </button>
-
-        <div class="flex justify-between gap-2 mb-6">
-            <button onclick="send('ESI')" class="w-1/2 bg-cyan-900/30 border border-cyan-500 text-[10px] font-bold py-3 rounded-xl">SEND AS COIN</button>
-            <button onclick="send('EUR')" class="w-1/2 bg-blue-900/30 border border-blue-500 text-[10px] font-bold py-3 rounded-xl">SEND AS EURO</button>
-        </div>
-
-        <div id="feed" class="h-24 bg-black/50 rounded-xl p-3 text-[8px] font-mono text-cyan-700 overflow-hidden">
-            > INITIALIZING VORTEX...
+        <div class="grid grid-cols-2 gap-4 text-[9px] font-mono opacity-50 uppercase">
+            <div class="border border-white/10 p-2 rounded-xl">Node: PC_0_I</div>
+            <div class="border border-white/10 p-2 rounded-xl text-right">Status: RESONANT</div>
         </div>
     </div>
 
     <script>
-        const SIG = "112358437189887641562819";
-        let esi = 0.08;
-        let btcPrice = 42500; // Beispielkurs
+        async function sync() {
+            try {
+                const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
+                const data = await res.json();
+                const eur = parseFloat(data.eur_value.replace(',', '.'));
+                const esi = data.total_esi;
 
-        function update() {
-            document.getElementById('esi-val').innerText = esi.toFixed(6);
-            document.getElementById('btc-val').innerText = (esi * 0.000015).toFixed(8);
-            document.getElementById('eur-val').innerText = (esi * 0.85).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+                document.getElementById('eur-display').innerText = eur.toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+                document.getElementById('esi-display').innerText = esi + " ESI";
+                
+                let progress = (eur % 1) * 100;
+                document.getElementById('bar').style.width = progress + "%";
+                document.getElementById('percent').innerText = Math.floor(progress) + "%";
+
+                if (eur >= 1.0) {
+                    document.getElementById('main-card').classList.add('glow-gold');
+                }
+            } catch(e) {}
         }
-
-        // AUTO-VACUUM: Saugt Müll und wandelt um
-        setInterval(() => {
-            let garbage = (Math.random() * 0.00005);
-            esi += garbage;
-            update();
-            log("INHALED DATA-GARBAGE: +" + garbage.toFixed(8) + " ESI");
-        }, 3000);
-
-        function boostVacuum() {
-            let boost = 0.002;
-            esi += boost;
-            update();
-            log("MANUAL BOOST: RECYCLED +" + boost + " ESI");
-        }
-
-        function log(m) {
-            const f = document.getElementById('feed');
-            f.innerHTML = "> " + m + "<br>" + f.innerHTML;
-        }
-
-        function send(mode) {
-            let auth = prompt("SIGNATUR EINGEBEN:");
-            if(auth === SIG) {
-                let target = prompt("Ziel (IBAN/BTC/Node):");
-                if(target) alert("Relay-Transfer: " + mode + " wird verschlüsselt an " + target + " gesendet.");
-            } else { alert("Das ist nicht meiner!"); }
-        }
+        setInterval(sync, 5000);
+        sync();
     </script>
 </body>
 </html>
