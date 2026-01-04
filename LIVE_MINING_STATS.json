@@ -1,8 +1,8 @@
 {
-  "total_esi": "0.081575",
-  "btc_value": "0.00000171",
+  "total_esi": "0.081707",
+  "btc_value": "0.00000172",
   "eur_value": "0.08",
   "node_status": "ONLINE | COHERENT | RESONANT",
-  "last_hunt_hash": "98962932fcf9cbef4e9f2dc5b290c29c63c71463b1da6609416047a25ce8e895",
+  "last_hunt_hash": "ac8da2abeb728d83ec0ad91f31a633809b67df2b5ea3dd69222f4b98ae3ec943",
   "r_ctrl": "0x1F"
 }
