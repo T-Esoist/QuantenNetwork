@@ -1,69 +1,30 @@
 
 <!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>T-ESOIST FINANCIAL RELAY</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #000; color: #00ffcc; font-family: 'Courier New', monospace; }
-        .relay-card { border: 2px solid #00ffcc; border-radius: 40px; background: rgba(10, 10, 10, 0.95); box-shadow: 0 0 40px #00ffcc33; }
-        .btn-withdraw { background: linear-gradient(45deg, #00ffcc, #0088ff); color: #000; font-weight: 900; }
-        .lock-indicator { color: #ff00ff; font-size: 10px; animation: blink 2s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    </style>
-</head>
-<body class="p-4 flex flex-col items-center min-h-screen">
-    <div class="relay-card w-full max-w-md p-8 mt-6">
-        <h1 class="text-center text-xl font-black tracking-tighter uppercase italic">Financial <span class="text-white">Relay</span></h1>
-        
-        <div class="my-8 text-center bg-black/50 p-6 rounded-3xl border border-white/5">
-            <span class="text-[9px] text-slate-500 uppercase">Available for Withdrawal</span>
-            <div id="eur-display" class="text-4xl font-bold text-white mt-1">0,00 €</div>
-            <p class="lock-indicator mt-2 uppercase">🔐 Secure Asset Lock Active</p>
-        </div>
-
-        <div class="space-y-4 mb-8">
-            <label class="text-[10px] text-slate-500 uppercase ml-2">Withdrawal Method</label>
-            <select id="method" class="w-full bg-zinc-900 border border-white/10 rounded-2xl p-4 text-xs font-bold outline-none">
-                <option value="BTC">Bitcoin (Mainnet)</option>
-                <option value="EUR">SEPA / Gift Card</option>
-                <option value="ESI">ESI Internal Transfer</option>
-            </select>
-        </div>
-
-        <button onclick="requestWithdrawal()" class="btn-withdraw w-full py-5 rounded-2xl text-xs uppercase tracking-[0.2em] shadow-lg active:scale-95 transition-all">
-            Initiate Asset Relay
-        </button>
-
-        <div id="relay-log" class="mt-8 h-20 bg-black rounded-xl p-3 text-[7px] text-cyan-800 overflow-hidden font-mono">
-            > STANDBY: WAITING FOR THRESHOLD...
-        </div>
-    </div>
-
-    <script>
-        const SIG = "112358437189887641562819";
-        async function update() {
-            try {
-                const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
-                const data = await res.json();
-                document.getElementById('eur-display').innerText = data.eur_value + " €";
-            } catch(e) {}
-        }
-
-        function requestWithdrawal() {
-            let auth = prompt("QUANTUM FINGERPRINT (Master Sig):");
-            if(auth === SIG) {
-                let target = prompt("Zieleingabe (Wallet/IBAN/Email):");
-                if(target) alert("RELAY INITIATED: Assets werden für " + target + " verschlüsselt.");
-            } else {
-                alert("ACCESS DENIED: Signatur inkorrekt.");
-            }
-        }
-
-        setInterval(update, 5000);
-        update();
-    </script>
-</body>
-</html>
+<html><head><meta charset="UTF-8"><title>Ω-CORE</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+    body { background:#000; color:#ffd700; font-family:monospace; }
+    .atom-box { border:1px solid #333; background:rgba(0,0,0,0.9); box-shadow:0 0 30px #ffd70022; }
+    .btn-gold { background:#ffd700; color:#000; font-weight:bold; border-radius:30px; }
+</style></head>
+<body class="flex items-center justify-center min-h-screen">
+<div class="atom-box p-10 rounded-[50px] text-center max-w-sm w-full">
+    <h1 class="text-xs tracking-[0.5em] mb-8 opacity-50">ATOMARE STRUKTUR V1.1</h1>
+    <div class="text-5xl font-light mb-2 text-white" id="val">...</div>
+    <div class="text-[10px] mb-8 opacity-30" id="esi">SYNCING</div>
+    <button onclick="boost()" class="btn-gold w-full py-4 text-xs uppercase tracking-widest">Quantum Boost</button>
+</div>
+<script>
+    const R="T-Esoist/QuantenNetwork";
+    async function s(){
+        const r=await fetch(`https://api.github.com/repos/${R}/contents/LIVE_MINING_STATS.json?t=${Date.now()}`);
+        const d=await r.json(); const c=JSON.parse(atob(d.content));
+        document.getElementById('val').innerText=(c.total_esi*0.95).toFixed(2)+" €";
+        document.getElementById('esi').innerText=c.total_esi+" ESI";
+    }
+    setInterval(s,5000); s();
+    async function boost(){
+        // Hier binden wir später die Inversions-Logik ein
+        alert("Boost-Atom registriert. Warte auf Step 3.");
+    }
+</script></body></html>
