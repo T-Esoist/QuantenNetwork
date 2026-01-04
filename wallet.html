@@ -4,63 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>T-ESOIST QUANTUM WALLET</title>
+    <title>T-ESOIST FINANCIAL RELAY</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #000; color: #00ffcc; font-family: 'Courier New', monospace; }
-        .glow-gold { box-shadow: 0 0 20px #ffd700; border-color: #ffd700; }
-        .progress-bg { background: rgba(255, 255, 255, 0.05); height: 10px; border-radius: 5px; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, #00ffcc, #ff00ff); height: 100%; transition: width 0.5s ease; }
+        .relay-card { border: 2px solid #00ffcc; border-radius: 40px; background: rgba(10, 10, 10, 0.95); box-shadow: 0 0 40px #00ffcc33; }
+        .btn-withdraw { background: linear-gradient(45deg, #00ffcc, #0088ff); color: #000; font-weight: 900; }
+        .lock-indicator { color: #ff00ff; font-size: 10px; animation: blink 2s infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
     </style>
 </head>
 <body class="p-4 flex flex-col items-center min-h-screen">
-    <div id="main-card" class="w-full max-w-md border-2 border-cyan-500 rounded-[40px] p-8 bg-zinc-900/90 shadow-2xl mt-10">
-        <h1 class="text-center text-2xl font-black italic italic uppercase">Quantum <span class="text-white">Assets</span></h1>
+    <div class="relay-card w-full max-w-md p-8 mt-6">
+        <h1 class="text-center text-xl font-black tracking-tighter uppercase italic">Financial <span class="text-white">Relay</span></h1>
         
-        <div class="my-10 text-center">
-            <span class="text-[10px] text-slate-500 uppercase tracking-widest">Available Balance</span>
-            <div id="eur-display" class="text-5xl font-bold text-white my-2">0,00 €</div>
-            <div id="esi-display" class="text-[10px] text-cyan-700 font-mono">0.000000 ESI</div>
+        <div class="my-8 text-center bg-black/50 p-6 rounded-3xl border border-white/5">
+            <span class="text-[9px] text-slate-500 uppercase">Available for Withdrawal</span>
+            <div id="eur-display" class="text-4xl font-bold text-white mt-1">0,00 €</div>
+            <p class="lock-indicator mt-2 uppercase">🔐 Secure Asset Lock Active</p>
         </div>
 
-        <div class="mb-8">
-            <div class="flex justify-between text-[10px] uppercase mb-2">
-                <span>Next Milestone (1,00 €)</span>
-                <span id="percent">0%</span>
-            </div>
-            <div class="progress-bg">
-                <div id="bar" class="progress-fill" style="width: 0%"></div>
-            </div>
+        <div class="space-y-4 mb-8">
+            <label class="text-[10px] text-slate-500 uppercase ml-2">Withdrawal Method</label>
+            <select id="method" class="w-full bg-zinc-900 border border-white/10 rounded-2xl p-4 text-xs font-bold outline-none">
+                <option value="BTC">Bitcoin (Mainnet)</option>
+                <option value="EUR">SEPA / Gift Card</option>
+                <option value="ESI">ESI Internal Transfer</option>
+            </select>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 text-[9px] font-mono opacity-50 uppercase">
-            <div class="border border-white/10 p-2 rounded-xl">Node: PC_0_I</div>
-            <div class="border border-white/10 p-2 rounded-xl text-right">Status: RESONANT</div>
+        <button onclick="requestWithdrawal()" class="btn-withdraw w-full py-5 rounded-2xl text-xs uppercase tracking-[0.2em] shadow-lg active:scale-95 transition-all">
+            Initiate Asset Relay
+        </button>
+
+        <div id="relay-log" class="mt-8 h-20 bg-black rounded-xl p-3 text-[7px] text-cyan-800 overflow-hidden font-mono">
+            > STANDBY: WAITING FOR THRESHOLD...
         </div>
     </div>
 
     <script>
-        async function sync() {
+        const SIG = "112358437189887641562819";
+        async function update() {
             try {
                 const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
                 const data = await res.json();
-                const eur = parseFloat(data.eur_value.replace(',', '.'));
-                const esi = data.total_esi;
-
-                document.getElementById('eur-display').innerText = eur.toLocaleString('de-DE', {style:'currency', currency:'EUR'});
-                document.getElementById('esi-display').innerText = esi + " ESI";
-                
-                let progress = (eur % 1) * 100;
-                document.getElementById('bar').style.width = progress + "%";
-                document.getElementById('percent').innerText = Math.floor(progress) + "%";
-
-                if (eur >= 1.0) {
-                    document.getElementById('main-card').classList.add('glow-gold');
-                }
+                document.getElementById('eur-display').innerText = data.eur_value + " €";
             } catch(e) {}
         }
-        setInterval(sync, 5000);
-        sync();
+
+        function requestWithdrawal() {
+            let auth = prompt("QUANTUM FINGERPRINT (Master Sig):");
+            if(auth === SIG) {
+                let target = prompt("Zieleingabe (Wallet/IBAN/Email):");
+                if(target) alert("RELAY INITIATED: Assets werden für " + target + " verschlüsselt.");
+            } else {
+                alert("ACCESS DENIED: Signatur inkorrekt.");
+            }
+        }
+
+        setInterval(update, 5000);
+        update();
     </script>
 </body>
 </html>
