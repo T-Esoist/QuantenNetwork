@@ -1,6 +1,7 @@
 {
-  "total_esi": "0.082368",
+  "total_esi": "0.082415",
   "eur_value": "0.08",
-  "status": "RESONANT",
-  "timestamp": "Sun Jan  4 14:42:57 2026"
+  "status": "ONLINE | MULTI-NODE-RESONANCE",
+  "last_node": "WORKER_EXPANSION_NODE_B",
+  "timestamp": "Sun Jan  4 14:44:55 2026"
 }
