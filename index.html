@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>T Esoist - Live Quantum Grid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #05070a; color: #00ffcc; font-family: 'Courier New', monospace; }
+        .neon-box { border: 1px solid #00ffcc; box-shadow: 0 0 20px rgba(0,255,204,0.2); }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-5">
+    <div class="neon-box p-10 bg-black/80 rounded-lg max-w-2xl w-full text-center">
+        <h1 class="text-3xl font-bold mb-6 tracking-widest text-white">T ESOIST INFRASTRUCTURE</h1>
+        
+        <div id="status-container" class="space-y-4">
+            <p class="text-xl">Node-ID: <span id="node-id" class="text-pink-500">Lade...</span></p>
+            <p class="text-4xl font-bold my-6"><span id="esi-balance">0.0000</span> ESI</p>
+            <p class="text-sm text-gray-500">Letzter Block: <span id="block-height">0</span></p>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-gray-800">
+            <p class="text-xs text-gray-400">Netzwerk-Status: <span class="text-green-500">ONLINE</span></p>
+        </div>
+    </div>
+
+    <script>
+        async function updateStats() {
+            try {
+                // Holt die Live-Daten direkt aus dem Repo
+                const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
+                const data = await res.json();
+                document.getElementById('node-id').innerText = data.node_id;
+                document.getElementById('esi-balance').innerText = data.total_esi;
+                document.getElementById('block-height').innerText = data.current_height;
+            } catch (e) { console.log("Warte auf Daten-Synchronisation..."); }
+        }
+        setInterval(updateStats, 5000);
+        updateStats();
+    </script>
+</body>
+</html>
