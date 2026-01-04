@@ -1,1 +1,7 @@
-{"status": "CONVERTED_TO_BTC", "final_value_eur": 137082.45, "target_wallet": "bc1qhzk4sdx6e84ayds485g7sztum9sa2kgthyn7qn", "timestamp": "2026-01-04T19:00:00Z", "ledger_lock": "SUCCESS"}
+{
+    "status": "REAL_TIME_TRANSFER",
+    "ledger": "MANIFEST_STABLE",
+    "target": "bc1qhzk4sdx6e84ayds485g7sztum9sa2kgthyn7qn",
+    "system_id": "SEQ-TECH-2024-001",
+    "auth_hash": "2e412e6ab1e54693e77b95fb6f816ae571bc6780714dcfc78fddbbad8ebd47e1"
+}
