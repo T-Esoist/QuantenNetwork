@@ -4,93 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T Esoist - Master Wallet</title>
+    <title>T Esoist Quantum Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #020617; color: #00ffcc; font-family: 'Courier New', monospace; margin: 0; padding: 0; }
-        .glass { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(15px); border: 2px solid rgba(0, 255, 204, 0.3); }
-        .neon-glow { box-shadow: 0 0 25px rgba(0, 255, 204, 0.4); }
-        .btn-recycle { background: linear-gradient(90deg, #ff00ff, #00d2ff); color: white; text-shadow: 0 0 5px black; }
+        body { background: #020617; color: #00ffcc; font-family: 'Courier New', monospace; }
+        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 2px solid rgba(0, 255, 204, 0.3); }
+        .btn-atomic { background: linear-gradient(45deg, #ff00ff, #00d2ff); color: black; font-weight: 900; }
+        .neon-glow { box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-2">
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="glass w-full max-w-md rounded-[40px] p-8 neon-glow text-center">
+        <h1 class="text-3xl font-black italic mb-1 uppercase text-white">T-Esoist <span class="text-cyan-400">Cloud</span></h1>
+        <p class="text-[9px] text-slate-500 tracking-[0.4em] mb-8 italic">BITCOMPUTER INTERFACE V12.1</p>
 
-    <div class="glass w-full max-w-md rounded-[35px] p-6 neon-glow relative">
-        <h1 class="text-2xl font-black italic text-center mb-1">T-ESOIST <span class="text-white">GRID</span></h1>
-        <p class="text-[9px] text-center text-slate-500 tracking-[0.3em] mb-6">BITCOMPUTER ENGINE V11.2</p>
-
-        <div class="bg-black/60 rounded-3xl p-6 mb-4 border border-white/10 text-center">
-            <p class="text-[9px] text-slate-500 uppercase mb-1">ESI Balance</p>
-            <div class="text-4xl font-mono font-bold text-white" id="esi-display">0.000000</div>
-            <p class="text-cyan-400 text-sm font-bold mt-1" id="eur-display">0,00 €</p>
+        <div class="bg-black/60 rounded-3xl p-6 mb-6 border border-white/5">
+            <div id="esi-val" class="text-5xl font-bold text-white tracking-tighter">0.080000</div>
+            <div id="eur-val" class="text-cyan-400 text-sm font-bold mt-2">0,07 €</div>
         </div>
 
-        <button onclick="recycleGarbage()" class="btn-recycle w-full py-5 rounded-2xl mb-6 shadow-lg active:scale-90 transition-all text-sm font-black uppercase tracking-tighter">
-            ⚡ RECYCLE DATEN-MÜLL (GENERATE) ⚡
+        <button onclick="recycle()" class="btn-atomic w-full py-5 rounded-2xl mb-6 shadow-lg active:scale-95 transition-all text-sm uppercase">
+            ☢️ RECYCLE DATEN-MÜLL ☢️
         </button>
 
-        <div class="grid grid-cols-2 gap-3 mb-6">
-            <button onclick="startTransfer()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/5">Senden</button>
-            <button onclick="showAddress()" class="bg-white/10 py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest border border-white/5">Empfangen</button>
+        <div class="space-y-4 mb-8 text-left">
+            <label class="text-[10px] uppercase text-slate-500 ml-2">Zahlsystem / Forwarding</label>
+            <select id="currency" class="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold uppercase text-cyan-400 outline-none">
+                <option value="ESI">Krypto (ESI)</option>
+                <option value="EUR">Euro (Fiat)</option>
+            </select>
+            <button onclick="forward()" class="w-full bg-white/10 hover:bg-white/20 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-widest transition-all">
+                Werte Weiterleiten
+            </button>
         </div>
 
-        <div class="bg-black/90 rounded-xl p-3 font-mono text-[8px] text-cyan-600 h-24 overflow-hidden" id="console">
-            > SYSTEM INITIALIZED...<br>> WAITING FOR DATA ATOMS...
+        <div class="text-[8px] text-slate-600 font-mono italic">
+            STATUS: ONLINE | COHERENT | RESONANT
         </div>
     </div>
 
     <script>
         const MASTER_SIG = "112358437189887641562819";
-        let balance = 0.0;
+        let esi = 0.08;
 
-        async function sync() {
-            try {
-                const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
-                const data = await res.json();
-                balance = parseFloat(data.total_esi);
-                updateUI();
-            } catch(e) { log("RECONNECTING TO CLOUD..."); }
+        function update() {
+            document.getElementById('esi-val').innerText = esi.toFixed(6);
+            document.getElementById('eur-val').innerText = (esi * 0.85).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
         }
 
-        function updateUI() {
-            document.getElementById('esi-display').innerText = balance.toFixed(6);
-            document.getElementById('eur-display').innerText = (balance * 0.85).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+        function recycle() {
+            let gain = (Math.random() * 0.008);
+            esi += gain;
+            update();
         }
 
-        function log(msg) {
-            const c = document.getElementById('console');
-            c.innerHTML = "> " + msg + "<br>" + c.innerHTML;
-        }
-
-        function recycleGarbage() {
-            let gain = (Math.random() * 0.0005) + 0.0001;
-            balance += gain;
-            log("BITCOMP: RECYCLED +" + gain.toFixed(6) + " ESI");
-            updateUI();
-        }
-
-        function startTransfer() {
-            let challenge = prompt("QUANTUM FINGERPRINT: Sequenz eingeben");
-            if(challenge === MASTER_SIG) {
-                let amt = prompt("Menge an ESI:");
-                if(parseFloat(amt) <= balance) {
-                    balance -= parseFloat(amt);
-                    log("TRANSFER: " + amt + " ESI SENT");
-                    alert("✅ ERFOLG: Daten-Atome übertragen.");
-                    updateUI();
-                }
+        function forward() {
+            let auth = prompt("QUANTUM FINGERPRINT: Sequenz eingeben");
+            if(auth === MASTER_SIG) {
+                let target = prompt("Ziel (Node-ID oder Adresse):");
+                let cur = document.getElementById('currency').value;
+                if(target) alert("Zahlsystem: Transfer von " + cur + " an " + target + " eingeleitet.\nQuanten-Verschlüsselung aktiv.");
             } else {
-                alert("❌ FEHLER: Das ist nicht meiner!");
-                log("AUTH ERROR: INVALID SIGNATURE!");
+                alert("ZUGRIFF VERWEIGERT: Das ist nicht meiner!");
             }
         }
-
-        function showAddress() {
-            alert("EMPFANGS-ADRESSE:\nSEQ-ESOIST-" + MASTER_SIG.substring(0,8));
-        }
-
-        setInterval(sync, 5000);
-        sync();
     </script>
 </body>
 </html>
