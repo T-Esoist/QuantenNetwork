@@ -1,1 +1,51 @@
-<html><body style='background:#000;color:#0f0'><h1>T ESOIST SYSTEM ACTIVE</h1><p>Deploying...</p><script>location.reload()</script></body></html>
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T ESOIST GRID</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #020617; color: #f8fafc; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        @keyframes scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .ticker-text { display: inline-block; white-space: nowrap; animation: scroll 15s linear infinite; }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-start min-h-screen">
+    
+    <div class="w-full bg-cyan-900/30 border-b border-cyan-500/30 py-2 overflow-hidden">
+        <div class="ticker-text text-cyan-400 text-xs font-bold tracking-widest uppercase" id="news">
+            Lade Netzwerknachrichten...
+        </div>
+    </div>
+
+    <div class="glass w-full max-w-sm rounded-3xl p-6 mt-10 shadow-2xl">
+        <div class="text-center space-y-2 mb-8">
+            <h1 class="text-slate-400 text-xs uppercase tracking-[0.3em]">Total ESI</h1>
+            <div class="text-5xl font-black text-white" id="esi">0.0000</div>
+        </div>
+        <div class="text-center text-[10px] text-slate-500 font-mono" id="node">NODE-ID: LADE...</div>
+    </div>
+
+    <script>
+        async function update() {
+            try {
+                // Lade Mining Stats
+                const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
+                const data = await res.json();
+                document.getElementById('esi').innerText = data.total_esi;
+                document.getElementById('node').innerText = "NODE: " + data.node_id;
+
+                // Lade News Ticker
+                const newsRes = await fetch('NEWS.json?t=' + Date.now());
+                const newsData = await newsRes.json();
+                document.getElementById('news').innerText = newsData.message;
+            } catch (e) { console.log("Reconnecting..."); }
+        }
+        setInterval(update, 5000);
+        update();
+    </script>
+</body>
+</html>
