@@ -1,0 +1,17 @@
+{
+    "version": "4.0.0",
+    "admin": "T-Esoist",
+    "location": "Lippstadt",
+    "infrastructure": {
+        "seq_computers": [
+            "SeqComputer_20241218190448_03cb8f",
+            "SeqComputer_20241218191222_2c7544"
+        ],
+        "protocols": [
+            "Polariton-Sync",
+            "GKP-Photon-Link",
+            "Hamming-ML"
+        ],
+        "security": "7-Qubit Steane QECC"
+    }
+}
