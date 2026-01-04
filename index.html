@@ -3,41 +3,59 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>T Esoist - Live Quantum Grid</title>
+    <title>T Esoist | Global Quantum Grid</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #05070a; color: #00ffcc; font-family: 'Courier New', monospace; }
-        .neon-box { border: 1px solid #00ffcc; box-shadow: 0 0 20px rgba(0,255,204,0.2); }
+        body { background: #020408; color: #00ffcc; font-family: 'Courier New', monospace; }
+        .neon-border { border: 1px solid #00ffcc; box-shadow: 0 0 25px rgba(0,255,204,0.3); }
+        .animate-pulse-fast { animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-5">
-    <div class="neon-box p-10 bg-black/80 rounded-lg max-w-2xl w-full text-center">
-        <h1 class="text-3xl font-bold mb-6 tracking-widest text-white">T ESOIST INFRASTRUCTURE</h1>
+    <div class="neon-border p-8 bg-black/90 rounded-xl max-w-lg w-full text-center">
+        <h1 class="text-2xl font-bold mb-2 tracking-[0.3em] text-white">T ESOIST LIVE</h1>
+        <div class="inline-block px-3 py-1 bg-green-900/30 rounded-full mb-6">
+            <span class="text-xs text-green-400 animate-pulse-fast">● SYSTEM ACTIVE</span>
+        </div>
         
-        <div id="status-container" class="space-y-4">
-            <p class="text-xl">Node-ID: <span id="node-id" class="text-pink-500">Lade...</span></p>
-            <p class="text-4xl font-bold my-6"><span id="esi-balance">0.0000</span> ESI</p>
-            <p class="text-sm text-gray-500">Letzter Block: <span id="block-height">0</span></p>
+        <div id="stats" class="space-y-6">
+            <div>
+                <p class="text-[0.6rem] text-gray-500 uppercase tracking-widest">Master Node ID</p>
+                <p id="node-id" class="text-lg font-bold text-pink-500 font-mono">Connecting...</p>
+            </div>
+            
+            <div class="py-6 border-y border-gray-800">
+                <p class="text-[0.6rem] text-gray-500 uppercase mb-1">ESI Accumulation</p>
+                <p class="text-5xl font-black"><span id="esi-balance">0.0000</span></p>
+            </div>
+
+            <div class="flex justify-between text-[0.7rem] text-gray-400">
+                <span>BLOCK: <span id="block-height" class="text-white">0</span></span>
+                <span>STATUS: <span class="text-white font-bold">STABLE</span></span>
+            </div>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-gray-800">
-            <p class="text-xs text-gray-400">Netzwerk-Status: <span class="text-green-500">ONLINE</span></p>
+        <div class="mt-10">
+            <a href="https://twitter.com/intent/tweet?text=Ich+baue+am+T+Esoist+Quantum+Network+mit!+Check+meine+Live-Node:+https://t-esoist.github.io/QuantenNetwork/" 
+               target="_blank" 
+               class="bg-[#1DA1F2] text-white px-4 py-2 rounded-full text-xs font-bold hover:scale-105 transition block">
+               PROJEKT AUF X TEILEN
+            </a>
         </div>
     </div>
 
     <script>
-        async function updateStats() {
+        async function fetchStats() {
             try {
-                // Holt die Live-Daten direkt aus dem Repo
-                const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
-                const data = await res.json();
-                document.getElementById('node-id').innerText = data.node_id;
-                document.getElementById('esi-balance').innerText = data.total_esi;
-                document.getElementById('block-height').innerText = data.current_height;
-            } catch (e) { console.log("Warte auf Daten-Synchronisation..."); }
+                const r = await fetch('LIVE_MINING_STATS.json?nocache=' + Math.random());
+                const d = await r.json();
+                document.getElementById('node-id').innerText = d.node_id;
+                document.getElementById('esi-balance').innerText = d.total_esi;
+                document.getElementById('block-height').innerText = d.current_height;
+            } catch (e) { console.log("Synchronisiere..."); }
         }
-        setInterval(updateStats, 5000);
-        updateStats();
+        setInterval(fetchStats, 5000);
+        fetchStats();
     </script>
 </body>
 </html>
