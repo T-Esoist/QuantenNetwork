@@ -3,67 +3,98 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T Esoist - Quantum Wallet v10.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>T Esoist - Master Wallet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #020617; color: #00ffcc; font-family: 'Courier New', monospace; }
-        .glass { background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(20px); border: 2px solid rgba(0, 255, 204, 0.3); }
-        .quantum-glow { box-shadow: 0 0 30px rgba(0, 255, 204, 0.15); }
+        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(15px); border: 1px solid rgba(0, 255, 204, 0.3); }
+        .neon-glow { box-shadow: 0 0 20px rgba(0, 255, 204, 0.3); }
+        @keyframes pulse-cyan { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        .status-dot { animation: pulse-cyan 2s infinite; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
-    <div class="glass max-w-md w-full rounded-[50px] p-10 quantum-glow text-center">
-        <h1 class="text-3xl font-black mb-1">T-ESOIST <span class="text-white tracking-tighter">CLOUD</span></h1>
-        <p class="text-[10px] text-slate-500 tracking-[0.5em] mb-10 uppercase font-bold">Quantum-AI Engine Active</p>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="glass w-full max-w-md rounded-[40px] p-8 neon-glow relative">
+        <div class="absolute top-6 right-8 flex items-center space-x-2">
+            <div class="w-2 h-2 bg-cyan-400 rounded-full status-dot"></div>
+            <span class="text-[9px] font-bold tracking-widest uppercase">Grid Link Active</span>
+        </div>
+        <h1 class="text-3xl font-black italic mb-1">T-ESOIST</h1>
+        <p class="text-[10px] text-slate-500 tracking-[0.4em] mb-10">BITCOMPUTER INTERFACE V11.1</p>
 
-        <div class="mb-10 p-6 bg-black/40 rounded-3xl border border-white/5">
-            <div class="text-[11px] text-slate-400 mb-2 uppercase tracking-widest">Mining-Status (ESI)</div>
-            <div id="esi-display" class="text-5xl font-mono font-bold text-white tracking-tighter">0.000000</div>
-            <div id="eur-display" class="text-cyan-400 font-bold mt-2">0,00 €</div>
+        <div class="bg-black/50 rounded-3xl p-8 mb-6 border border-white/5 text-center">
+            <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em] mb-2">Gesamtguthaben (ESI)</p>
+            <div class="text-5xl font-mono font-bold text-white mb-2" id="esi-display">0.000000</div>
+            <p class="text-cyan-400 font-bold" id="eur-display">0,00 €</p>
         </div>
 
-        <div class="space-y-4">
-            <button onclick="authAndSend()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-black py-5 rounded-3xl transition-all shadow-lg shadow-cyan-500/20 uppercase tracking-widest text-sm">
-                Daten-Atome Senden
-            </button>
+        <button onclick="recycleGarbage()" class="w-full bg-gradient-to-r from-fuchsia-600 to-cyan-500 text-black font-black py-4 rounded-2xl mb-8 shadow-lg active:scale-95 transition-all text-sm uppercase">
+            Recycle Daten-Müll (Generate Value)
+        </button>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <button onclick="startTransfer()" class="bg-white/10 hover:bg-white/20 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest">Senden</button>
+            <button onclick="showAddress()" class="bg-white/10 hover:bg-white/20 py-4 rounded-2xl text-[10px] font-bold uppercase tracking-widest">Empfangen</button>
         </div>
-        <div class="mt-10 text-[9px] text-slate-600 font-mono">
-            ID: VERIFIED BY T-ESOIST SYSTEM-KEY
+
+        <div class="bg-black/80 rounded-2xl p-4 font-mono text-[9px] text-cyan-800 h-20 overflow-hidden" id="console">
+            > SYSTEM READY...<br>> SIGNATURE SCANNER ACTIVE...
         </div>
     </div>
 
     <script>
-        const SIG = "112358437189887641562819";
-        let currentEsi = 0;
+        const MASTER_SIG = "112358437189887641562819";
+        let balance = 0.0;
 
-        async function update() {
+        async function sync() {
             try {
                 const res = await fetch('LIVE_MINING_STATS.json?t=' + Date.now());
                 const data = await res.json();
-                currentEsi = parseFloat(data.total_esi);
-                document.getElementById('esi-display').innerText = currentEsi.toFixed(6);
-                document.getElementById('eur-display').innerText = (currentEsi * 0.85).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
-            } catch(e) { console.warn("Syncing..."); }
+                balance = parseFloat(data.total_esi);
+                updateUI();
+            } catch(e) { log("SYNC ERROR..."); }
         }
 
-        function authAndSend() {
-            let challenge = prompt("QUANTUM FINGERPRINT: Bitte Identitäts-Sequenz eingeben:");
-            if(challenge === SIG) {
-                let target = prompt("Empfänger-Adresse:");
-                let amount = prompt("Menge an Daten-Atomen (ESI):");
-                if(target && parseFloat(amount) <= currentEsi) {
-                    alert("TRANSFER ERFOLGREICH: " + amount + " ESI an " + target + " übertragen.");
-                } else {
-                    alert("FEHLER: Betrag überschreitet Cloud-Kapazität.");
-                }
+        function updateUI() {
+            document.getElementById('esi-display').innerText = balance.toFixed(6);
+            document.getElementById('eur-display').innerText = (balance * 0.85).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+        }
+
+        function log(msg) {
+            const c = document.getElementById('console');
+            c.innerHTML = "> " + msg + "<br>" + c.innerHTML;
+        }
+
+        function recycleGarbage() {
+            let gain = Math.random() * 0.005;
+            balance += gain;
+            log("DATA-MÜLL RECYCLED: +" + gain.toFixed(6) + " ESI");
+            updateUI();
+        }
+
+        function startTransfer() {
+            let challenge = prompt("QUANTUM FINGERPRINT: Sequenz eingeben");
+            if(challenge === MASTER_SIG) {
+                let amt = prompt("Menge an Daten-Atomen (ESI):");
+                if(parseFloat(amt) <= balance) {
+                    balance -= parseFloat(amt);
+                    log("TRANSFER INITIALIZED: " + amt + " ESI");
+                    alert("✅ TRANSFER ERFOLGREICH. Atome gesendet.");
+                    updateUI();
+                } else { alert("Menge ungültig!"); }
             } else {
-                alert("❌ FEHLER: Das ist nicht meiner! Biometrischer Abgleich fehlgeschlagen.");
+                alert("❌ FEHLER: Das ist nicht meiner! Zugriff verweigert.");
+                log("ALARM: UNAUTHORIZED ATTEMPT!");
             }
         }
 
-        setInterval(update, 5000);
-        update();
+        function showAddress() {
+            alert("DEINE EMPFANGS-ADRESSE:\nSEQ-ESOIST-" + MASTER_SIG.substring(0,8));
+        }
+
+        setInterval(sync, 5000);
+        sync();
     </script>
 </body>
 </html>
