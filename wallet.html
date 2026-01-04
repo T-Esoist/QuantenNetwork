@@ -3,69 +3,68 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>T Esoist Quantum Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #020617; color: #00ffcc; font-family: 'Courier New', monospace; }
-        .glass { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px); border: 2px solid rgba(0, 255, 204, 0.3); }
-        .btn-atomic { background: linear-gradient(45deg, #ff00ff, #00d2ff); color: black; font-weight: 900; }
-        .neon-glow { box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+        body { background: #010409; color: #00ffcc; font-family: monospace; margin: 0; padding: 20px; }
+        .main-card { background: #0d1117; border: 2px solid #00ffcc; border-radius: 30px; padding: 30px; box-shadow: 0 0 20px #00ffcc44; }
+        .btn-action { background: #00ffcc; color: #000; font-weight: bold; border-radius: 15px; padding: 15px; width: 100%; margin-bottom: 10px; border: none; }
+        .btn-secondary { background: #161b22; color: #00ffcc; border: 1px solid #00ffcc; border-radius: 15px; padding: 12px; width: 48%; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
-    <div class="glass w-full max-w-md rounded-[40px] p-8 neon-glow text-center">
-        <h1 class="text-3xl font-black italic mb-1 uppercase text-white">T-Esoist <span class="text-cyan-400">Cloud</span></h1>
-        <p class="text-[9px] text-slate-500 tracking-[0.4em] mb-8 italic">BITCOMPUTER INTERFACE V12.1</p>
+<body>
+    <div class="main-card">
+        <h1 style="text-align:center; font-size: 24px;">T-ESOIST CLOUD</h1>
+        <p style="text-align:center; font-size: 10px; color: #8b949e; letter-spacing: 2px;">AUTO-FLOW ACTIVE</p>
 
-        <div class="bg-black/60 rounded-3xl p-6 mb-6 border border-white/5">
-            <div id="esi-val" class="text-5xl font-bold text-white tracking-tighter">0.080000</div>
-            <div id="eur-val" class="text-cyan-400 text-sm font-bold mt-2">0,07 €</div>
+        <div style="background: #000; padding: 20px; border-radius: 20px; text-align: center; margin: 20px 0;">
+            <div id="esi-display" style="font-size: 32px; font-weight: bold;">0.080000</div>
+            <div id="eur-display" style="color: #58a6ff;">0,07 €</div>
         </div>
 
-        <button onclick="recycle()" class="btn-atomic w-full py-5 rounded-2xl mb-6 shadow-lg active:scale-95 transition-all text-sm uppercase">
-            ☢️ RECYCLE DATEN-MÜLL ☢️
-        </button>
+        <button onclick="manualRecycle()" class="btn-action">☢️ RECYCLE DATEN-MÜLL</button>
 
-        <div class="space-y-4 mb-8 text-left">
-            <label class="text-[10px] uppercase text-slate-500 ml-2">Zahlsystem / Forwarding</label>
-            <select id="currency" class="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-xs font-bold uppercase text-cyan-400 outline-none">
-                <option value="ESI">Krypto (ESI)</option>
-                <option value="EUR">Euro (Fiat)</option>
-            </select>
-            <button onclick="forward()" class="w-full bg-white/10 hover:bg-white/20 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-widest transition-all">
-                Werte Weiterleiten
-            </button>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+            <button onclick="forward('ESI')" class="btn-secondary">SEND ESI</button>
+            <button onclick="forward('EUR')" class="btn-secondary">SEND EUR</button>
         </div>
 
-        <div class="text-[8px] text-slate-600 font-mono italic">
-            STATUS: ONLINE | COHERENT | RESONANT
+        <div id="log" style="font-size: 9px; color: #3081f7; background: #000; padding: 10px; border-radius: 10px; height: 60px; overflow: hidden;">
+            > System Online...
         </div>
     </div>
 
     <script>
-        const MASTER_SIG = "112358437189887641562819";
+        const SIG = "112358437189887641562819";
         let esi = 0.08;
 
-        function update() {
-            document.getElementById('esi-val').innerText = esi.toFixed(6);
-            document.getElementById('eur-val').innerText = (esi * 0.85).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
+        function updateUI() {
+            document.getElementById('esi-display').innerText = esi.toFixed(6);
+            document.getElementById('eur-display').innerText = (esi * 0.85).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
         }
 
-        function recycle() {
-            let gain = (Math.random() * 0.008);
+        // AUTO-GENERIERUNG: Alle 10 Sekunden
+        setInterval(() => {
+            let gain = Math.random() * 0.0001;
             esi += gain;
-            update();
+            updateUI();
+            console.log("Auto-Flow Gain: " + gain);
+        }, 10000);
+
+        function manualRecycle() {
+            esi += 0.005;
+            updateUI();
+            document.getElementById('log').innerHTML = "> Manuelle Extraktion erfolgreich<br>" + document.getElementById('log').innerHTML;
         }
 
-        function forward() {
-            let auth = prompt("QUANTUM FINGERPRINT: Sequenz eingeben");
-            if(auth === MASTER_SIG) {
-                let target = prompt("Ziel (Node-ID oder Adresse):");
-                let cur = document.getElementById('currency').value;
-                if(target) alert("Zahlsystem: Transfer von " + cur + " an " + target + " eingeleitet.\nQuanten-Verschlüsselung aktiv.");
+        function forward(cur) {
+            let auth = prompt("SIGNATUR EINGEBEN:");
+            if(auth === SIG) {
+                let target = prompt("Zieladresse:");
+                if(target) alert("Transfer von " + cur + " eingeleitet an: " + target);
             } else {
-                alert("ZUGRIFF VERWEIGERT: Das ist nicht meiner!");
+                alert("Das ist nicht meiner!");
             }
         }
     </script>
