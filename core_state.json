@@ -1,9 +1,8 @@
 {
-  "qe_balance": 4200136.625,
-  "data_steps": 121,
-  "entropy": 0.09844822,
+  "qe_balance": 4200141.375,
+  "data_steps": 151,
+  "entropy": 0.2866159,
   "core_key": "112358437189887641562819",
-  "protocol": "T-ESOIST-CORE",
-  "timestamp_utc": "2026-01-06T17:43:34.622934+00:00",
-  "signature": "47d1220309a70de8f445c0f426be22325386f4083fac20380b185cfb168b4cd3"
+  "timestamp_utc": "2026-01-06T17:45:47.467882+00:00",
+  "signature": "5fd4a358f2b54e45b1bffdda45ff206c98f41c5f032c2008dc9cba7c7839a202"
 }
