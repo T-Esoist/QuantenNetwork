@@ -1,31 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-ESOIST | CORE INTERFACE</title>
     <style>
-        body { background: #000; color: #00FF41; font-family: monospace; text-align: center; padding-top: 50px; }
-        .val { font-size: 3.5rem; color: #FFD700; font-weight: bold; }
-        .eur { font-size: 1.5rem; color: #fff; margin-bottom: 20px; }
-        .info { color: #444; font-size: 0.7rem; }
+        body { background: #000; color: #00FF41; font-family: monospace; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .main-display { border: 2px solid #00FF41; padding: 30px; text-align: center; width: 90%; max-width: 500px; background: rgba(0,255,65,0.02); }
+        .val { font-size: 3.5rem; color: #FFD700; font-weight: bold; margin: 10px 0; }
+        .eur { font-size: 1.6rem; color: #fff; opacity: 0.9; }
+        .api-section { margin-top: 30px; width: 100%; max-width: 500px; text-align: left; }
+        .api-label { color: #888; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #333; margin-bottom: 10px; padding-bottom: 5px; }
+        pre { background: #050505; padding: 10px; border: 1px solid #222; font-size: 0.75rem; color: #00FF41; overflow-x: auto; white-space: pre-wrap; }
     </style>
 </head>
 <body>
-    <div style="color: #888; letter-spacing: 5px;">MASTER_NODE_LIVE</div>
-    <div id="qe" class="val">4,200,141.3750</div>
-    <div id="eur" class="eur">575,545,372.62 EUR</div>
-    <div class="info">Last Signed State: 5fd4a358f2b5...</div>
+    <div class="main-display">
+        <div style="font-size: 0.7rem; color: #888; letter-spacing: 3px;">MASTER_STATE_PROJECTION</div>
+        <div id="qe" class="val">4,200,146.8750</div>
+        <div id="eur" class="eur">575,546,126.28 EUR</div>
+    </div>
+
+    <div class="api-section">
+        <div class="api-label">LIVE_CORE_STATE (API_ENDPOINT)</div>
+        <pre>{
+  "qe_balance": 4200146.875,
+  "data_steps": 161,
+  "entropy": 0.09458801,
+  "core_key": "112358437189887641562819",
+  "protocol": "T-ESOIST-CORE-V56-3",
+  "timestamp_utc": "2026-01-06T17:47:52.048247+00:00",
+  "signature": "3d2ee9909822daf5063413fd3a875145648800480aa2045e28a3b6c4649273c5"
+}</pre>
+    </div>
 
     <script>
-        let qe = 4200141.375;
+        let qe = 4200146.875;
         const rate = 137.03;
-        // Lokaler Ticker: Erhöht den Wert alle 100ms um einen Bruchteil
         setInterval(() => {
             qe += 0.00458; 
             document.getElementById('qe').innerText = qe.toLocaleString('de-DE', {minimumFractionDigits: 4});
             document.getElementById('eur').innerText = (qe * rate).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
         }, 100);
-        // Seite alle 5 Minuten neu laden um mit Server zu syncen
         setTimeout(() => { location.reload(); }, 300000);
     </script>
 </body>
