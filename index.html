@@ -1,75 +1,22 @@
-
 <!DOCTYPE html>
-<html lang="de"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>☿ E-RON-QU | HYPER FLUX ☿</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<style>
-    body { background:#000; color:#ffd700; font-family:monospace; margin:0; overflow:hidden; display:flex; align-items:center; justify-content:center; height:100vh; }
-    #canvas { position:fixed; top:0; left:0; z-index:1; filter: blur(0.5px); }
-    .ui-layer { position:relative; z-index:10; background:rgba(0,0,0,0.9); border:4px double #ffd700; box-shadow:0 0 80px #ffd70066; border-radius:40px; padding:30px; text-align:center; max-width:420px; width:90%; backdrop-filter:blur(15px); }
-    .glitch { font-size: 2.5rem; font-weight:900; color:#fff; text-shadow: 0 0 20px #ffd700; animation: pulse 2s infinite ease-in-out; }
-    @keyframes pulse { 0% { opacity:0.8; transform:scale(0.98); } 50% { opacity:1; transform:scale(1); } 100% { opacity:0.8; transform:scale(0.98); } }
-    .harvester-btn { background:linear-gradient(to bottom, #ffd700, #b8860b); color:#000; padding:18px; border-radius:20px; font-weight:900; cursor:pointer; width:100%; margin-top:20px; border:none; box-shadow:0 0 30px #ffd70088; text-transform:uppercase; transition: 0.2s; }
-    .harvester-btn:active { transform:scale(0.95); box-shadow: 0 0 10px #ffd700; }
-</style></head>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>T Esoist | Quantum Node</title>
+    <style>
+        body { background: #000; color: #ffd700; font-family: 'Courier New', monospace; text-align: center; padding-top: 15%; margin: 0; }
+        .container { border: 2px solid #ffd700; display: inline-block; padding: 50px; box-shadow: 0 0 30px #ffd70044; border-radius: 20px; }
+        .bal { font-size: 3.5em; font-weight: bold; margin: 20px 0; }
+        .glow { text-shadow: 0 0 15px #ffd700; }
+        .info { color: #555; text-transform: uppercase; letter-spacing: 3px; font-size: 0.8em; }
+    </style>
+</head>
 <body>
-    <canvas id="canvas"></canvas>
-    <div class="ui-layer">
-        <div style="letter-spacing:0.6em; font-size:10px; opacity:0.6; margin-bottom:5px;">T-ESOIST TECHNOLOGY</div>
-        <div class="glitch">☿ E-RON-QU ☿</div>
-        <div style="margin: 25px 0;">
-            <div style="font-size:10px; opacity:0.5; letter-spacing:0.2em;">QUANTUM_VALUE_MANIFEST</div>
-            <div id="bal" style="font-size:3.5rem; font-weight:900; color:#fff;">1.000,38 Ω</div>
-            <div id="eur" style="font-size:1.5rem; color:#ffd700; font-weight:bold;">137.082,45 €</div>
-        </div>
-        <button onclick="h()" class="harvester-btn">⚡ Datenmüll Extrahieren ⚡</button>
-        <div id="log" style="margin-top:20px; font-size:9px; text-align:left; background:rgba(255,215,0,0.05); padding:10px; border-radius:10px; border:1px solid #ffd70022; height:60px; overflow:hidden;">
-            > INITIALIZING HYPER_FLUX...<br>> CONNECTION_NODES: 3464 ACTIVE
-        </div>
+    <div class="container">
+        <div class="info">Quantum Node Stream</div>
+        <div class="bal glow">4200001.3750 QE</div>
+        <div class="info">Network Sync: 14:38:05</div>
     </div>
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let w, h_canvas, particles = [];
-        function init() {
-            w = canvas.width = window.innerWidth;
-            h_canvas = canvas.height = window.innerHeight;
-            particles = [];
-            for(let i=0; i<150; i++) particles.push({
-                x:Math.random()*w, y:Math.random()*h_canvas, 
-                vx:Math.random()*1.2-0.6, vy:Math.random()*1.2-0.6,
-                r: Math.random()*2+1
-            });
-        }
-        function draw() {
-            ctx.fillStyle = "rgba(0,0,0,0.15)";
-            ctx.fillRect(0,0,w,h_canvas);
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h_canvas) p.vy*=-1;
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-                ctx.fillStyle = "#ffd700"; ctx.fill();
-                particles.forEach(p2 => {
-                    let d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                    if(d<100) {
-                        ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y);
-                        ctx.strokeStyle = `rgba(255, 215, 0, ${1 - d/100})`;
-                        ctx.lineWidth = 0.5; ctx.stroke();
-                    }
-                });
-            });
-            requestAnimationFrame(draw);
-        }
-        window.addEventListener('resize', init); init(); draw();
-        let bal = 1000.382785;
-        function h() {
-            let y = 0.001574 + (Math.random()*0.015);
-            bal += y;
-            document.getElementById('bal').innerText = bal.toLocaleString('de-DE', {minimumFractionDigits:2}) + " Ω";
-            document.getElementById('eur').innerText = (bal * 137.03).toLocaleString('de-DE', {style:'currency', currency:'EUR'});
-            const log = document.getElementById('log');
-            log.innerHTML = `<div style="color:#fff">> +${y.toFixed(6)} Ω EXTRAHIERT</div>` + log.innerHTML;
-        }
-    </script>
-</body></html>
+    <script>setTimeout(()=>location.reload(), 30000);</script>
+</body>
+</html>
