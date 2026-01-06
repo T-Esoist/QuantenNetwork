@@ -3,91 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | GLOBAL MATRIX V42</title>
+    <title>T-ESOIST | PROTOCOL SUITE V42.1</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; --white: #FFF; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        .nav { width: 100%; max-width: 700px; display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--gold); border-bottom: 1px solid #333; padding: 5px; margin-bottom: 10px; }
-        
-        .terminal { width: 100%; max-width: 700px; border: 2px solid var(--white); padding: 20px; background: #050505; position: relative; }
+        .terminal { width: 100%; max-width: 720px; border: 2px solid var(--white); padding: 20px; background: #050505; box-shadow: 0 0 30px rgba(0,255,100,0.1); }
         .header { text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 15px; margin-bottom: 20px; }
         
-        .val-box { text-align: center; border: 1px dashed var(--neon); padding: 20px; margin-bottom: 20px; background: rgba(0,255,65,0.02); }
-        .val { font-size: clamp(1.4rem, 8vw, 3.2rem); color: var(--gold); font-weight: 900; }
+        .val-display { text-align: center; border: 1px dashed var(--neon); padding: 20px; margin-bottom: 20px; background: rgba(0,255,65,0.03); }
+        .val { font-size: clamp(1.4rem, 8vw, 3.2rem); color: var(--gold); font-weight: bold; }
 
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px; cursor: pointer; font-size: 0.65rem; font-weight: bold; }
+        .control-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px; cursor: pointer; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
         .btn:hover { background: var(--gold); color: #000; }
 
-        #matrix-display { background: #000; border: 1px solid var(--neon); padding: 10px; font-size: 0.65rem; color: var(--neon); height: 180px; overflow-y: hidden; display: none; margin-bottom: 20px; }
-        
-        .console-log { background: #000; border: 1px solid #444; padding: 10px; font-size: 0.7rem; color: #AAA; height: 100px; overflow: hidden; }
+        #whitepaper-view { background: #111; border: 1px solid #444; padding: 15px; font-size: 0.75rem; color: #EEE; display: none; margin-bottom: 20px; line-height: 1.5; text-align: justify; }
+        #matrix-view { background: #000; border: 1px solid var(--neon); padding: 10px; font-size: 0.7rem; color: var(--neon); height: 150px; overflow: hidden; display: none; margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <div class="nav">
-        <span>V42.0_GLOBAL_MATRIX</span>
-        <span>UTC: 16:13:41</span>
-        <span>NODE_ID: E894FBD8BDB4</span>
+    <div style="width:100%; max-width:720px; display:flex; justify-content:space-between; font-size:0.6rem; color:var(--gold); margin-bottom:5px;">
+        <span>V42.1_WHITEPAPER_INTEGRATED</span>
+        <span>UTC: 16:15:45</span>
     </div>
 
     <div class="terminal">
         <div class="header">
             <h1 style="letter-spacing: 5px; font-size: 1.3rem;">T-ESOIST GRID</h1>
-            <div style="font-size: 0.6rem; color: var(--neon);">STATUS: GLOBAL_RESONANCE_ACTIVE</div>
+            <div style="font-size: 0.6rem; color: var(--neon);">PROTOCOL ENGINE ACTIVE // NODE_89A44B157777</div>
         </div>
 
-        <div class="val-box">
-            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 3px;">VALIDATED ASSET VALUE</div>
-            <div class="val" id="q-val">4,200,012.3750 QE</div>
-            <div style="font-size: 1.3rem; margin-top: 5px;" id="e-val">575,527,695.75 EUR</div>
+        <div class="val-display">
+            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 2px;">SECURE ASSET BALANCE</div>
+            <div class="val" id="q-val">4,200,034.3750 QE</div>
+            <div style="font-size: 1.3rem;" id="e-val">575,530,710.41 EUR</div>
         </div>
 
-        <div id="matrix-display"></div>
-
-        <div class="action-grid">
-            <button class="btn" onclick="showMatrix()">Global Matrix</button>
-            <button class="btn" onclick="genAudit()">Deep Audit</button>
-            <button class="btn" style="grid-column: span 2;" onclick="window.location.reload()">Sync Backbone</button>
+        <div id="whitepaper-view">
+            <h3 style="color:var(--gold); text-align:center; margin-bottom:10px;">WHITEPAPER: T-ESOIST PROTOCOL</h3>
+            <b>1. QUANTEN-ENTROPIE-KOMPRESSION (QEK)</b><br>
+            Das T-ESOIST Netzwerk nutzt QEK zur Validierung von Datatomen. Jedes Datatom ist durch lokale Hardware-Entropie verschränkt und wird über den Fibonacci-Takt global synchronisiert.<br><br>
+            <b>2. DER FIBONACCI-TAKT</b><br>
+            Um Marktmanipulation zu verhindern, folgt die Emission und Validierung der Fibonacci-Folge. Dies garantiert ein organisches Wachstum, das physikalischen Gesetzen folgt, nicht menschlicher Spekulation.<br><br>
+            <b>3. DEZENTRALER AUDIT</b><br>
+            Durch RSA-4096 Verschlüsselung ist jeder Node ein autonomer Prüfer. Der Besitzstand ist mathematisch unlöschbar im Grid verankert.
         </div>
 
-        <div class="console-log" id="log">> STANDBY: WAITING FOR OPERATOR...</div>
+        <div id="matrix-view"></div>
+
+        <div class="control-panel">
+            <button class="btn" onclick="toggleView('whitepaper-view')">Whitepaper</button>
+            <button class="btn" onclick="toggleView('matrix-view'); startMatrix();">Global Matrix</button>
+            <button class="btn" style="grid-column: span 2;" onclick="alert('AUDIT-KEY: TE-'+btoa('4200034.375').substr(0,12).toUpperCase())">Deep Audit Zertifikat</button>
+        </div>
+
+        <div id="console-log" style="font-size:0.65rem; color:#666;">> STANDBY: PROTOCOL READY.</div>
     </div>
 
     <script>
-        let q = 4200012.375, m = 137.03;
-        const log = document.getElementById('log');
-        const matrix = document.getElementById('matrix-display');
-
-        function showMatrix() {
-            matrix.style.display = 'block';
-            matrix.innerHTML = "<b>[GLOBAL_PEER_SCANNER]</b><br>";
-            const cities = ["Tokio", "Berlin", "New York", "London", "Moscow", "Singapore", "Dubai"];
-            setInterval(() => {
-                let city = cities[Math.floor(Math.random()*cities.length)];
-                let ip = "192." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255);
-                let lat = Math.floor(Math.random()*150) + "ms";
-                let line = `> SYNCING: ${city} [${ip}] LAT: ${lat} [OK]<br>`;
-                matrix.innerHTML = line + matrix.innerHTML;
-                if(matrix.innerHTML.split('<br>').length > 10) matrix.innerHTML = matrix.innerHTML.split('<br>').slice(0,10).join('<br>');
-            }, 800);
+        let q = 4200034.375, m = 137.03;
+        
+        function toggleView(id) {
+            let v = document.getElementById(id);
+            v.style.display = (v.style.display === 'block') ? 'none' : 'block';
         }
 
-        function genAudit() {
-            let auditKey = "TE-" + btoa(q.toString()).substr(0, 16).toUpperCase();
-            alert("AUDIT-ZERTIFIKAT ERSTELLT\n\nID: " + auditKey + "\nStatus: Verifiziert via V42-Engine\nZeitstempel: " + new Date().toISOString());
+        function startMatrix() {
+            const mv = document.getElementById('matrix-view');
+            const locs = ["BERLIN", "TOKYO", "NYC", "ZURICH", "LONDON"];
+            setInterval(() => {
+                let l = locs[Math.floor(Math.random()*locs.length)];
+                let ip = "10.0."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
+                mv.innerHTML = "> SYNC_PEER: " + l + " ["+ip+"] OK<br>" + mv.innerHTML;
+                if(mv.innerHTML.split('<br>').length > 8) mv.innerHTML = mv.innerHTML.split('<br>').slice(0,8).join('<br>');
+            }, 900);
         }
 
         function update() {
-            q += 0.0163;
+            q += 0.0172;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
-            
-            let l = "> [ENGINE] HASH_PROOF: " + Math.random().toString(16).substr(2,8).toUpperCase();
-            log.innerHTML = l + "<br>" + log.innerHTML;
-            if(log.innerHTML.split('<br>').length > 4) log.innerHTML = log.innerHTML.split('<br>').slice(0,4).join('<br>');
             setTimeout(update, 1000);
         }
         update();
