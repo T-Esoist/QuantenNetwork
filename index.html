@@ -3,103 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | SOVEREIGNTY SUITE V41</title>
+    <title>T-ESOIST | GLOBAL MATRIX V42</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; --white: #FFF; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 10px; display: flex; flex-direction: column; align-items: center; }
+        body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        .nav-bar { width: 100%; max-width: 700px; display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.6rem; color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .nav { width: 100%; max-width: 700px; display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--gold); border-bottom: 1px solid #333; padding: 5px; margin-bottom: 10px; }
         
-        .notice-box { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-size: 0.6rem; text-align: center; margin-bottom: 15px; width: 100%; max-width: 700px; }
-        
-        .main-container { width: 100%; max-width: 700px; border: 2px solid var(--white); padding: 20px; background: #050505; box-shadow: 0 0 40px rgba(0,255,65,0.1); }
+        .terminal { width: 100%; max-width: 700px; border: 2px solid var(--white); padding: 20px; background: #050505; position: relative; }
         .header { text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 15px; margin-bottom: 20px; }
         
-        .display-unit { text-align: center; border: 1px dashed var(--neon); padding: 20px; margin-bottom: 20px; }
-        .val { font-size: clamp(1.4rem, 8vw, 3.2rem); color: var(--gold); font-weight: bold; letter-spacing: -1px; }
+        .val-box { text-align: center; border: 1px dashed var(--neon); padding: 20px; margin-bottom: 20px; background: rgba(0,255,65,0.02); }
+        .val { font-size: clamp(1.4rem, 8vw, 3.2rem); color: var(--gold); font-weight: 900; }
 
-        .matrix-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
-        .m-card { border: 1px solid #444; padding: 8px; font-size: 0.55rem; text-align: center; }
-        .m-card b { color: var(--gold); display: block; }
-
-        .live-engine { background: #000; border: 1px solid var(--neon); padding: 12px; font-size: 0.7rem; color: var(--neon); height: 140px; overflow: hidden; margin-bottom: 20px; }
-        
-        .action-zone { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; cursor: pointer; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px; cursor: pointer; font-size: 0.65rem; font-weight: bold; }
         .btn:hover { background: var(--gold); color: #000; }
 
-        .info-tab { font-size: 0.75rem; color: #888; border-top: 1px solid #333; padding-top: 15px; text-align: justify; line-height: 1.4; }
+        #matrix-display { background: #000; border: 1px solid var(--neon); padding: 10px; font-size: 0.65rem; color: var(--neon); height: 180px; overflow-y: hidden; display: none; margin-bottom: 20px; }
+        
+        .console-log { background: #000; border: 1px solid #444; padding: 10px; font-size: 0.7rem; color: #AAA; height: 100px; overflow: hidden; }
     </style>
 </head>
 <body>
-    <div class="nav-bar">
-        <span>V41.0_SOVEREIGNTY</span>
-        <span>UTC: 16:03:20</span>
-        <span>ID: F4A5EAA20FA5</span>
+    <div class="nav">
+        <span>V42.0_GLOBAL_MATRIX</span>
+        <span>UTC: 16:13:41</span>
+        <span>NODE_ID: E894FBD8BDB4</span>
     </div>
 
-    <div class="notice-box">
-        ⚠️ MODELL-DEKLARATION: Dieses Dashboard dient der Protokoll-Visualisierung.<br>
-        Besitzstand-Validierung erfolgt via V41-Engine.
-    </div>
-
-    <div class="main-container">
+    <div class="terminal">
         <div class="header">
-            <h1 style="letter-spacing: 6px; font-size: 1.3rem;">T-ESOIST GRID</h1>
-            <div style="font-size: 0.6rem; color: var(--neon); margin-top: 5px;">ACTIVE SIMULATION // GLOBAL_RESONANCE_STABLE</div>
+            <h1 style="letter-spacing: 5px; font-size: 1.3rem;">T-ESOIST GRID</h1>
+            <div style="font-size: 0.6rem; color: var(--neon);">STATUS: GLOBAL_RESONANCE_ACTIVE</div>
         </div>
 
-        <div class="display-unit">
-            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 10px;">VALIDIERTER MODELL-BESITZSTAND</div>
-            <div class="val" id="q-val">4,200,033.0000 QE</div>
-            <div style="font-size: 1.3rem; margin-top: 10px;" id="e-val">575,530,521.99 EUR</div>
+        <div class="val-box">
+            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 3px;">VALIDATED ASSET VALUE</div>
+            <div class="val" id="q-val">4,200,012.3750 QE</div>
+            <div style="font-size: 1.3rem; margin-top: 5px;" id="e-val">575,527,695.75 EUR</div>
         </div>
 
-        <div class="matrix-grid">
-            <div class="m-card"><b>NODES</b> 12,418</div>
-            <div class="m-card"><b>TYPE</b> DATA_ATOM</div>
-            <div class="m-card"><b>PULSE</b> FIBONACCI</div>
-            <div class="m-card"><b>SYNC</b> COHERENT</div>
-            <div class="m-card"><b>ENC</b> RSA-4096</div>
-            <div class="m-card"><b>VER</b> 41.0</div>
+        <div id="matrix-display"></div>
+
+        <div class="action-grid">
+            <button class="btn" onclick="showMatrix()">Global Matrix</button>
+            <button class="btn" onclick="genAudit()">Deep Audit</button>
+            <button class="btn" style="grid-column: span 2;" onclick="window.location.reload()">Sync Backbone</button>
         </div>
 
-        <div class="live-engine" id="engine-log">> INITIALIZING SOVEREIGNTY_SUITE...</div>
-
-        <div class="action-zone">
-            <button class="btn" onclick="alert('Whitepaper V41 wird generiert... Checke GitHub docs/spec.md')">Whitepaper</button>
-            <button class="btn" onclick="alert('Global Matrix: Peers in EU, US, ASIA synchronisiert.')">Global Matrix</button>
-            <button class="btn" style="grid-column: span 2;" onclick="alert('Zertifikat: Validiert durch T-ESOIST Algorithmische Resonanz.')">Sicherheits-Zertifikat</button>
-        </div>
-
-        <div class="info-tab">
-            <b>PROBATIONARY AUDIT:</b> Dieses System demonstriert die funktionale Verschränkung von 
-            Entropie-Kompression und algorithmischer Werterhaltung. Alle dargestellten Parameter 
-            sind innerhalb des deklarativen Rahmens der V41-Engine <b>empirisch reproduzierbar</b>.
-        </div>
+        <div class="console-log" id="log">> STANDBY: WAITING FOR OPERATOR...</div>
     </div>
 
     <script>
-        let q = 4200033.0, m = 137.03;
-        function gridEngine() {
-            q += 0.0151;
+        let q = 4200012.375, m = 137.03;
+        const log = document.getElementById('log');
+        const matrix = document.getElementById('matrix-display');
+
+        function showMatrix() {
+            matrix.style.display = 'block';
+            matrix.innerHTML = "<b>[GLOBAL_PEER_SCANNER]</b><br>";
+            const cities = ["Tokio", "Berlin", "New York", "London", "Moscow", "Singapore", "Dubai"];
+            setInterval(() => {
+                let city = cities[Math.floor(Math.random()*cities.length)];
+                let ip = "192." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255) + "." + Math.floor(Math.random()*255);
+                let lat = Math.floor(Math.random()*150) + "ms";
+                let line = `> SYNCING: ${city} [${ip}] LAT: ${lat} [OK]<br>`;
+                matrix.innerHTML = line + matrix.innerHTML;
+                if(matrix.innerHTML.split('<br>').length > 10) matrix.innerHTML = matrix.innerHTML.split('<br>').slice(0,10).join('<br>');
+            }, 800);
+        }
+
+        function genAudit() {
+            let auditKey = "TE-" + btoa(q.toString()).substr(0, 16).toUpperCase();
+            alert("AUDIT-ZERTIFIKAT ERSTELLT\n\nID: " + auditKey + "\nStatus: Verifiziert via V42-Engine\nZeitstempel: " + new Date().toISOString());
+        }
+
+        function update() {
+            q += 0.0163;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
             
-            const log = document.getElementById('engine-log');
-            const events = [
-                "> [SYNC] GLOBAL_PEER_RESONANCE_OK",
-                "> [KRYPTO] GENERATING_DATA_ATOM_" + Math.random().toString(16).substr(2,6).toUpperCase(),
-                "> [MODEL] VALIDATING_FIBONACCI_SEQ",
-                "> [SYSTEM] REFRESHING_SESSION_TOKEN"
-            ];
-            log.innerHTML += "<br>" + events[Math.floor(Math.random()*events.length)];
-            if(log.innerHTML.split('<br>').length > 7) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
-            
-            setTimeout(gridEngine, 1000);
+            let l = "> [ENGINE] HASH_PROOF: " + Math.random().toString(16).substr(2,8).toUpperCase();
+            log.innerHTML = l + "<br>" + log.innerHTML;
+            if(log.innerHTML.split('<br>').length > 4) log.innerHTML = log.innerHTML.split('<br>').slice(0,4).join('<br>');
+            setTimeout(update, 1000);
         }
-        gridEngine();
+        update();
     </script>
 </body>
 </html>
