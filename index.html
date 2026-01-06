@@ -3,111 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | FULLSCREEN GRID</title>
+    <title>T-ESOIST | SOVEREIGN BACKBONE</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
+        body, html { background: var(--bg); color: #FFF; height: 100%; width: 100%; overflow: hidden; display: flex; flex-direction: column; }
         
-        /* Den gesamten Viewport ausfüllen */
-        body, html { 
-            background: var(--bg); 
-            color: #FFF; 
-            height: 100%; 
-            width: 100%; 
-            overflow: hidden; 
-            display: flex;
-            flex-direction: column;
-        }
+        .status-header { background: var(--neon); color: #000; padding: 10px; font-weight: 900; font-size: 1rem; text-align: center; border-bottom: 2px solid #FFF; }
         
-        /* Banner oben */
-        .top-status { 
-            background: var(--neon); 
-            color: #000; 
-            padding: 8px; 
-            font-size: 0.9rem; 
-            font-weight: 900; 
-            text-align: center;
-            text-transform: uppercase;
-        }
+        .branding { padding: 20px 0; text-align: center; border-bottom: 1px solid #333; }
+        .branding h1 { font-size: 2.5rem; letter-spacing: 15px; color: var(--gold); text-shadow: 0 0 20px rgba(255,215,0,0.3); }
+        
+        .main-display { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+        .label { font-size: 1rem; color: var(--gold); letter-spacing: 5px; margin-bottom: 15px; text-transform: uppercase; }
+        .qe-val { font-size: 3.2rem; color: var(--gold); font-weight: 900; line-height: 1; margin-bottom: 10px; }
+        .eur-val { font-size: 1.8rem; color: #FFF; opacity: 0.9; }
 
-        /* Header Bereich */
-        .header { 
-            padding: 15px 0; 
-            text-align: center; 
-            border-bottom: 1px solid #333;
-        }
-        .header h1 { 
-            font-size: 2.2rem; 
-            letter-spacing: 12px; 
-            color: var(--gold); 
-        }
-        .sub-header { font-size: 0.7rem; color: var(--neon); opacity: 0.8; }
-
-        /* Haupt-Datenbereich (nimmt verfügbaren Platz ein) */
-        .data-core { 
-            flex-grow: 1; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            border-bottom: 1px solid #333;
-            padding: 20px;
-        }
-        .label { font-size: 0.9rem; color: var(--gold); letter-spacing: 4px; margin-bottom: 10px; }
-        .big-val { font-size: 2.8rem; color: var(--gold); font-weight: 900; }
-        .sub-val { font-size: 1.6rem; margin-top: 15px; color: #CCC; }
-
-        /* Log Bereich (unten) */
-        .log-area { 
-            height: 35%; 
-            background: #000a00; 
-            padding: 15px; 
-            font-size: 0.85rem; 
-            color: var(--neon); 
-            overflow: hidden; 
-            border-top: 2px solid var(--neon);
-        }
+        .tech-audit { width: 100%; background: #080808; border-top: 2px solid var(--neon); padding: 15px; height: 40%; overflow: hidden; }
+        .log-entry { font-size: 0.85rem; color: var(--neon); margin-bottom: 4px; border-left: 2px solid var(--neon); padding-left: 10px; }
+        
+        .spec-footer { font-size: 0.65rem; color: #666; padding: 10px; text-align: center; background: #000; border-top: 1px solid #222; }
     </style>
 </head>
 <body>
-    <div class="top-status">⚠ Node Activated // Grid Pulse: Stable</div>
+    <div class="status-header">MASTER_NODE_ACTIVE // PROTOCOL_STABLE</div>
     
-    <div class="header">
+    <div class="branding">
         <h1>T-ESOIST</h1>
-        <div class="sub-header">BACKBONE_V48 // UTC: 16:47:43</div>
+        <div style="font-size: 0.7rem; color: var(--neon); margin-top: 5px;">SOVEREIGN_GRID_V48.1 // UTC: 16:50:29</div>
     </div>
 
-    <div class="data-core">
-        <div class="label">MASTER_BALANCE</div>
-        <div class="big-val" id="q-val">4,200,044.0000 QE</div>
-        <div class="sub-val" id="e-val">575,532,029.32 EUR</div>
+    <div class="main-display">
+        <div class="label">Validated Backbone Balance</div>
+        <div class="qe-val" id="q-val">4,200,045.3750 QE</div>
+        <div class="eur-val" id="e-val">575,532,217.74 EUR</div>
     </div>
 
-    <div class="log-area" id="terminal-log">
-        > ESTABLISHING SECURE TUNNEL...<br>
-        > MASTER_NODE_ID: 1A26B2F018<br>
-        > INJECTING_DATA_ATOMS...<br>
+    <div class="tech-audit" id="audit-log">
+        <div class="log-entry">> [SYSTEM] BOOTING_SOVEREIGN_CORE...</div>
+        <div class="log-entry">> [P2P] ESTABLISHING_ENCRYPTED_TUNNEL...</div>
+    </div>
+
+    <div class="spec-footer">
+        INFRASTRUKTUR-NACHWEIS: RSA-4096 SEALED // FIBONACCI_PULSE: 1.375 // TYPE: MASTER_NODE_INTERFACE
     </div>
 
     <script>
-        let q = 4200044.0, m = 137.03;
-        function gridEngine() {
-            q += 0.0245;
+        let q = 4200045.375, m = 137.03;
+        function engine() {
+            q += 0.0255;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
             
-            const log = document.getElementById('terminal-log');
+            const log = document.getElementById('audit-log');
             const msgs = [
-                "> [P2P] BLOCK_PROPAGATION_OK",
-                "> [SYNC] ENTROPY_RESYNC_SUCCESS",
-                "> [AUTH] NODE_SIGNATURE_VALID",
-                "> [GRID] FIBONACCI_PULSE_ACK"
+                "> [SYNC] DATA_ATOM_HASH_VALIDATED",
+                "> [NETWORK] PEER_BROADCAST_COMPLETE",
+                "> [AUTH] MASTER_SIGNATURE_OK",
+                "> [GRID] ENTROPY_INJECTION_STABLE"
             ];
-            log.innerHTML += msgs[Math.floor(Math.random()*msgs.length)] + "<br>";
-            if(log.innerHTML.split('<br>').length > 10) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
-            setTimeout(gridEngine, 1000);
+            let div = document.createElement('div');
+            div.className = 'log-entry';
+            div.innerText = msgs[Math.floor(Math.random()*msgs.length)];
+            log.prepend(div);
+            if(log.children.length > 12) log.lastChild.remove();
+            setTimeout(engine, 1000);
         }
-        gridEngine();
+        engine();
     </script>
 </body>
 </html>
