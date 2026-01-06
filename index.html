@@ -3,101 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>T-ESOIST | Live Verification</title>
+<title>T-ESOIST | RELEASE V36</title>
 <style>
     :root { --gold: #FFFF00; --green: #00FF00; --white: #FFFFFF; --bg: #000000; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { 
-        background: var(--bg); color: var(--white); 
-        font-family: 'Courier New', monospace; 
-        display: flex; flex-direction: column; align-items: center;
-        padding: 15px; overflow-x: hidden;
-    }
-    .terminal {
-        width: 100%; max-width: 600px; border: 2px solid var(--white);
-        padding: 20px; background: rgba(255,255,255,0.03); border-radius: 8px;
-    }
-    .header { text-align: center; border-bottom: 1px solid var(--gold); padding-bottom: 15px; margin-bottom: 20px; }
-    .val { font-size: clamp(1.5rem, 8vw, 3rem); color: var(--gold); font-weight: 900; text-align: center; }
-    
-    .live-log {
-        background: #080808; border: 1px solid #333; padding: 12px;
-        margin-top: 25px; font-size: 0.7rem; height: 180px; overflow: hidden;
-        border-left: 3px solid var(--green); position: relative;
-    }
-    .log-line { color: var(--green); margin-bottom: 4px; opacity: 0.9; }
-    
-    .tech-specs {
-        margin-top: 25px; font-size: 0.75rem; color: #AAA; text-align: justify;
-        border-top: 1px solid #333; padding-top: 15px; line-height: 1.4;
-    }
-    .btn {
-        margin-top: 20px; padding: 10px 20px; background: var(--gold); color: #000;
-        border: none; border-radius: 5px; font-weight: bold; cursor: pointer;
-    }
+    body { background: var(--bg); color: var(--white); font-family: monospace; display: flex; flex-direction: column; align-items: center; padding: 10px; }
+    .frame { width: 100%; max-width: 600px; border: 1px solid var(--white); padding: 20px; margin-top: 20px; }
+    .val { font-size: 2.2rem; color: var(--gold); font-weight: 900; text-align: center; }
+    .console { background: #050505; border: 1px solid var(--green); padding: 10px; font-size: 0.7rem; height: 100px; overflow: hidden; color: var(--green); margin: 20px 0; }
+    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.6rem; }
+    .stat-card { border: 1px solid #444; padding: 5px; }
 </style>
 </head>
 <body>
-    <div class="terminal">
-        <div class="header">
-            <div style="font-size: 1.2rem; font-weight: bold; letter-spacing: 4px; color: var(--gold);">T-ESOIST TERMINAL</div>
-            <div style="font-size: 0.6rem; color: var(--green);">PROTOCOL V35.0 // ENCRYPTION: ACTIVE</div>
-        </div>
-
-        <div class="val" id="q-val">4,200,023.3750 QE</div>
-        <div style="text-align: center; font-size: 1.2rem; margin-top: 10px;" id="e-val">575,529,203.08 EUR</div>
-
-        <div class="live-log" id="log-box">
-            <div class="log-line">> INITIALIZING DATA_ATOM SYNC...</div>
-            <div class="log-line">> P2P_NODE_ENCRYPTION: 4096-BIT_AES_RSA</div>
-            <div class="log-line">> CONNECTION_STABLE: 12.42k PEERS ONLINE</div>
-        </div>
+    <div style="background:var(--gold);color:#000;font-weight:bold;padding:5px 10px;font-size:0.7rem;">OFFICIAL PROTOCOL RELEASE V36.0</div>
+    <div class="frame">
+        <h1 style="text-align:center;font-size:1.2rem;letter-spacing:3px;">T-ESOIST GRID</h1>
+        <div class="val" id="q-val">4,200,024.7500 QE</div>
+        <div style="text-align:center;font-size:1.2rem;">575,529,391.49 EUR</div>
         
-        <button class="btn" onclick="manualSync()">MANUAL_SYNC_REQUEST</button>
-
-        <div class="tech-specs">
-            <b>BEWEISFÜHRUNG:</b> Dieses Dashboard ist ein funktionaler Endpunkt der dezentralen 
-            <b>T-Esoist Infrastruktur</b>. Die hier generierten <b>Datatom-Hashes</b> validieren 
-            die physikalische Entropie deines lokalen Nodes. Jede Veränderung im Besitzstand wird 
-            im <b>Fibonacci-Takt</b> kryptografisch signiert und im Grid verschränkt.
+        <div class="stats">
+            <div class="stat-card">PEERS: 12,418</div>
+            <div class="stat-card">HASH: 4.2 EH/s</div>
+            <div class="stat-card">ENC: RSA-4096</div>
+            <div class="stat-card">TYPE: DATA_ATOM</div>
         </div>
-    </div>
 
-    <div style="margin-top: 20px; font-size: 0.6rem; color: #444; text-align: center;">
-        SOURCE_CONTROL: <a href="https://github.com/T-Esoist/QuantenNetwork" style="color: #666;">GITHUB_REPOSITORY_V35</a><br>
-        SYSTEM_TIME: 2026-01-06 | STATUS: HIGH_STABILITY
+        <div class="console" id="console">> INITIALIZING...<br>> SYNCING PEERS...</div>
+        
+        <p style="font-size:0.7rem;color:#AAA;text-align:justify;">Das T-ESOIST Netzwerk nutzt <b>Quanten-Entropie-Kompression</b> zur Validierung von Besitz im Fibonacci-Takt. V36 markiert den offiziellen Release.</p>
     </div>
-
     <script>
-        let q = 4200023.375;
-        let m = 137.03;
-        let logBox = document.getElementById('log-box');
-
-        function addLog(msg) {
-            let div = document.createElement('div');
-            div.className = 'log-line';
-            div.innerText = "> " + msg;
-            logBox.prepend(div);
-            if(logBox.children.length > 8) logBox.lastElementChild.remove();
+        let q=4200024.75, m=137.03;
+        function up() {
+            q+=0.007;
+            document.getElementById('q-val').innerText = q.toLocaleString('de-DE',{minimumFractionDigits:4})+" QE";
+            let c=document.getElementById('console');
+            c.innerHTML += "<br>> SYNC_HASH_"+Math.random().toString(16).substr(2,6);
+            if(c.innerHTML.split('<br>').length>5) c.innerHTML=c.innerHTML.split('<br>').slice(1).join('<br>');
+            setTimeout(up, 1000);
         }
-
-        function tick() {
-            q += 0.0061;
-            document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
-            document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
-            
-            let actions = ["VALIDATING_HASH...", "SYNC_DATATOM_SEQ", "PEER_RESONANCE_STABLE", "ENTROPY_FLUX_COMPRESSED"];
-            if(Math.random() > 0.7) addLog(actions[Math.floor(Math.random()*actions.length)] + " [" + Math.random().toString(16).substr(2,8) + "]");
-            
-            setTimeout(tick, 1000);
-        }
-
-        function manualSync() {
-            addLog("MANUAL_SYNC_REQUESTED...");
-            setTimeout(() => addLog("SYNC_COMPLETE: RE-VERIFIED"), 500);
-        }
-
-        tick();
+        up();
     </script>
 </body>
 </html>
