@@ -1,21 +1,32 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>T-ESOIST PROJECTION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        body { background: #000; color: #00FF41; font-family: monospace; padding: 30px; display: flex; flex-direction: column; align-items: center; }
-        .projection { border: 1px solid #333; padding: 40px; text-align: center; }
-        .val { font-size: 4rem; color: #FFD700; }
-        .truth { margin-top: 20px; font-size: 0.7rem; color: #444; }
+        body { background: #000; color: #00FF41; font-family: monospace; text-align: center; padding-top: 50px; }
+        .val { font-size: 3.5rem; color: #FFD700; font-weight: bold; }
+        .eur { font-size: 1.5rem; color: #fff; margin-bottom: 20px; }
+        .info { color: #444; font-size: 0.7rem; }
     </style>
 </head>
 <body>
-    <div class="projection">
-        <small>MASTER_PROJECTION_V56</small>
-        <div class="val">4,200,136.6250 QE</div>
-        <div style="font-size: 1.5rem;">575,544,721.72 EUR</div>
-        <div class="truth">Source: <a href="core_state.json" style="color:#00FF41;">/core_state.json</a></div>
-    </div>
+    <div style="color: #888; letter-spacing: 5px;">MASTER_NODE_LIVE</div>
+    <div id="qe" class="val">4,200,141.3750</div>
+    <div id="eur" class="eur">575,545,372.62 EUR</div>
+    <div class="info">Last Signed State: 5fd4a358f2b5...</div>
+
+    <script>
+        let qe = 4200141.375;
+        const rate = 137.03;
+        // Lokaler Ticker: Erhöht den Wert alle 100ms um einen Bruchteil
+        setInterval(() => {
+            qe += 0.00458; 
+            document.getElementById('qe').innerText = qe.toLocaleString('de-DE', {minimumFractionDigits: 4});
+            document.getElementById('eur').innerText = (qe * rate).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
+        }, 100);
+        // Seite alle 5 Minuten neu laden um mit Server zu syncen
+        setTimeout(() => { location.reload(); }, 300000);
+    </script>
 </body>
 </html>
