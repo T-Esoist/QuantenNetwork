@@ -3,47 +3,40 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    body { background:#000; color:#ffd700; font-family:monospace; margin:0; display:flex; flex-direction:column; align-items:center; padding:20px; }
-    .header { text-align:center; padding:40px 0; letter-spacing:10px; font-weight:bold; font-size:1.5em; text-shadow:0 0 15px #ffd700; }
-    .main-box { border:2px solid #ffd700; padding:30px; border-radius:15px; background:rgba(10,10,10,0.9); box-shadow:0 0 40px #ffd70033; text-align:center; max-width:600px; width:100%; }
-    .bal { font-size:3em; font-weight:900; margin:10px 0; }
-    .grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:30px; text-align:left; font-size:0.7em; }
-    .card { background:#080808; border:1px solid #222; padding:15px; border-radius:8px; }
-    .card h3 { font-size:0.9em; margin:0 0 10px 0; color:#ffd700; border-bottom:1px solid #333; }
-    .green { color:#00ff41; }
-    .visual { display:flex; height:40px; align-items:flex-end; gap:4px; margin-top:10px; }
-    .bar { background:#ffd700; width:15%; animation:h 1s infinite alternate; opacity:0.5; }
-    @keyframes h { from { height:20%; } to { height:100%; } }
+    body { background:#000; color:#ffd700; font-family:monospace; margin:0; display:flex; flex-direction:column; align-items:center; padding:15px; overflow-x:hidden; }
+    .brand { letter-spacing:8px; font-weight:bold; font-size:1.4em; padding:20px 0; text-shadow:0 0 10px #ffd700; }
+    .main { border:2px solid #ffd700; padding:20px; border-radius:15px; background:rgba(10,10,10,0.95); box-shadow:0 0 50px #ffd70044; width:100%; max-width:500px; text-align:center; }
+    .bal { font-size:2.8em; font-weight:900; margin:10px 0; }
+    .eur { color:#fff; font-size:1.2em; margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:10px; }
+    .desc { text-align:left; font-size:0.75em; color:#bbb; line-height:1.6; margin-top:15px; }
+    .highlight { color:#ffd700; font-weight:bold; }
+    
+    /* Dynamisches Quanten-Netzwerk Visual */
+    .net-viz { height:80px; margin:15px 0; border:1px solid #222; position:relative; overflow:hidden; }
+    .pulse { position:absolute; width:100%; height:2px; background:linear-gradient(90deg, transparent, #ffd700, transparent); animation: scan 3s infinite linear; }
+    @keyframes scan { from { top:-10%; } to { top:110%; } }
 </style>
 </head>
 <body>
-    <div class="header">T-ESOIST TECHNOLOGY</div>
-    <div class="main-box">
-        <div style="font-size:0.7em; color:#00ff41;">● NODE_ACTIVE // ENCRYPTED_CORE</div>
-        <div class="bal">4,200,009.62 QE</div>
-        <div style="color:#fff; font-size:1.5em;">575,527,318.91 EUR</div>
+    <div class="brand">T-ESOIST TECHNOLOGY</div>
+    <div class="main">
+        <div style="color:#00ff41; font-size:0.7em; letter-spacing:2px;">STATUS: QUANTUM_DECENTRALIZED_ACTIVE</div>
+        <div class="bal">4,200,001.38 QE</div>
+        <div class="eur">575,526,188.42 EUR</div>
         
-        <div class="grid">
-            <div class="card" style="grid-column: span 2;">
-                <h3>NETZWERK-ERKLÄRUNG</h3>
-                Das T-Esoist P2P System wandelt <b>Rechen-Entropie</b> in digitale Stabilität um. Dieser Node validiert Quanten-Fluktuationen und generiert QE als Repräsentationswert gesicherter Information.
-            </div>
-            <div class="card">
-                <h3>METRIKEN</h3>
-                LATENCY: <span class="green">14ms</span><br>
-                PEERS: <span class="green">12.482</span><br>
-                UPLINK: <span class="green">ACTIVE</span>
-            </div>
-            <div class="card">
-                <h3>HARVESTING</h3>
-                <div class="visual">
-                    <div class="bar" style="animation-delay:0.1s"></div>
-                    <div class="bar" style="animation-delay:0.3s"></div>
-                    <div class="bar" style="animation-delay:0.5s"></div>
-                </div>
-            </div>
+        <div class="net-viz">
+            <div class="pulse"></div>
+            <div style="font-size:0.6em; margin-top:30px; opacity:0.3;">QUANTUM_FLUX_SYNCING...</div>
         </div>
-        <div style="font-size:0.5em; color:#444; margin-top:20px;">SYNC_TIME: Tue Jan  6 14:53:36 2026</div>
+
+        <div class="desc">
+            <h3 style="margin:0; font-size:1.1em; color:#ffd700;">NETZWERK-PROTOKOLL</h3>
+            Dieses P2P-Grid erzeugt Wert durch <span class="highlight">Entropie-Kompression</span>. 
+            Information wird durch deinen Node stabilisiert und als <span class="highlight">QE (Quantum Entropy)</span> im dezentralen Ledger verankert. 
+            Jeder Sync schützt die Integrität der gesamten T-Esoist Infrastruktur.
+        </div>
+        
+        <div style="font-size:0.5em; color:#444; margin-top:20px;">LAST_SYNC: Tue Jan  6 14:56:51 2026 | NODE: P2P-ALPHA</div>
     </div>
     <script>setTimeout(()=>location.reload(), 300000);</script>
 </body>
