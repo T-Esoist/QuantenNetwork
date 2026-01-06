@@ -2,30 +2,36 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | FIBONACCI CORE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-ESOIST | DETERMINISTIC STATE</title>
     <style>
-        body { background: #000; color: #00FF41; font-family: monospace; padding: 15px; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        .header { color: #FFD700; text-align: center; border-bottom: 2px solid var(--gold); padding: 10px; font-size: 0.9rem; letter-spacing: 2px; }
-        .main { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid #00FF41; margin: 15px 0; background: rgba(0,255,65,0.05); }
-        .val-qe { font-size: 3.5rem; color: #FFD700; font-weight: 900; line-height: 1; }
-        .val-eur { font-size: 1.8rem; color: #FFF; margin-top: 15px; font-weight: bold; }
-        .stats { background: #050505; border: 1px solid #444; padding: 12px; font-size: 0.85rem; color: #00FF41; }
-        .fib-key { font-size: 0.55rem; color: #444; word-break: break-all; margin-top: 5px; }
+        body { background: #000; color: #00FF41; font-family: 'Courier New', monospace; padding: 20px; }
+        .state-box { border: 2px solid #00FF41; padding: 20px; background: #050505; }
+        .big { font-size: 3rem; color: #FFD700; font-weight: bold; }
+        pre { font-size: 0.7rem; color: #00FF41; overflow-x: auto; }
+        .label { color: #888; font-size: 0.8rem; letter-spacing: 2px; }
     </style>
 </head>
 <body>
-    <div class="header">T-ESOIST FIBONACCI CORE ENGINE</div>
-    <div class="main">
-        <div style="font-size:0.7rem; color:#888; letter-spacing:3px;">SOVEREIGN_MASTER_BALANCE</div>
-        <div class="val-qe">4,200,019.2500</div>
-        <div class="val-eur">575,528,637.83 EUR</div>
-    </div>
-    <div class="stats">
-        > CORE: FIBONACCI_RESONANCE_ACTIVE<br>
-        > ENTROPY_LEVEL: 0.11100006<br>
-        > DATA_STEPS: 1<br>
-        <div class="fib-key">KEY_STREAM: 112358437189887641562819</div>
+    <div class="state-box">
+        <div class="label">CURRENT_STATE_PROJECTION</div>
+        <div class="big">4,200,096.8750 QE</div>
+        <div style="font-size: 1.5rem; color: #FFF;">575,539,274.78 EUR</div>
+        <hr style="border:0; border-top:1px solid #333; margin: 20px 0;">
+        <div class="label">DETERMINISTIC_CORE_DATA</div>
+        <pre>{
+  "protocol": "T-ESOIST-FIBONACCI-NET",
+  "version": "1.0",
+  "core_key": "112358437189887641562819",
+  "timestamp_utc": "2026-01-06T17:33:34.071535+00:00",
+  "state": {
+    "qe_balance": 4200096.875,
+    "eur_rate": 137.03,
+    "data_steps": 1,
+    "entropy": 0.11100006
+  },
+  "signature": "578cd319b20b010bed75ca5cbd8a90148290aebcd36e4b68eeb56ccb802a66af"
+}</pre>
     </div>
 </body>
 </html>
