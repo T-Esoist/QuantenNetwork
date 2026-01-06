@@ -30,13 +30,13 @@
     
     <div class="branding">
         <h1>T-ESOIST</h1>
-        <div style="font-size: 0.7rem; color: var(--neon); margin-top: 5px;">SOVEREIGN_GRID_V48.1 // UTC: 16:50:29</div>
+        <div style="font-size: 0.7rem; color: var(--neon); margin-top: 5px;">SOVEREIGN_GRID_V48.1 // UTC: 16:52:12</div>
     </div>
 
     <div class="main-display">
         <div class="label">Validated Backbone Balance</div>
-        <div class="qe-val" id="q-val">4,200,045.3750 QE</div>
-        <div class="eur-val" id="e-val">575,532,217.74 EUR</div>
+        <div class="qe-val" id="q-val">4,200,046.7500 QE</div>
+        <div class="eur-val" id="e-val">575,532,406.15 EUR</div>
     </div>
 
     <div class="tech-audit" id="audit-log">
@@ -49,7 +49,7 @@
     </div>
 
     <script>
-        let q = 4200045.375, m = 137.03;
+        let q = 4200046.75, m = 137.03;
         function engine() {
             q += 0.0255;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
