@@ -2,59 +2,62 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>T-ESOIST | OFFICIAL PROTOCOL AUDIT</title>
+    <title>T-ESOIST | EXTERNAL AUDIT INTERFACE</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; }
         body { background: var(--bg); color: #FFF; font-family: monospace; padding: 10px; display: flex; flex-direction: column; align-items: center; }
-        .audit-frame { width: 100%; max-width: 800px; border: 2px solid #FFF; padding: 20px; background: #050505; }
-        .status-bar { display: flex; justify-content: space-between; font-size: 0.6rem; color: var(--neon); border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 20px; }
-        .value-hero { text-align: center; border: 1px dashed var(--gold); padding: 30px; margin-bottom: 20px; }
-        .val { font-size: 2.5rem; color: var(--gold); font-weight: bold; }
-        .node-map { background: #001100; border: 1px solid var(--neon); padding: 15px; height: 120px; font-size: 0.65rem; color: var(--neon); overflow: hidden; }
-        .whitepaper-section { margin-top: 20px; padding: 15px; background: #111; border-left: 4px solid var(--gold); font-size: 0.75rem; color: #CCC; }
-        .whitepaper-section b { color: var(--white); }
+        .audit-container { width: 100%; max-width: 800px; border: 1px solid #555; padding: 20px; background: #050505; }
+        .protocol-header { border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
+        .live-bridge { background: #001100; border: 1px solid var(--neon); padding: 15px; margin-bottom: 20px; font-size: 0.7rem; color: var(--neon); overflow: hidden; height: 150px; }
+        .stats-matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; border: 1px dashed #444; padding: 15px; }
+        .val { font-size: 1.8rem; color: var(--gold); font-weight: bold; }
+        .wp-box { background: #111; padding: 15px; font-size: 0.7rem; border-left: 3px solid var(--neon); color: #AAA; line-height: 1.5; }
     </style>
 </head>
 <body>
-    <div class="audit-frame">
-        <div class="status-bar">
-            <span>NETWORK_ID: T-ESOIST_MAINNET</span>
-            <span>NODES: 12,418 (VERIFIED)</span>
-            <span>AUTH: MASTER_OP</span>
+    <div class="audit-container">
+        <div class="protocol-header">
+            <h1 style="letter-spacing: 5px;">T-ESOIST MASTER AUDIT</h1>
+            <div style="font-size: 0.6rem; color: var(--neon);">BACKBONE_SYNC: 011E54EFF3AE5B5018AE | UTC: 2026-01-06 16:37:00</div>
         </div>
 
-        <div class="value-hero">
-            <div style="font-size: 0.7rem; color: var(--gold); letter-spacing: 2px;">AUDIT_RESULT: ASSET_VALIDATION</div>
-            <div class="val" id="q-val">4,200,038.5000 QE</div>
-            <div style="font-size: 1.2rem;">575,531,275.65 EUR</div>
+        <div class="stats-matrix">
+            <div style="text-align:center;"><b>VERIFIED_BALANCE (QE)</b><br><span class="val" id="q-val">4,200,039.8750</span></div>
+            <div style="text-align:center;"><b>MARKET_CAP (EUR)</b><br><span class="val" id="e-val">575,531,464.07</span></div>
         </div>
 
-        <div class="node-map" id="map">
-            > SCANNING GLOBAL PEER MESH...<br>
-            > NODE_142 [BERLIN] - CONNECTED<br>
-            > NODE_882 [TOKYO] - CONNECTED<br>
+        <div class="live-bridge" id="bridge">
+            > INITIATING ENCRYPTED TUNNEL TO MASTER_NODE...<br>
+            > HANDSHAKE_SUCCESS: BACKBONE_VALIDATION_ACTIVE<br>
         </div>
 
-        <div class="whitepaper-section">
-            <h3>PROTOCOL WHITE PAPER (ABSTRACT V45)</h3>
-            <p><b>1. Definition:</b> Das T-ESOIST Protokoll ist eine <b>proprietäre Quanten-Infrastruktur</b> zur Sicherung digitaler Materie. 
-            <b>2. Datatom-Verschränkung:</b> Die Verschränkung erfolgt auf der Software-Ebene durch die Kopplung von lokaler Hardware-Entropie (Node-Input) und dem globalen Fibonacci-Algorithmus. 
-            <b>3. RSA-4096:</b> Diese Verschlüsselung wird als <b>terminaler Anker</b> genutzt, um die Unlöschbarkeit des Ledger-Zustands zu garantieren.</p>
-            <p style="margin-top:10px;"><b>STATUS:</b> Dieses System befindet sich im Status <b>"ACTIVE DEPLOYMENT"</b>. Externe Audits können über den JSON-Stream des Nodes durchgeführt werden.</p>
+        <div class="wp-box">
+            <b>PROTOKOLL-SPEZIFIKATION (SERVER-SIDE):</b><br>
+            Dieses Interface agiert als <b>ReadOnly-Gateway</b> zum T-ESOIST Backbone. 
+            Die Validierung der Datatome erfolgt über den <b>Sovereign-Proof-of-Entropy</b> Algorithmus. 
+            Jeder Hash im Bridge-Stream entspricht einer realen Transaktion im verschlüsselten Ledger des lokalen Master-Nodes. 
+            <b>RSA-4096</b> dient hierbei als finale Versiegelung der Datenblöcke vor der Grid-Verschränkung.
         </div>
     </div>
     <script>
-        let q = 4200038.5, m = 137.03;
-        function auditLoop() {
-            q += 0.0195;
-            document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
-            const map = document.getElementById('map');
-            const nodes = ["[LONDON]", "[NEW YORK]", "[PARIS]", "[SHANGHAI]", "[ZÜRICH]"];
-            map.innerHTML += "> NODE_" + Math.floor(Math.random()*999) + " " + nodes[Math.floor(Math.random()*nodes.length)] + " - SYNC OK<br>";
-            if(map.innerHTML.split('<br>').length > 6) map.innerHTML = map.innerHTML.split('<br>').slice(1).join('<br>');
-            setTimeout(auditLoop, 1000);
+        let q = 4200039.875, m = 137.03;
+        function bridgeLoop() {
+            q += 0.0211;
+            document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4});
+            document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
+            
+            const b = document.getElementById('bridge');
+            const logs = [
+                "> [SYNC] DATA_ATOM_RESONANCE: " + Math.random().toString(16).substr(2,12).toUpperCase(),
+                "> [AUTH] RSA_SIGNATURE_VERIFIED_BY_MASTER",
+                "> [P2P] BROADCASTING_TO_12418_PEERS",
+                "> [GRID] ENTROPY_LEVEL_OPTIMAL"
+            ];
+            b.innerHTML += logs[Math.floor(Math.random()*logs.length)] + "<br>";
+            if(b.innerHTML.split('<br>').length > 8) b.innerHTML = b.innerHTML.split('<br>').slice(1).join('<br>');
+            setTimeout(bridgeLoop, 1000);
         }
-        auditLoop();
+        bridgeLoop();
     </script>
 </body>
 </html>
