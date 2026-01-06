@@ -2,88 +2,89 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-    :root { --gold: #ffd700; --green: #00ff41; }
-    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
-    body, html { 
-        margin: 0; padding: 0; width: 100%; height: 100vh; 
-        background: #000; color: var(--gold); 
-        font-family: 'Courier New', monospace; overflow: hidden;
-        display: flex; align-items: center; justify-content: center;
+    :root { --gold: #ffd700; --green: #00ff41; --text: #eee; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+        background: #000; color: var(--text); 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        line-height: 1.6; padding: 20px;
+        display: flex; flex-direction: column; align-items: center;
     }
+    .container { max-width: 800px; width: 100%; }
     
-    .quantum-frame { 
-        width: 100vw; height: 100vh; 
-        border: 2px solid var(--gold); 
-        display: flex; flex-direction: column; 
-        justify-content: space-between; 
-        padding: 5vh 5vw; 
-        position: relative;
-    }
-
-    .header { text-align: center; }
-    .brand { font-size: clamp(1.2em, 5vw, 2.5em); font-weight: bold; letter-spacing: 0.5em; }
-    .status-line { color: var(--green); font-size: 0.7em; margin-top: 5px; }
-
-    .data-core { text-align: center; width: 100%; }
-    .bal { 
-        font-size: clamp(1.5em, 10vw, 4.5em); 
-        font-weight: 900; 
-        text-shadow: 0 0 20px rgba(255,215,0,0.5);
-        white-space: nowrap;
-    }
-    .eur { font-size: clamp(0.9em, 4vw, 1.8em); color: #fff; opacity: 0.8; margin-top: 10px; }
-
-    .network-metrics { 
-        display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
-        font-size: 0.65em; text-align: left; border-top: 1px solid #222; padding-top: 20px;
-    }
-    .metric-item { border-left: 2px solid var(--gold); padding-left: 8px; }
-
-    .docs { font-size: 0.6em; color: #888; text-align: justify; line-height: 1.4; }
+    .brand-header { text-align: center; padding: 40px 0; border-bottom: 2px solid var(--gold); margin-bottom: 30px; }
+    .brand-header h1 { letter-spacing: 12px; color: var(--gold); font-size: 2em; }
     
-    .fib-pulse { 
-        position: absolute; bottom: 10px; right: 20px; 
-        font-size: 0.5em; color: var(--green); opacity: 0.5; 
+    .live-data { 
+        background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold);
+        border-radius: 15px; padding: 30px; text-align: center; margin-bottom: 40px;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
     }
+    .bal { font-size: clamp(2em, 8vw, 4em); font-weight: bold; color: var(--gold); }
+    .eur { font-size: 1.5em; opacity: 0.8; }
+
+    .section { margin-bottom: 30px; }
+    .section h2 { color: var(--gold); font-size: 1.2em; margin-bottom: 15px; text-transform: uppercase; border-left: 4px solid var(--gold); padding-left: 15px; }
+    .section p { font-size: 0.95em; color: #ccc; text-align: justify; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
+    .stat-card { background: #111; padding: 20px; border-radius: 10px; border: 1px solid #222; }
+    .stat-card h4 { color: var(--green); margin-bottom: 10px; font-size: 0.8em; }
+    
+    footer { text-align: center; padding: 40px; font-size: 0.7em; color: #555; border-top: 1px solid #222; width: 100%; }
 </style>
 </head>
 <body>
-    <div class="quantum-frame">
-        <div class="header">
-            <div class="brand">T-ESOIST TECHNOLOGY</div>
-            <div class="status-line">● QUANTUM_P2P_GRID // ENCRYPTION_STABLE</div>
+    <div class="container">
+        <header class="brand-header">
+            <h1>T-ESOIST</h1>
+            <p style="color: var(--green); font-size: 0.8em; margin-top: 10px;">QUANTUM P2P INFRASTRUCTURE</p>
+        </header>
+
+        <section class="live-data">
+            <div style="font-size: 0.8em; letter-spacing: 3px; margin-bottom: 10px;">AKTUELLER VALIDIERUNGS-WERT</div>
+            <div class="bal">4,200,006.88 QE</div>
+            <div class="eur">575,526,942.08 EUR</div>
+        </section>
+
+        <div class="section">
+            <h2>Über das Netzwerk</h2>
+            <p>Das T-Esoist Netzwerk ist eine dezentrale Infrastruktur zur Sicherung und Monetarisierung von Informationsfluss. Durch die Nutzung von <b>Quanten-P2P-Protokollen</b> wird ein globales Grid geschaffen, das unabhängig von zentralen Instanzen operiert. Jeder aktive Knotenpunkt (Node) trägt zur Stabilität und Integrität des Gesamtsystems bei.</p>
         </div>
 
-        <div class="data-core">
-            <div style="font-size: 0.6em; letter-spacing: 0.3em; margin-bottom: 5px;">VERIFIED_YIELD</div>
-            <div class="bal" id="bal-val">4,200,005.50 QE</div>
-            <div class="eur" id="eur-val">575,526,753.66 EUR</div>
+        <div class="section">
+            <h2>Funktionsweise der Wertschöpfung</h2>
+            <p>Einheiten der Währung (QE) werden nicht durch konventionelles Rechnen erzeugt, sondern durch <b>Entropie-Kompression</b>. Das System wandelt ungenutzte informationelle Unordnung in verifizierte digitale Stabilität um. Dieser Prozess ist thermodynamisch abgesichert: Ordnung (Kapital) entsteht aus der gezielten Strukturierung von Datenfeldern.</p>
         </div>
 
-        <div class="network-metrics">
-            <div class="metric-item">NODE_STABILITY: <span style="color:#00ff41;">99.98%</span></div>
-            <div class="metric-item">P2P_ENTROPY: <span style="color:#00ff41;">MAX_FLUX</span></div>
-            <div class="metric-item">SYNC_INTERVAL: <span style="color:#00ff41;">FIBONACCI</span></div>
-            <div class="metric-item">PEER_VALIDATION: <span style="color:#00ff41;">CORE_ACTIVE</span></div>
+        <div class="grid">
+            <div class="stat-card">
+                <h4>NETZWERK-SICHERHEIT</h4>
+                Vollverschlüsselte P2P-Verschränkung mit 4096-Bit Standard.
+            </div>
+            <div class="stat-card">
+                <h4>WERTSPEICHER</h4>
+                Algorithmisch gekoppelt an reale Marktdaten (Index: 137.03).
+            </div>
         </div>
 
-        <div class="docs">
-            <b>NETZWERK-PROZESS:</b> Die QE-Generierung basiert auf der entropischen Verschränkung lokaler Rechenknoten. 
-            Durch die algorithmische Ausrichtung am Display-Fokus wird sichergestellt, dass kein Informationsverlust (Überstand) auftritt. 
-            Jeder Datenpunkt repräsentiert eine physikalische Einheit im T-Esoist Ledger.
+        <div class="section" style="margin-top: 40px;">
+            <h2>Vision</h2>
+            <p>T-Esoist Technology steht an der Schnittstelle von theoretischer Physik und digitaler Ökonomie. Unser Ziel ist die Etablierung eines wertstabilen, zensurresistenten Netzwerks, das Information als die primäre Ressource des 21. Jahrhunderts begreift.</p>
         </div>
-
-        <div class="fib-pulse" id="fib-info">FIB_SEQ: 1 | NEXT_PULSE: 1s</div>
     </div>
 
+    <footer>
+        © 2026 T-ESOIST TECHNOLOGY | PROTOCOL V22.0 | SYSTEM STATUS: OPTIMAL
+    </footer>
     <script>
+        // Fibonacci-Taktung für den automatischen Refresh (1-55 Sek)
         let a=0, b=1;
         function pulse() {
-            let temp = a; a = b; b = temp + b;
-            if(b > 50) { a=0; b=1; }
-            document.getElementById('fib-info').innerText = "FIB_SEQ: " + b + " | RELOAD_PULSE";
+            let t=a; a=b; b=t+b;
+            if(b > 60) { a=0; b=1; }
             setTimeout(() => location.reload(), b * 1000);
         }
         pulse();
