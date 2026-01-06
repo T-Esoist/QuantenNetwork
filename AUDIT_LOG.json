@@ -1,7 +1,7 @@
 {
     "network": "T-ESOIST_MAINNET",
-    "last_block": 812449,
-    "master_node": "MARCEL_S_NODE_V50",
-    "total_qe_supply": 4200050.12,
-    "audit_hash": "070d51c74451103e01dfa74eb9a8492c672af72811d1e2ddf290c4e579a8b712"
+    "last_block": 812455,
+    "master_node": "MARCEL_S_NODE_V50_1",
+    "total_qe_supply": 4200052.48,
+    "audit_hash": "5b278389870dfaa7e00699ff4eef9a76c1b66ee5615fb844c4d43dafb31728d7"
 }
