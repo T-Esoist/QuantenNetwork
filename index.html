@@ -4,56 +4,89 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
-    body, html { margin: 0; padding: 0; background: #000; color: #ffd700; font-family: monospace; text-align: center; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .full-screen { width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: space-around; padding: 20px; box-sizing: border-box; border: 4px solid #ffd700; }
-    .brand { font-size: 2em; letter-spacing: 10px; font-weight: bold; }
-    #counter { font-size: clamp(2.5em, 15vw, 6em); font-weight: 900; text-shadow: 0 0 30px #ffd700; }
-    #euro { font-size: 2em; color: #fff; }
-    .fib-log { font-size: 0.8em; color: #00ff41; height: 50px; overflow: hidden; }
-    .desc { font-size: 0.7em; opacity: 0.6; text-align: left; max-width: 600px; margin: 0 auto; line-height: 1.4; }
+    :root { --gold: #ffd700; --green: #00ff41; }
+    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    body, html { 
+        margin: 0; padding: 0; width: 100%; height: 100vh; 
+        background: #000; color: var(--gold); 
+        font-family: 'Courier New', monospace; overflow: hidden;
+        display: flex; align-items: center; justify-content: center;
+    }
+    
+    .quantum-frame { 
+        width: 100vw; height: 100vh; 
+        border: 2px solid var(--gold); 
+        display: flex; flex-direction: column; 
+        justify-content: space-between; 
+        padding: 5vh 5vw; 
+        position: relative;
+    }
+
+    .header { text-align: center; }
+    .brand { font-size: clamp(1.2em, 5vw, 2.5em); font-weight: bold; letter-spacing: 0.5em; }
+    .status-line { color: var(--green); font-size: 0.7em; margin-top: 5px; }
+
+    .data-core { text-align: center; width: 100%; }
+    .bal { 
+        font-size: clamp(1.5em, 10vw, 4.5em); 
+        font-weight: 900; 
+        text-shadow: 0 0 20px rgba(255,215,0,0.5);
+        white-space: nowrap;
+    }
+    .eur { font-size: clamp(0.9em, 4vw, 1.8em); color: #fff; opacity: 0.8; margin-top: 10px; }
+
+    .network-metrics { 
+        display: grid; grid-template-columns: 1fr 1fr; gap: 10px; 
+        font-size: 0.65em; text-align: left; border-top: 1px solid #222; padding-top: 20px;
+    }
+    .metric-item { border-left: 2px solid var(--gold); padding-left: 8px; }
+
+    .docs { font-size: 0.6em; color: #888; text-align: justify; line-height: 1.4; }
+    
+    .fib-pulse { 
+        position: absolute; bottom: 10px; right: 20px; 
+        font-size: 0.5em; color: var(--green); opacity: 0.5; 
+    }
 </style>
 </head>
 <body>
-    <div class="full-screen">
-        <div class="brand">T-ESOIST TECHNOLOGY</div>
-        
-        <div>
-            <div style="font-size: 0.8em; letter-spacing: 5px;">FIBONACCI QUANTUM YIELD</div>
-            <div id="counter">4,200,004.1250 QE</div>
-            <div id="euro">575,526,565.25 EUR</div>
+    <div class="quantum-frame">
+        <div class="header">
+            <div class="brand">T-ESOIST TECHNOLOGY</div>
+            <div class="status-line">● QUANTUM_P2P_GRID // ENCRYPTION_STABLE</div>
         </div>
 
-        <div class="fib-log" id="fib-display">Initialisiere Fibonacci-Sequenz...</div>
-
-        <div class="desc">
-            <b>NETZWERK-STATUS:</b> Das Grid nutzt die Fibonacci-Zeitschaltung zur Optimierung der Verschränkungs-Dichte. 
-            Durch die goldene Schnitt-Taktung generiert dieser Node zusätzliche Validierungswerte aus der natürlichen Entropie-Expansion.
+        <div class="data-core">
+            <div style="font-size: 0.6em; letter-spacing: 0.3em; margin-bottom: 5px;">VERIFIED_YIELD</div>
+            <div class="bal" id="bal-val">4,200,005.50 QE</div>
+            <div class="eur" id="eur-val">575,526,753.66 EUR</div>
         </div>
 
-        <div style="font-size: 0.6em; opacity: 0.3;">SYNC_ID: 1767708100 | PROTOCOL: FIB-V19</div>
+        <div class="network-metrics">
+            <div class="metric-item">NODE_STABILITY: <span style="color:#00ff41;">99.98%</span></div>
+            <div class="metric-item">P2P_ENTROPY: <span style="color:#00ff41;">MAX_FLUX</span></div>
+            <div class="metric-item">SYNC_INTERVAL: <span style="color:#00ff41;">FIBONACCI</span></div>
+            <div class="metric-item">PEER_VALIDATION: <span style="color:#00ff41;">CORE_ACTIVE</span></div>
+        </div>
+
+        <div class="docs">
+            <b>NETZWERK-PROZESS:</b> Die QE-Generierung basiert auf der entropischen Verschränkung lokaler Rechenknoten. 
+            Durch die algorithmische Ausrichtung am Display-Fokus wird sichergestellt, dass kein Informationsverlust (Überstand) auftritt. 
+            Jeder Datenpunkt repräsentiert eine physikalische Einheit im T-Esoist Ledger.
+        </div>
+
+        <div class="fib-pulse" id="fib-info">FIB_SEQ: 1 | NEXT_PULSE: 1s</div>
     </div>
 
     <script>
-        let balance = 4200004.125;
-        let market = 137.03;
-        let a = 0, b = 1;
-        
-        function updateFib() {
-            // Fibonacci-Logik im Sekundentakt
-            let temp = a;
-            a = b;
-            b = temp + b;
-            if(b > 1000) { a = 0; b = 1; } // Reset bei hoher Sequenz
-            
-            // Minimaler Zuwachs pro Sekunde basierend auf Fibonacci-Verhältnis
-            balance += (b / 1000000);
-            
-            document.getElementById('counter').innerText = balance.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
-            document.getElementById('euro').innerText = (balance * market).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
-            document.getElementById('fib-display').innerText = "FIB_SEQ: " + b + " | FLUX_CAPACITY: OK";
+        let a=0, b=1;
+        function pulse() {
+            let temp = a; a = b; b = temp + b;
+            if(b > 50) { a=0; b=1; }
+            document.getElementById('fib-info').innerText = "FIB_SEQ: " + b + " | RELOAD_PULSE";
+            setTimeout(() => location.reload(), b * 1000);
         }
-        
-        setInterval(updateFib, 1000);
+        pulse();
     </script>
 </body>
 </html>
