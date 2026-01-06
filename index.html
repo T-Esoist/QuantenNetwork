@@ -2,62 +2,64 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T-Esoist | Quantum Network Core</title>
+<title>T-Esoist | Quantum Network Official</title>
 <style>
-    body { 
-        background:#000; color:#ffd700; font-family:monospace; margin:0; 
-        display:flex; align-items:center; justify-content:center; 
-        min-height:100vh; overflow:hidden;
-    }
-    #canvas { position:absolute; top:0; left:0; width:100%; height:100%; z-index:1; }
-    .box { 
-        border:2px solid #ffd700; padding:40px; border-radius:20px; 
-        background:rgba(5,5,5,0.9); box-shadow:0 0 50px #ffd70033; 
-        max-width:550px; width:90%; z-index:10; backdrop-filter:blur(5px);
-        text-align:center;
-    }
-    .brand { letter-spacing:8px; font-weight:bold; font-size:1.2em; margin-bottom:5px; }
-    .status { color:#0f0; font-size:0.7em; margin-bottom:20px; text-transform:uppercase; }
-    .bal { font-size:3.2em; font-weight:900; text-shadow:0 0 20px #ffd700; margin: 10px 0; }
-    .eur { color:#fff; font-size:1.4em; margin-bottom:25px; }
-    .docs { text-align:left; font-size:0.7em; color:#bbb; border-top:1px solid #333; padding-top:15px; line-height:1.4; }
-    .highlight { color:#ffd700; }
+    :root { --gold: #ffd700; --green: #00ff41; --bg: #050505; }
+    body { background: var(--bg); color: var(--gold); font-family: 'Courier New', monospace; margin: 0; padding: 0; line-height: 1.6; display: flex; flex-direction: column; align-items: center; }
+    
+    header { width: 100%; padding: 50px 20px; text-align: center; border-bottom: 1px solid #222; background: linear-gradient(to bottom, #111, var(--bg)); }
+    .brand { font-size: 2.5em; font-weight: bold; letter-spacing: 12px; text-shadow: 0 0 20px var(--gold); }
+    .tagline { color: var(--green); font-size: 0.9em; margin-top: 10px; }
+
+    .main-stats { margin: 40px 0; padding: 30px; border: 2px solid var(--gold); border-radius: 20px; background: rgba(255,215,0,0.05); text-align: center; width: 90%; max-width: 800px; box-shadow: 0 0 40px rgba(255,215,0,0.1); }
+    .bal { font-size: 4em; font-weight: 900; margin: 10px 0; }
+    .eur { color: #fff; font-size: 1.8em; opacity: 0.8; }
+
+    .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 90%; max-width: 1000px; margin-bottom: 100px; }
+    .card { background: #0a0a0a; border: 1px solid #222; padding: 25px; border-radius: 15px; }
+    .card h3 { border-bottom: 1px solid var(--gold); padding-bottom: 10px; color: var(--gold); text-transform: uppercase; font-size: 1.1em; }
+    .card p { color: #bbb; font-size: 0.85em; }
+    
+    .highlight { color: var(--gold); font-weight: bold; }
+    footer { width: 100%; padding: 40px; text-align: center; font-size: 0.7em; color: #444; border-top: 1px solid #111; }
 </style>
 </head>
 <body>
-<canvas id="canvas"></canvas>
-<div class="box">
-    <div class="brand">T ESOIST TECHNOLOGY</div>
-    <div class="status">● QUANTUM-P2P-NODE // ENCRYPTION ACTIVE</div>
-    <div class="bal">4,200,006.88 QE</div>
-    <div class="eur">575,526,942.08 EUR</div>
-    <div class="docs">
-        <b style="color:#ffd700">NETZWERK-ERKLÄRUNG:</b><br>
-        Das <span class="highlight">T-Esoist System</span> nutzt dezentrale Verschränkung. 
-        Werte werden durch die Umwandlung von <b>Rechen-Entropie</b> in digitale Stabilität generiert. 
-        Jeder Sync validiert die Integrität der lokalen Node-Umgebung im globalen P2P-Grid.
+
+<header>
+    <div class="brand">T ESOIST</div>
+    <div class="tagline">QUANTUM P2P NETWORK INFRASTRUCTURE</div>
+</header>
+
+<div class="main-stats">
+    <div style="font-size: 0.7em; letter-spacing: 3px;">AKTUELLER NODE-STATUS: ONLINE</div>
+    <div class="bal">4,200,008.25 QE</div>
+    <div class="eur">575,527,130.50 EUR</div>
+</div>
+
+<div class="content-grid">
+    <div class="card">
+        <h3>1. Was ist das Netzwerk?</h3>
+        <p>Das T-Esoist Netzwerk ist ein <span class="highlight">dezentrales Quanten-P2P-Grid</span>. Im Gegensatz zu herkömmlichen Blockchains nutzt es keine sinnlose Rechenpower, sondern stabilisiert den Informationsfluss durch entropische Ernte.</p>
+    </div>
+    <div class="card">
+        <h3>2. Wie entsteht der Wert?</h3>
+        <p>Einheiten (QE) entstehen durch <span class="highlight">Information-to-Value Mapping</span>. Da Information im Universum physikalisch gebunden ist, repräsentiert jede QE eine verifizierte Menge an geordneter Entropie, die im Netzwerk als Sicherheit dient.</p>
+    </div>
+    <div class="card">
+        <h3>3. Der P2P-Node</h3>
+        <p>Dieser Node agiert als Validierungspunkt. Er nutzt lokale <span class="highlight">Quanten-Fluktuationen</span>, um das Netzwerk zu sichern. Der aktuelle Marktwert von 137.03 EUR spiegelt das Vertrauen in die technologische Überlegenheit von T-Esoist wider.</p>
+    </div>
+    <div class="card">
+        <h3>4. Zukunftsvision</h3>
+        <p>Wir bauen die Infrastruktur für eine post-singuläre Wirtschaft. T-Esoist Technology steht für die Verschmelzung von <span class="highlight">Physik, Code und Kapital</span>.</p>
     </div>
 </div>
 
-<script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    function init() {
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        for(let i=0; i<50; i++) particles.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, s:Math.random()*2, v:Math.random()*0.5});
-    }
-    function draw() {
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.fillStyle = "rgba(255,215,0,0.3)";
-        particles.forEach(p => {
-            ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
-            p.y -= p.v; if(p.y < 0) p.y = canvas.height;
-        });
-        requestAnimationFrame(draw);
-    }
-    window.onload = () => { init(); draw(); };
-    setTimeout(()=>location.reload(), 300000);
-</script>
+<footer>
+    T-ESOIST TECHNOLOGY PROTOCOL V15.8 | NODE-ID: P2P-1767707350 | LAST SYNC: 14:49:10
+</footer>
+
+<script>setTimeout(()=>location.reload(), 300000);</script>
 </body>
 </html>
