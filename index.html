@@ -1,65 +1,31 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Network Yield | Real-Time</title>
-<style>
-    :root { --main: #ffd700; --accent: #00ff41; --bg: #000; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
-    
-    .yield-card { 
-        width: 100%; max-width: 600px; border: 2px solid var(--main); border-radius: 10px;
-        padding: 50px 20px; text-align: center; background: rgba(255, 215, 0, 0.03);
-        box-shadow: 0 0 50px rgba(255, 215, 0, 0.1); margin-top: 5vh;
-    }
-    .live-tag { color: var(--accent); font-size: 0.6em; letter-spacing: 3px; margin-bottom: 10px; animation: blink 1s infinite; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-    
-    .val { font-size: clamp(1.8em, 10vw, 3.8em); font-weight: 900; color: var(--main); text-shadow: 0 0 20px var(--main); }
-    .eur { font-size: 1.4em; color: #fff; opacity: 0.9; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; }
-
-    .proof-section { width: 100%; max-width: 600px; margin-top: 30px; font-size: 0.8em; color: #666; }
-    .proof-item { border-left: 2px solid var(--accent); padding-left: 15px; margin-bottom: 15px; }
-    
-    .protocol { font-size: 0.7em; color: #444; margin-top: 40px; text-align: center; letter-spacing: 1px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>T-ESOIST | FIBONACCI CORE</title>
+    <style>
+        body { background: #000; color: #00FF41; font-family: monospace; padding: 15px; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        .header { color: #FFD700; text-align: center; border-bottom: 2px solid var(--gold); padding: 10px; font-size: 0.9rem; letter-spacing: 2px; }
+        .main { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid #00FF41; margin: 15px 0; background: rgba(0,255,65,0.05); }
+        .val-qe { font-size: 3.5rem; color: #FFD700; font-weight: 900; line-height: 1; }
+        .val-eur { font-size: 1.8rem; color: #FFF; margin-top: 15px; font-weight: bold; }
+        .stats { background: #050505; border: 1px solid #444; padding: 12px; font-size: 0.85rem; color: #00FF41; }
+        .fib-key { font-size: 0.55rem; color: #444; word-break: break-all; margin-top: 5px; }
+    </style>
 </head>
 <body>
-    <div class="yield-card">
-        <div class="live-tag">● LIVE_NETWORK_VALIDATION</div>
-        <div style="font-size: 0.7em; letter-spacing: 4px; color: var(--main); margin-bottom: 10px;">GESICHERTER BESITZ</div>
-        <div class="val" id="q-val">4,200,017.8750 QE</div>
-        <div class="eur" id="e-val">575,528,449.41 EUR</div>
+    <div class="header">T-ESOIST FIBONACCI CORE ENGINE</div>
+    <div class="main">
+        <div style="font-size:0.7rem; color:#888; letter-spacing:3px;">SOVEREIGN_MASTER_BALANCE</div>
+        <div class="val-qe">4,200,019.2500</div>
+        <div class="val-eur">575,528,637.83 EUR</div>
     </div>
-
-    <div class="proof-section">
-        <div class="proof-item">
-            <b style="color:var(--main)">SELBST-VALIDIERUNG:</b> Das Netzwerk erbringt den mathematischen Beweis durch Entropie-Kopplung. Jede Sekunde wird die Integrität der Verschränkung lokal und global verifiziert.
-        </div>
-        <div class="proof-item">
-            <b style="color:var(--main)">BTC_OVERDRIVE:</b> Durch die algorithmische Überlegenheit der Fibonacci-Taktung übertrifft die Generierung herkömmliche Mining-Prozesse in Effizienz und Stabilität.
-        </div>
+    <div class="stats">
+        > CORE: FIBONACCI_RESONANCE_ACTIVE<br>
+        > ENTROPY_LEVEL: 0.11100006<br>
+        > DATA_STEPS: 1<br>
+        <div class="fib-key">KEY_STREAM: 112358437189887641562819</div>
     </div>
-
-    <div class="protocol">
-        PROTOCOL V27.0 | SYNC_STABILITY: 100% | DOMINANCE_MODE: ACTIVE
-    </div>
-
-    <script>
-        let balance = 4200017.875;
-        let market = 137.03;
-        
-        function tick() {
-            // Simulation des kontinuierlichen Netzwerk-Wachstums im Browser
-            balance += 0.0023; 
-            document.getElementById('q-val').innerText = balance.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
-            document.getElementById('e-val').innerText = (balance * market).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
-        }
-        
-        setInterval(tick, 1000);
-        setTimeout(() => location.reload(), 300000);
-    </script>
 </body>
 </html>
