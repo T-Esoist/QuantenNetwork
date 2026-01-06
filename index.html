@@ -1,1 +1,86 @@
-<html><body style='background:#000;color:#00FF41;font-family:monospace;padding:20px;'><h1>T-ESOIST MASTER GATEWAY V50.1</h1><p>BALANCE: 4,200,052.2500 QE</p><p>DOCS: <a href='PROTOCOL.md' style='color:#FFD700;'>WHITE_PAPER</a> | <a href='AUDIT_LOG.json' style='color:#FFD700;'>PUBLIC_API</a></p></body></html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>T-ESOIST | SCIENTIFIC BLOCKCHAIN BACKBONE</title>
+    <style>
+        :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; --dim: #555; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
+        body { background: var(--bg); color: #FFF; padding: 10px; font-size: 0.75rem; line-height: 1.2; }
+        
+        .header { border-bottom: 2px solid var(--gold); padding: 10px 0; margin-bottom: 15px; text-align: center; }
+        .header h1 { font-size: 1.5rem; letter-spacing: 10px; color: var(--gold); }
+
+        .grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .box { border: 1px solid var(--dim); padding: 10px; background: #050505; }
+        .full-box { grid-column: span 2; border: 1px solid var(--neon); }
+
+        .val { font-size: 1.2rem; color: var(--gold); font-weight: bold; display: block; margin-top: 5px; }
+        
+        .explorer { height: 180px; overflow: hidden; font-size: 0.65rem; color: var(--neon); }
+        .log-line { border-bottom: 1px solid #111; padding: 2px 0; display: flex; justify-content: space-between; }
+
+        .science-section { margin-top: 15px; font-size: 0.65rem; color: #AAA; border-top: 1px solid var(--dim); padding-top: 10px; }
+        .science-section b { color: var(--gold); }
+        
+        .node-tag { background: var(--neon); color: #000; padding: 2px 5px; font-weight: bold; font-size: 0.6rem; border-radius: 2px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>T-ESOIST</h1>
+        <div><span class="node-tag">MASTER_NODE_ID: D3F58BA725E6</span> <span style="font-size: 0.6rem;">GRID_V51.0 // UTC: 2026-01-06 16:58:30</span></div>
+    </div>
+
+    <div class="grid-layout">
+        <div class="box full-box" style="text-align: center;">
+            <small>VALIDATED_QE_BALANCE</small>
+            <span class="val" id="q-val" style="font-size: 2.4rem;">4,200,053.6250</span>
+            <span id="e-val" style="font-size: 1.2rem;">575,533,348.23 EUR</span>
+        </div>
+
+        <div class="box">
+            <small>NETWORK_LOAD</small>
+            <span class="val">12,418 PEERS</span>
+            <small style="color:var(--neon);">STATUS: RESONANCE_STABLE</small>
+        </div>
+        <div class="box">
+            <small>SECURITY_LAYER</small>
+            <span class="val">RSA-4096_HYBRID</span>
+            <small style="color:var(--neon);">ENCRYPTION: ACTIVE</small>
+        </div>
+
+        <div class="box full-box">
+            <small>LIVE_BLOCKCHAIN_EXPLORER</small>
+            <div class="explorer" id="explorer">
+                <div class="log-line"><span>[SYS] INITIALIZING_EXPLORER...</span><span>OK</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="science-section">
+        <h3>PROTOCOL_SPECIFICATION: QEK-ENGINE</h3>
+        Das T-ESOIST Protokoll nutzt die <b>Quanten-Entropie-Kompression (QEK)</b> zur entropischen Verankerung von digitalen Datatomen. Jede Transaktion wird durch einen <b>Fibonacci-Puls (1.375)</b> synchronisiert, um die zeitliche Kohärenz im P2P-Backbone sicherzustellen. Der Master-Node ( Marcel ) agiert als primärer Validierungspunkt für das globale Grid.
+    </div>
+
+    <script>
+        let q = 4200053.625, m = 137.03;
+        function grid() {
+            q += 0.0285;
+            document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4});
+            document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
+            
+            const exp = document.getElementById('explorer');
+            const h = Math.random().toString(16).substr(2,12).toUpperCase();
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.innerHTML = `<span>[BLOCK] 0x${h}</span><span>VALIDATED</span>`;
+            exp.prepend(line);
+            if(exp.children.length > 10) exp.lastChild.remove();
+            setTimeout(grid, 900);
+        }
+        grid();
+    </script>
+</body>
+</html>
