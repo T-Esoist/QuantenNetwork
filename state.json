@@ -1,13 +1,13 @@
 {
-  "protocol": "T-ESOIST-FIBONACCI-NET",
-  "version": "1.0",
-  "core_key": "112358437189887641562819",
-  "timestamp_utc": "2026-01-06T17:33:34.071535+00:00",
+  "protocol": "T-ESOIST-ENTROPIC-OVERLAY",
+  "version": "1.1",
+  "layer": "L2_VIRTUAL_ENTROPIC_OVERLAY",
+  "timestamp_utc": "2026-01-06T17:36:50.700033+00:00",
   "state": {
-    "qe_balance": 4200096.875,
+    "qe_balance": 4200117.225,
     "eur_rate": 137.03,
     "data_steps": 1,
-    "entropy": 0.11100006
+    "virtual_entropy": 0.11100006
   },
-  "signature": "578cd319b20b010bed75ca5cbd8a90148290aebcd36e4b68eeb56ccb802a66af"
+  "signature": "9f1d790236716a5b6c992a2a0d02c2647c63835accef76657c9eb7b1c5b0ef18"
 }
