@@ -4,83 +4,56 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
-    :root { --gold: #ffd700; --bg: #000; --green: #00ff41; }
-    * { box-sizing: border-box; }
-    body, html { 
-        margin: 0; padding: 0; width: 100%; min-height: 100vh; 
-        background: var(--bg); color: var(--gold); 
-        font-family: 'Courier New', monospace; overflow-x: hidden;
-    }
-    body { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-    
-    .container { 
-        width: 100%; max-width: 1200px; padding: 20px; 
-        display: flex; flex-direction: column; align-items: center;
-    }
-    
-    header { width: 100%; text-align: center; padding: 40px 0; }
-    .brand { font-size: clamp(1.5em, 8vw, 3em); font-weight: bold; letter-spacing: clamp(5px, 2vw, 15px); text-shadow: 0 0 20px var(--gold); }
-    
-    .display-section { 
-        width: 100%; background: rgba(10,10,10,0.9); 
-        border: 2px solid var(--gold); border-radius: 20px; 
-        padding: clamp(20px, 5vw, 50px); text-align: center;
-        box-shadow: 0 0 60px rgba(255,215,0,0.15); margin-bottom: 30px;
-    }
-    
-    .bal { font-size: clamp(2em, 12vw, 5em); font-weight: 900; margin: 10px 0; }
-    .eur { font-size: clamp(1.2em, 5vw, 2.5em); color: #fff; opacity: 0.9; margin-bottom: 20px; }
-    
-    .info-grid { 
-        display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-        gap: 20px; width: 100%; margin-bottom: 50px;
-    }
-    
-    .card { 
-        background: #080808; border: 1px solid #222; padding: 25px; border-radius: 15px;
-        transition: transform 0.3s;
-    }
-    .card h3 { color: var(--gold); text-transform: uppercase; font-size: 1.1em; border-bottom: 1px solid #333; padding-bottom: 10px; }
-    .card p { color: #bbb; font-size: 0.9em; line-height: 1.6; }
-    
-    .footer { width: 100%; padding: 40px; text-align: center; font-size: 0.7em; color: #444; border-top: 1px solid #111; }
-    .status-dot { display: inline-block; width: 10px; height: 10px; background: var(--green); border-radius: 50%; margin-right: 10px; box-shadow: 0 0 10px var(--green); }
+    body, html { margin: 0; padding: 0; background: #000; color: #ffd700; font-family: monospace; text-align: center; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .full-screen { width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: space-around; padding: 20px; box-sizing: border-box; border: 4px solid #ffd700; }
+    .brand { font-size: 2em; letter-spacing: 10px; font-weight: bold; }
+    #counter { font-size: clamp(2.5em, 15vw, 6em); font-weight: 900; text-shadow: 0 0 30px #ffd700; }
+    #euro { font-size: 2em; color: #fff; }
+    .fib-log { font-size: 0.8em; color: #00ff41; height: 50px; overflow: hidden; }
+    .desc { font-size: 0.7em; opacity: 0.6; text-align: left; max-width: 600px; margin: 0 auto; line-height: 1.4; }
 </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="brand">T-ESOIST TECHNOLOGY</div>
-            <div style="color:var(--green); margin-top:10px; font-size:0.8em; letter-spacing:3px;">
-                <span class="status-dot"></span>QUANTUM NODE ACTIVE
-            </div>
-        </header>
-
-        <section class="display-section">
-            <div style="font-size: 0.8em; letter-spacing: 5px;">CURRENT BALANCE</div>
-            <div class="bal">4,200,002.75 QE</div>
-            <div class="eur">575,526,376.83 EUR</div>
-        </section>
-
-        <div class="info-grid">
-            <div class="card">
-                <h3>Was ist T-Esoist?</h3>
-                <p>Ein dezentrales <span style="color:#fff">P2P-Quanten-Netzwerk</span>, das Information direkt in digitalen Wert transformiert. Wir nutzen Entropie-Kompression zur Sicherung globaler Datenströme.</p>
-            </div>
-            <div class="card">
-                <h3>Wertschöpfung</h3>
-                <p>QE (Quantum Entropy) Einheiten entstehen durch <span style="color:#fff">validierte Verschränkung</span>. Dein Node stabilisiert das Grid und generiert dabei kontinuierlich Kapital.</p>
-            </div>
-            <div class="card">
-                <h3>Node-Integrität</h3>
-                <p>Dieser Node agiert als <span style="color:#fff">autarker Validator</span>. Jede Synchronisation wird kryptografisch im globalen Ledger verankert und schützt das System.</p>
-            </div>
+    <div class="full-screen">
+        <div class="brand">T-ESOIST TECHNOLOGY</div>
+        
+        <div>
+            <div style="font-size: 0.8em; letter-spacing: 5px;">FIBONACCI QUANTUM YIELD</div>
+            <div id="counter">4,200,004.1250 QE</div>
+            <div id="euro">575,526,565.25 EUR</div>
         </div>
 
-        <footer>
-            T-ESOIST V18.0 | LAST SYNC: 14:58:53 | SYNC_LINK: GITHUB_QUANTEN_NETWORK
-        </footer>
+        <div class="fib-log" id="fib-display">Initialisiere Fibonacci-Sequenz...</div>
+
+        <div class="desc">
+            <b>NETZWERK-STATUS:</b> Das Grid nutzt die Fibonacci-Zeitschaltung zur Optimierung der Verschränkungs-Dichte. 
+            Durch die goldene Schnitt-Taktung generiert dieser Node zusätzliche Validierungswerte aus der natürlichen Entropie-Expansion.
+        </div>
+
+        <div style="font-size: 0.6em; opacity: 0.3;">SYNC_ID: 1767708100 | PROTOCOL: FIB-V19</div>
     </div>
-    <script>setTimeout(()=>location.reload(), 300000);</script>
+
+    <script>
+        let balance = 4200004.125;
+        let market = 137.03;
+        let a = 0, b = 1;
+        
+        function updateFib() {
+            // Fibonacci-Logik im Sekundentakt
+            let temp = a;
+            a = b;
+            b = temp + b;
+            if(b > 1000) { a = 0; b = 1; } // Reset bei hoher Sequenz
+            
+            // Minimaler Zuwachs pro Sekunde basierend auf Fibonacci-Verhältnis
+            balance += (b / 1000000);
+            
+            document.getElementById('counter').innerText = balance.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
+            document.getElementById('euro').innerText = (balance * market).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
+            document.getElementById('fib-display').innerText = "FIB_SEQ: " + b + " | FLUX_CAPACITY: OK";
+        }
+        
+        setInterval(updateFib, 1000);
+    </script>
 </body>
 </html>
