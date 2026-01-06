@@ -2,30 +2,20 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | PROTOCOL SPECS</title>
+    <title>T-ESOIST PROJECTION</title>
     <style>
-        body { background: #000; color: #00FF41; font-family: 'Courier New', monospace; padding: 15px; line-height: 1.4; }
-        .header { border-bottom: 2px solid #FFD700; padding-bottom: 10px; margin-bottom: 20px; }
-        .val { font-size: 3rem; color: #FFD700; font-weight: bold; }
-        .spec { background: #080808; border: 1px solid #333; padding: 15px; font-size: 0.8rem; }
-        h3 { color: #FFD700; margin-top: 0; }
-        .label { color: #888; text-transform: uppercase; font-size: 0.7rem; }
+        body { background: #000; color: #00FF41; font-family: monospace; padding: 30px; display: flex; flex-direction: column; align-items: center; }
+        .projection { border: 1px solid #333; padding: 40px; text-align: center; }
+        .val { font-size: 4rem; color: #FFD700; }
+        .truth { margin-top: 20px; font-size: 0.7rem; color: #444; }
     </style>
 </head>
 <body>
-    <div class="header">T-ESOIST DETERMINISTIC STATE LAYER (L7)</div>
-    
-    <div class="label">Logical Asset Balance</div>
-    <div class="val">4,200,122.7250 QE</div>
-    <div style="color:#FFF; margin-bottom:25px;">Basis-Rate: 137.03 EUR</div>
-
-    <div class="spec">
-        <h3>TECHNISCHE INTERPRETATION</h3>
-        <b>1. Layer-Definition:</b> Dieses Protokoll operiert auf der <b>Applikationsebene (L7)</b>. Es ist ein logisches Overlay, kein physikalisches Quanten-Internet (L1/Photonik).<br>
-        <b>2. GRID_ENTROPY:</b> Bezeichnet hier die algorithmische Varianz innerhalb des Fibonacci-Core-Zustands, nicht die thermodynamische Entropie von Qubits.<br>
-        <b>3. WEB_AES_RSA:</b> Bezeichnet die kryptografische Versiegelung der Zustands-Übertragung via GitHub-Backbone.<br>
-        <b>4. Determinismus:</b> Das Netzwerk validiert sich durch die Konsistenz der Signatur: <b>d73ef5423c8ed8d3...</b>
+    <div class="projection">
+        <small>MASTER_PROJECTION_V56</small>
+        <div class="val">4,200,136.6250 QE</div>
+        <div style="font-size: 1.5rem;">575,544,721.72 EUR</div>
+        <div class="truth">Source: <a href="core_state.json" style="color:#00FF41;">/core_state.json</a></div>
     </div>
 </body>
 </html>
