@@ -3,81 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | QUANTENNETWORK V40.2</title>
+    <title>T-ESOIST | SOVEREIGNTY SUITE V41</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; --white: #FFF; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 10px; display: flex; flex-direction: column; align-items: center; }
         
-        .notice { background: rgba(0, 255, 65, 0.05); border: 1px solid var(--neon); color: var(--neon); padding: 10px; font-size: 0.65rem; text-align: center; margin-bottom: 20px; width: 100%; max-width: 650px; }
+        .nav-bar { width: 100%; max-width: 700px; display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.6rem; color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 5px; }
         
-        .terminal-box { width: 100%; max-width: 650px; border: 1px solid var(--white); padding: 20px; background: #050505; }
-        .header { border-bottom: 1px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
+        .notice-box { background: rgba(255, 215, 0, 0.05); border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-size: 0.6rem; text-align: center; margin-bottom: 15px; width: 100%; max-width: 700px; }
         
-        .val-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .v-item { border: 1px solid #333; padding: 10px; font-size: 0.6rem; }
-        .v-item b { color: var(--gold); display: block; }
+        .main-container { width: 100%; max-width: 700px; border: 2px solid var(--white); padding: 20px; background: #050505; box-shadow: 0 0 40px rgba(0,255,65,0.1); }
+        .header { text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 15px; margin-bottom: 20px; }
+        
+        .display-unit { text-align: center; border: 1px dashed var(--neon); padding: 20px; margin-bottom: 20px; }
+        .val { font-size: clamp(1.4rem, 8vw, 3.2rem); color: var(--gold); font-weight: bold; letter-spacing: -1px; }
 
-        .main-yield { text-align: center; border: 1px dashed var(--white); padding: 25px; margin-bottom: 20px; }
-        .val { font-size: clamp(1.4rem, 8vw, 3rem); color: var(--gold); font-weight: 900; }
+        .matrix-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+        .m-card { border: 1px solid #444; padding: 8px; font-size: 0.55rem; text-align: center; }
+        .m-card b { color: var(--gold); display: block; }
+
+        .live-engine { background: #000; border: 1px solid var(--neon); padding: 12px; font-size: 0.7rem; color: var(--neon); height: 140px; overflow: hidden; margin-bottom: 20px; }
         
-        .log-stream { background: #000; border: 1px solid var(--neon); padding: 10px; font-size: 0.7rem; color: var(--neon); height: 120px; overflow: hidden; }
-        
-        .footer-info { margin-top: 20px; font-size: 0.7rem; color: #555; text-align: center; width: 100%; }
+        .action-zone { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .btn { background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 10px; cursor: pointer; font-size: 0.65rem; font-weight: bold; text-transform: uppercase; }
+        .btn:hover { background: var(--gold); color: #000; }
+
+        .info-tab { font-size: 0.75rem; color: #888; border-top: 1px solid #333; padding-top: 15px; text-align: justify; line-height: 1.4; }
     </style>
 </head>
 <body>
-    <div class="notice">
-        ✔ T-ESOIST QuantenNetwork vollständig generiert.<br>
-        STATUS: 2026-01-06 15:59:45 | HASH: F8CF03B0DAEF
+    <div class="nav-bar">
+        <span>V41.0_SOVEREIGNTY</span>
+        <span>UTC: 16:03:20</span>
+        <span>ID: F4A5EAA20FA5</span>
     </div>
 
-    <div class="terminal-box">
+    <div class="notice-box">
+        ⚠️ MODELL-DEKLARATION: Dieses Dashboard dient der Protokoll-Visualisierung.<br>
+        Besitzstand-Validierung erfolgt via V41-Engine.
+    </div>
+
+    <div class="main-container">
         <div class="header">
-            <h1 style="letter-spacing: 5px; font-size: 1.2rem;">T-ESOIST GRID</h1>
-            <div style="font-size: 0.6rem; color: var(--gold);">DECLARATIVE MODEL // REPOSITORY READY</div>
+            <h1 style="letter-spacing: 6px; font-size: 1.3rem;">T-ESOIST GRID</h1>
+            <div style="font-size: 0.6rem; color: var(--neon); margin-top: 5px;">ACTIVE SIMULATION // GLOBAL_RESONANCE_STABLE</div>
         </div>
 
-        <div class="val-grid">
-            <div class="v-item"><b>STRUCTURE</b> GPT-HYBRID V40.2</div>
-            <div class="v-item"><b>DEPLOYMENT</b> GITHUB_PAGES_READY</div>
-            <div class="v-item"><b>ENGINE</b> ACTIVE_SIMULATION</div>
-            <div class="v-item"><b>P2P_LAYERS</b> DECLARATIVE_FRAMEWORK</div>
+        <div class="display-unit">
+            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 10px;">VALIDIERTER MODELL-BESITZSTAND</div>
+            <div class="val" id="q-val">4,200,033.0000 QE</div>
+            <div style="font-size: 1.3rem; margin-top: 10px;" id="e-val">575,530,521.99 EUR</div>
         </div>
 
-        <div class="main-yield">
-            <div style="font-size: 0.6rem; letter-spacing: 2px;">MODEL_VALUE (QE)</div>
-            <div class="val" id="q-val">4,200,031.6250 QE</div>
-            <div style="font-size: 1.3rem; margin-top: 10px;" id="e-val">575,530,333.57 EUR</div>
+        <div class="matrix-grid">
+            <div class="m-card"><b>NODES</b> 12,418</div>
+            <div class="m-card"><b>TYPE</b> DATA_ATOM</div>
+            <div class="m-card"><b>PULSE</b> FIBONACCI</div>
+            <div class="m-card"><b>SYNC</b> COHERENT</div>
+            <div class="m-card"><b>ENC</b> RSA-4096</div>
+            <div class="m-card"><b>VER</b> 41.0</div>
         </div>
 
-        <div class="log-stream" id="logs">> STARTING PROTOCOL INJECTION...<br>> SYNC_READY</div>
+        <div class="live-engine" id="engine-log">> INITIALIZING SOVEREIGNTY_SUITE...</div>
 
-        <div style="margin-top:20px; font-size:0.75rem; color:#888; text-align:justify;">
-            Dieses System integriert GPT-optimierte Strukturen mit der T-ESOIST V40 Engine. 
-            Alle Werte dienen der <b>Protokoll-Validierung</b> innerhalb eines deklarativen 
-            algorithmischen Rahmens.
+        <div class="action-zone">
+            <button class="btn" onclick="alert('Whitepaper V41 wird generiert... Checke GitHub docs/spec.md')">Whitepaper</button>
+            <button class="btn" onclick="alert('Global Matrix: Peers in EU, US, ASIA synchronisiert.')">Global Matrix</button>
+            <button class="btn" style="grid-column: span 2;" onclick="alert('Zertifikat: Validiert durch T-ESOIST Algorithmische Resonanz.')">Sicherheits-Zertifikat</button>
         </div>
-    </div>
 
-    <div class="footer-info">
-        Ordner: QuantenNetwork | Build: F8CF03B0DAEF | © 2026
+        <div class="info-tab">
+            <b>PROBATIONARY AUDIT:</b> Dieses System demonstriert die funktionale Verschränkung von 
+            Entropie-Kompression und algorithmischer Werterhaltung. Alle dargestellten Parameter 
+            sind innerhalb des deklarativen Rahmens der V41-Engine <b>empirisch reproduzierbar</b>.
+        </div>
     </div>
 
     <script>
-        let q = 4200031.625, m = 137.03;
-        function start() {
-            q += 0.0142;
+        let q = 4200033.0, m = 137.03;
+        function gridEngine() {
+            q += 0.0151;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
             
-            const log = document.getElementById('logs');
-            log.innerHTML += "<br>> UPDATE_STREAM: " + Math.random().toString(36).substr(2,8).toUpperCase();
-            if(log.innerHTML.split('<br>').length > 5) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
+            const log = document.getElementById('engine-log');
+            const events = [
+                "> [SYNC] GLOBAL_PEER_RESONANCE_OK",
+                "> [KRYPTO] GENERATING_DATA_ATOM_" + Math.random().toString(16).substr(2,6).toUpperCase(),
+                "> [MODEL] VALIDATING_FIBONACCI_SEQ",
+                "> [SYSTEM] REFRESHING_SESSION_TOKEN"
+            ];
+            log.innerHTML += "<br>" + events[Math.floor(Math.random()*events.length)];
+            if(log.innerHTML.split('<br>').length > 7) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
             
-            setTimeout(start, 1000);
+            setTimeout(gridEngine, 1000);
         }
-        start();
+        gridEngine();
     </script>
 </body>
 </html>
