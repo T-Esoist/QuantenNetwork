@@ -2,64 +2,49 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T-Esoist | Quantum Network Official</title>
 <style>
-    :root { --gold: #ffd700; --green: #00ff41; --bg: #050505; }
-    body { background: var(--bg); color: var(--gold); font-family: 'Courier New', monospace; margin: 0; padding: 0; line-height: 1.6; display: flex; flex-direction: column; align-items: center; }
-    
-    header { width: 100%; padding: 50px 20px; text-align: center; border-bottom: 1px solid #222; background: linear-gradient(to bottom, #111, var(--bg)); }
-    .brand { font-size: 2.5em; font-weight: bold; letter-spacing: 12px; text-shadow: 0 0 20px var(--gold); }
-    .tagline { color: var(--green); font-size: 0.9em; margin-top: 10px; }
-
-    .main-stats { margin: 40px 0; padding: 30px; border: 2px solid var(--gold); border-radius: 20px; background: rgba(255,215,0,0.05); text-align: center; width: 90%; max-width: 800px; box-shadow: 0 0 40px rgba(255,215,0,0.1); }
-    .bal { font-size: 4em; font-weight: 900; margin: 10px 0; }
-    .eur { color: #fff; font-size: 1.8em; opacity: 0.8; }
-
-    .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; width: 90%; max-width: 1000px; margin-bottom: 100px; }
-    .card { background: #0a0a0a; border: 1px solid #222; padding: 25px; border-radius: 15px; }
-    .card h3 { border-bottom: 1px solid var(--gold); padding-bottom: 10px; color: var(--gold); text-transform: uppercase; font-size: 1.1em; }
-    .card p { color: #bbb; font-size: 0.85em; }
-    
-    .highlight { color: var(--gold); font-weight: bold; }
-    footer { width: 100%; padding: 40px; text-align: center; font-size: 0.7em; color: #444; border-top: 1px solid #111; }
+    body { background:#000; color:#ffd700; font-family:monospace; margin:0; display:flex; flex-direction:column; align-items:center; padding:20px; }
+    .header { text-align:center; padding:40px 0; letter-spacing:10px; font-weight:bold; font-size:1.5em; text-shadow:0 0 15px #ffd700; }
+    .main-box { border:2px solid #ffd700; padding:30px; border-radius:15px; background:rgba(10,10,10,0.9); box-shadow:0 0 40px #ffd70033; text-align:center; max-width:600px; width:100%; }
+    .bal { font-size:3em; font-weight:900; margin:10px 0; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:30px; text-align:left; font-size:0.7em; }
+    .card { background:#080808; border:1px solid #222; padding:15px; border-radius:8px; }
+    .card h3 { font-size:0.9em; margin:0 0 10px 0; color:#ffd700; border-bottom:1px solid #333; }
+    .green { color:#00ff41; }
+    .visual { display:flex; height:40px; align-items:flex-end; gap:4px; margin-top:10px; }
+    .bar { background:#ffd700; width:15%; animation:h 1s infinite alternate; opacity:0.5; }
+    @keyframes h { from { height:20%; } to { height:100%; } }
 </style>
 </head>
 <body>
-
-<header>
-    <div class="brand">T ESOIST</div>
-    <div class="tagline">QUANTUM P2P NETWORK INFRASTRUCTURE</div>
-</header>
-
-<div class="main-stats">
-    <div style="font-size: 0.7em; letter-spacing: 3px;">AKTUELLER NODE-STATUS: ONLINE</div>
-    <div class="bal">4,200,008.25 QE</div>
-    <div class="eur">575,527,130.50 EUR</div>
-</div>
-
-<div class="content-grid">
-    <div class="card">
-        <h3>1. Was ist das Netzwerk?</h3>
-        <p>Das T-Esoist Netzwerk ist ein <span class="highlight">dezentrales Quanten-P2P-Grid</span>. Im Gegensatz zu herkömmlichen Blockchains nutzt es keine sinnlose Rechenpower, sondern stabilisiert den Informationsfluss durch entropische Ernte.</p>
+    <div class="header">T-ESOIST TECHNOLOGY</div>
+    <div class="main-box">
+        <div style="font-size:0.7em; color:#00ff41;">● NODE_ACTIVE // ENCRYPTED_CORE</div>
+        <div class="bal">4,200,009.62 QE</div>
+        <div style="color:#fff; font-size:1.5em;">575,527,318.91 EUR</div>
+        
+        <div class="grid">
+            <div class="card" style="grid-column: span 2;">
+                <h3>NETZWERK-ERKLÄRUNG</h3>
+                Das T-Esoist P2P System wandelt <b>Rechen-Entropie</b> in digitale Stabilität um. Dieser Node validiert Quanten-Fluktuationen und generiert QE als Repräsentationswert gesicherter Information.
+            </div>
+            <div class="card">
+                <h3>METRIKEN</h3>
+                LATENCY: <span class="green">14ms</span><br>
+                PEERS: <span class="green">12.482</span><br>
+                UPLINK: <span class="green">ACTIVE</span>
+            </div>
+            <div class="card">
+                <h3>HARVESTING</h3>
+                <div class="visual">
+                    <div class="bar" style="animation-delay:0.1s"></div>
+                    <div class="bar" style="animation-delay:0.3s"></div>
+                    <div class="bar" style="animation-delay:0.5s"></div>
+                </div>
+            </div>
+        </div>
+        <div style="font-size:0.5em; color:#444; margin-top:20px;">SYNC_TIME: Tue Jan  6 14:53:36 2026</div>
     </div>
-    <div class="card">
-        <h3>2. Wie entsteht der Wert?</h3>
-        <p>Einheiten (QE) entstehen durch <span class="highlight">Information-to-Value Mapping</span>. Da Information im Universum physikalisch gebunden ist, repräsentiert jede QE eine verifizierte Menge an geordneter Entropie, die im Netzwerk als Sicherheit dient.</p>
-    </div>
-    <div class="card">
-        <h3>3. Der P2P-Node</h3>
-        <p>Dieser Node agiert als Validierungspunkt. Er nutzt lokale <span class="highlight">Quanten-Fluktuationen</span>, um das Netzwerk zu sichern. Der aktuelle Marktwert von 137.03 EUR spiegelt das Vertrauen in die technologische Überlegenheit von T-Esoist wider.</p>
-    </div>
-    <div class="card">
-        <h3>4. Zukunftsvision</h3>
-        <p>Wir bauen die Infrastruktur für eine post-singuläre Wirtschaft. T-Esoist Technology steht für die Verschmelzung von <span class="highlight">Physik, Code und Kapital</span>.</p>
-    </div>
-</div>
-
-<footer>
-    T-ESOIST TECHNOLOGY PROTOCOL V15.8 | NODE-ID: P2P-1767707350 | LAST SYNC: 14:49:10
-</footer>
-
-<script>setTimeout(()=>location.reload(), 300000);</script>
+    <script>setTimeout(()=>location.reload(), 300000);</script>
 </body>
 </html>
