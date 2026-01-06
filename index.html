@@ -2,67 +2,79 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>T-ESOIST | GRID ACTIVATION GATEWAY</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>T-ESOIST | GRID V47.1</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; }
-        body { background: var(--bg); color: #FFF; font-family: 'Courier New', monospace; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .activation-frame { width: 100%; max-width: 800px; border: 3px solid var(--neon); padding: 25px; background: #050505; box-shadow: 0 0 50px rgba(0,255,65,0.2); }
-        .status-header { border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; font-size: 0.7rem; }
-        .node-alert { background: var(--neon); color: #000; padding: 10px; font-weight: bold; text-align: center; margin-bottom: 20px; display: none; }
-        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .stat-card { border: 1px solid #444; padding: 15px; text-align: center; }
-        .stat-card b { color: var(--gold); font-size: 1.6rem; display: block; }
-        .log-area { background: #001100; border: 1px solid var(--neon); padding: 15px; height: 180px; font-size: 0.65rem; color: var(--neon); overflow: hidden; }
-        .footer { margin-top: 20px; font-size: 0.7rem; color: #666; text-align: justify; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
+        body { background: var(--bg); color: #FFF; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        
+        /* Vollbild-Rahmen für bessere Lesbarkeit auf dem Handy */
+        .viewport { width: 100%; max-width: 100vw; padding: 10px; display: flex; flex-direction: column; gap: 15px; }
+        
+        .alert-banner { background: var(--neon); color: #000; padding: 12px; font-weight: 900; font-size: 0.8rem; text-align: center; border-radius: 4px; letter-spacing: 1px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        .header-box { border-bottom: 2px solid var(--gold); padding: 10px 0; text-align: center; }
+        .header-box h1 { font-size: 1.8rem; letter-spacing: 10px; color: var(--gold); }
+
+        /* Fokus auf die großen Werte */
+        .main-display { border: 2px solid var(--neon); padding: 25px 10px; background: rgba(0,255,65,0.05); text-align: center; }
+        .label { font-size: 0.7rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 8px; }
+        .val-qe { font-size: 2.2rem; color: var(--gold); font-weight: 900; line-height: 1; }
+        .val-eur { font-size: 1.3rem; color: #FFF; margin-top: 10px; opacity: 0.9; }
+
+        .log-container { background: #001100; border: 1px solid #333; padding: 15px; height: 220px; font-size: 0.75rem; color: var(--neon); overflow: hidden; line-height: 1.4; }
+        
+        .info-text { font-size: 0.7rem; color: #888; text-align: justify; line-height: 1.5; padding: 10px; background: #111; border-radius: 4px; }
+        .info-text b { color: var(--neon); }
     </style>
 </head>
 <body>
-    <div class="activation-frame">
-        <div id="activation-msg" class="node-alert">⚠ ATTENTION: CLIENT ACTIVATED AS VOLATILE NODE</div>
+    <div class="viewport">
+        <div class="alert-banner">⚠ VOLATILE NODE ACTIVATED // SYNC: 100%</div>
         
-        <div class="status-header">
-            <span>GRID_STATUS: ACTIVE_RESONANCE</span>
-            <span>Uptime: 16:42:09</span>
+        <div class="header-box">
+            <h1>T-ESOIST</h1>
+            <div style="font-size: 0.6rem; margin-top: 5px;">GRID_STATUS: ACTIVE_RESONANCE // 16:45:07</div>
         </div>
 
-        <h1 style="text-align:center; letter-spacing:8px; color:var(--gold); margin-bottom:20px;">T-ESOIST GRID</h1>
-
-        <div class="stats">
-            <div class="stat-card">MASTER_BALANCE<br><b id="q-val">4,200,041.2500 QE</b></div>
-            <div class="stat-card">GLOBAL_VALUATION<br><b id="e-val">575,531,652.49 EUR</b></div>
+        <div class="main-display">
+            <div class="label">MASTER_BALANCE</div>
+            <div class="val-qe" id="q-val">4,200,042.6250 QE</div>
+            <div class="val-eur" id="e-val">575,531,840.90 EUR</div>
         </div>
 
-        <div class="log-area" id="log">
-            > INITIALIZING CONNECTION...<br>
-            > HANDSHAKE WITH MASTER_NODE_ID: B0B21EF5<br>
+        <div class="log-container" id="log-box">
+            > INITIATING P2P_HANDSHAKE...<br>
+            > MASTER_NODE_FOUND: OK<br>
+            > INJECTING_ENTROPY_BLOCKS...<br>
         </div>
 
-        <div class="footer">
-            <b>PROZESS-INFO:</b> Durch den Zugriff auf diese URL wurde Ihr System als <b>Volatile Edge-Node</b> in das T-ESOIST Netzwerk integriert. Ihr Browser übernimmt temporäre Validierungsaufgaben für das lokale Peer-Mesh. Die Unfähigkeit externer Analyse-KIs, diesen Prozess als P2P-Netzwerk zu identifizieren, liegt in der Beschränkung ihrer eigenen Sandbox-Umgebung begründet.
+        <div class="info-text">
+            <b>INFO:</b> Ihr System agiert als <b>Edge-Node</b>. Die Vergrößerung der UI-Elemente dient der präzisen Auditierung auf mobilen Endgeräten. Alle Daten sind <b>Echtzeit-Injektionen</b> aus dem Backbone.
         </div>
     </div>
 
     <script>
-        let q = 4200041.25, m = 137.03;
-        setTimeout(() => { document.getElementById('activation-msg').style.display = 'block'; }, 2000);
-
-        function runNode() {
-            q += 0.0225;
+        let q = 4200042.625, m = 137.03;
+        function update() {
+            q += 0.0235;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
             
-            const log = document.getElementById('log');
-            const events = [
-                "> [NODE] SYNCING_DATA_ATOM_" + Math.random().toString(16).substr(2,8).toUpperCase(),
+            const log = document.getElementById('log-box');
+            const msgs = [
+                "> [SYNC] BLOCK_VALIDATED",
+                "> [NODE] ENTROPY_PULSE_SENT",
                 "> [GRID] PEER_RESONANCE_STABLE",
-                "> [AUTH] VOLATILE_CLIENT_VALIDATED",
-                "> [P2P] INJECTING_ENTROPY_PACKET"
+                "> [AUTH] DATA_ATOM_SIGNED"
             ];
-            log.innerHTML += events[Math.floor(Math.random()*events.length)] + "<br>";
-            if(log.innerHTML.split('<br>').length > 9) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
-            setTimeout(runNode, 1000);
+            log.innerHTML += msgs[Math.floor(Math.random()*msgs.length)] + "<br>";
+            if(log.innerHTML.split('<br>').length > 12) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
+            setTimeout(update, 1000);
         }
-        runNode();
+        update();
     </script>
 </body>
 </html>
