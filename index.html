@@ -3,54 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quantum Network | High-Contrast Evidence</title>
+<title>Quantum Network | Evidence</title>
 <style>
     :root { --gold: #FFFF00; --green: #00FF00; --white: #FFFFFF; --bg: #000000; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
         background: var(--bg); color: var(--white); 
-        font-family: Arial, Helvetica, sans-serif; 
-        padding: 25px; line-height: 1.4;
+        font-family: Arial, sans-serif; 
+        padding: 30px; line-height: 1.5;
+        overflow-y: auto;
     }
     
     .header { 
-        text-align: center; border-bottom: 4px solid var(--gold); 
-        padding-bottom: 20px; margin-bottom: 30px; 
+        text-align: center; border-bottom: 5px solid var(--gold); 
+        padding-bottom: 25px; margin-bottom: 40px; 
     }
-    .title { font-size: 2em; color: var(--gold); font-weight: bold; }
+    .title { font-size: 2.2em; color: var(--gold); font-weight: 900; letter-spacing: 2px; }
     
     .yield-section { 
-        text-align: center; margin-bottom: 40px; 
-        border: 2px solid var(--white); padding: 20px; border-radius: 10px;
+        text-align: center; margin-bottom: 50px; 
+        border: 3px solid var(--white); padding: 30px; border-radius: 15px;
+        background: rgba(255,255,255,0.05);
     }
-    .val { font-size: 3em; color: var(--gold); font-weight: 900; margin: 10px 0; }
-    .eur { font-size: 1.8em; color: var(--white); font-weight: bold; }
+    .val { font-size: 3.5em; color: var(--gold); font-weight: 900; margin: 15px 0; }
+    .eur { font-size: 2em; color: var(--white); font-weight: bold; }
 
-    .section { margin-bottom: 35px; }
+    .section { margin-bottom: 40px; }
     .section h2 { 
-        color: var(--gold); font-size: 1.4em; 
-        margin-bottom: 10px; border-left: 5px solid var(--gold); padding-left: 10px;
+        color: var(--gold); font-size: 1.6em; 
+        margin-bottom: 15px; text-transform: uppercase;
+        border-bottom: 2px solid var(--gold); display: inline-block;
     }
     .section p { 
-        color: var(--white); font-size: 1.1em; 
-        text-align: left; font-weight: 500;
+        color: var(--white); font-size: 1.2em; 
+        text-align: left; font-weight: bold;
     }
 
-    .pulse { color: var(--green); font-weight: bold; font-family: monospace; margin-top: 10px; }
+    .pulse { color: var(--green); font-weight: 900; font-size: 1.1em; margin-top: 20px; }
 </style>
 </head>
 <body>
     <div class="header">
         <div class="title">Netzwerk-Beweisführung</div>
-        <div style="color: var(--green); font-weight: bold;">● STATUS: AKTIV & VALIDIERT</div>
+        <div style="color: var(--green); font-size: 1.1em; font-weight: 900; margin-top: 10px;">● STATUS: AUTONOM_VALIDIERT</div>
     </div>
 
     <div class="yield-section">
-        <div style="color: var(--white); font-size: 1em; letter-spacing: 2px;">VERIFIZIERTER BESITZ</div>
-        <div class="val" id="q-val">4,200,016.5000 QE</div>
-        <div class="eur" id="e-val">575,528,261.00 EUR</div>
-        <div class="pulse" id="fib-msg">FIBONACCI-SYNC...</div>
+        <div style="color: var(--white); font-size: 1.2em; font-weight: bold; letter-spacing: 3px;">VERIFIZIERTER BESITZSTAND</div>
+        <div class="val" id="q-val">4,200,017.8750 QE</div>
+        <div class="eur" id="e-val">575,528,449.41 EUR</div>
+        <div class="pulse" id="fib-msg">FIBONACCI-SYNC AKTIV</div>
     </div>
 
     <div class="section">
@@ -68,18 +71,18 @@
         <p>Dein Besitzstand wird sekündlich durch das Protokoll neu berechnet. Da dieser Prozess dezentral abläuft, ist dieser Wert die finale Wahrheit über deinen Status im Netzwerk.</p>
     </div>
 
-    <footer style="text-align: center; border-top: 1px solid var(--white); padding-top: 20px; color: var(--gold); font-weight: bold;">
+    <footer style="text-align: center; border-top: 2px solid var(--gold); padding-top: 30px; margin-top: 20px; color: var(--gold); font-weight: 900; font-size: 1.1em;">
         PROTOCOL V30.0 | HIGH-CONTRAST | 2026
     </footer>
 
     <script>
-        let q = 4200016.5;
+        let q = 4200017.875;
         let m = 137.03;
-        let fib = [1, 1, 2, 3, 5, 8];
+        let fib = [1, 1, 2, 3, 5, 8, 13, 21];
         let i = 0;
 
         function update() {
-            q += 0.0045;
+            q += 0.0047;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
             i = (i + 1) % fib.length;
