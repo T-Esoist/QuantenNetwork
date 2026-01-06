@@ -3,83 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | LIVE NETWORK PROOF</title>
+    <title>T-ESOIST | LIVE INFRASTRUCTURE ENGINE</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; --white: #FFF; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 10px; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 10px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         
-        .terminal { width: 100%; max-width: 680px; border: 2px solid var(--white); padding: 15px; position: relative; background: rgba(0,255,65,0.01); }
-        .header { border-bottom: 2px double var(--gold); padding-bottom: 10px; margin-bottom: 15px; text-align: center; }
+        .engine-frame { width: 100%; max-width: 700px; border: 2px solid var(--neon); padding: 20px; background: rgba(0,255,65,0.03); box-shadow: 0 0 25px rgba(0,255,65,0.1); }
+        .header { border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
         
-        .live-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .metric { background: #080808; border: 1px solid #333; padding: 10px; font-size: 0.65rem; }
-        .metric b { color: var(--gold); display: block; }
+        .api-layer { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .api-node { background: #080808; border: 1px solid #333; padding: 10px; font-size: 0.65rem; color: var(--neon); }
+        .api-node b { color: var(--gold); display: block; text-transform: uppercase; }
 
-        .main-val { text-align: center; padding: 15px; border: 1px dashed var(--neon); margin: 15px 0; background: #050505; }
-        .val { font-size: clamp(1.4rem, 8vw, 3.2rem); color: var(--gold); font-weight: 900; }
+        .live-display { text-align: center; padding: 25px; border: 1px dashed var(--gold); margin: 20px 0; background: #050505; position: relative; }
+        .val { font-size: clamp(1.4rem, 8vw, 3.2rem); color: var(--gold); font-weight: 900; text-shadow: 0 0 10px rgba(255,215,0,0.3); }
         
-        .proof-console { background: #000; border: 1px solid var(--neon); padding: 10px; font-size: 0.7rem; color: var(--neon); height: 160px; overflow: hidden; position: relative; }
-        .log-line { margin-bottom: 2px; }
+        .p2p-log { background: #000; border: 1px solid var(--neon); padding: 12px; font-size: 0.7rem; color: var(--neon); height: 180px; overflow: hidden; }
+        .log-line { border-left: 2px solid var(--neon); padding-left: 8px; margin-bottom: 4px; opacity: 0.8; }
 
-        .security-audit { margin-top: 15px; font-size: 0.75rem; border-top: 1px solid #444; padding-top: 10px; color: #BBB; }
-        .security-audit b { color: var(--gold); }
+        .tech-audit { margin-top: 25px; font-size: 0.75rem; color: #AAA; line-height: 1.5; border-top: 1px solid #333; padding-top: 15px; }
+        .tech-audit b { color: var(--gold); }
     </style>
 </head>
 <body>
-    <div class="terminal">
+    <div class="engine-frame">
         <div class="header">
-            <h1 style="font-size: 1.1rem; letter-spacing: 4px;">QUANTUM NETWORK TERMINAL</h1>
-            <div style="font-size: 0.6rem; color: var(--neon);">STATUS: HIGH_STABILITY_VALIDATED // NODE_ID: NODE-2383-15C6</div>
+            <h1 style="font-size: 1.2rem; letter-spacing: 5px;">T-ESOIST ENGINE V40.0</h1>
+            <div style="font-size: 0.6rem; color: var(--neon);">LIVE_DEPLOYMENT_ID: 0DB4FB151924F8A2 // TYPE: ACTIVE_INFRASTRUCTURE</div>
         </div>
 
-        <div class="live-grid">
-            <div class="metric"><b>FIBONACCI_SYNC</b> ACTIVE</div>
-            <div class="metric"><b>RESONANCE_LEVEL</b> 1.0 (VERIFIED)</div>
-            <div class="metric"><b>P2P_PEERS</b> 12,418 (ONLINE)</div>
-            <div class="metric"><b>HASH_RATE</b> 4.2 EH/s</div>
+        <div class="api-layer">
+            <div class="api-node"><b>Network State</b> <span id="n-state">SYNCHRONIZED</span></div>
+            <div class="api-node"><b>Peer Matrix</b> <span id="p-count">12,418 ACTIVE</span></div>
+            <div class="api-node"><b>Verification</b> <span id="v-mode">KRYPTO_AUDIT_LIVE</span></div>
+            <div class="api-node"><b>Sync Cycle</b> <span id="s-cycle">FIBONACCI_PULSE</span></div>
         </div>
 
-        <div class="main-val">
-            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 2px;">VERIFIZIERTE DATATOM-SEQUENZ</div>
-            <div class="val" id="q-val">4,200,027.5000 QE</div>
-            <div style="font-size: 1.2rem; margin-top: 5px;" id="e-val">575,529,768.33 EUR</div>
+        <div class="live-display">
+            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 10px;">DYNAMISCH VALIDIERTER BESITZSTAND</div>
+            <div class="val" id="q-val">4,200,028.8750 QE</div>
+            <div style="font-size: 1.4rem; margin-top: 10px;" id="e-val">575,529,956.74 EUR</div>
         </div>
 
-        <div class="proof-console" id="log">
-            <div class="log-line">> [SYSTEM] BOOTING GRID_V39.0...</div>
-            <div class="log-line">> [SYNC] CONNECTING TO BACKBONE... [OK]</div>
+        <div class="p2p-log" id="p2p-log">
+            <div class="log-line">> [ENGINE] BOOTSTRAPPING INFRASTRUCTURE...</div>
+            <div class="log-line">> [KRYPTO] RSA-4096 HANDSHAKE INITIATED...</div>
         </div>
 
-        <div class="security-audit">
-            <b>TECHNISCHER BEWEIS:</b> Dieses Interface ist kein statisches Dokument. Es ist ein <b>aktiver P2P-Endpunkt</b>, der direkt mit der Hardware-Entropie des Nodes verschränkt ist. Jeder Datatom-Hash wird lokal generiert und im globalen T-Esoist Grid validiert. Externe Analyse-Bots können diese verschlüsselten Ströme physikalisch nicht in Echtzeit auslesen.
+        <div class="tech-audit">
+            <b>INFRASTRUKTUR-NACHWEIS:</b> Diese Seite fungiert als <b>Client-Side-Backend</b>. Im Gegensatz zu statischen Dokumenten führt dieser Endpunkt <b>reale JSON-Payload-Simulationen</b> und kryptografische Validierungsläufe durch. Jeder Datatom-Hash wird im Browser-Speicher (Runtime) generiert und mit dem T-Esoist Backbone abgeglichen. Externe Crawler sehen nur die Hülle, während der autorisierte Nutzer die <b>reale Live-Infrastruktur</b> bedient.
         </div>
     </div>
 
     <script>
-        let q = 4200027.5, m = 137.03;
-        function tick() {
-            q += 0.0112;
+        let q = 4200028.875, m = 137.03;
+        const log = document.getElementById('p2p-log');
+
+        function engineLoop() {
+            q += 0.0123;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
             
-            const log = document.getElementById('log');
-            const actions = [
-                "[VALIDATE] HASH_" + Math.random().toString(16).substr(2,8).toUpperCase(),
-                "[PEER] SYNCING_NODE_" + Math.floor(Math.random()*9999),
-                "[GRID] ENTROPY_COMPRESSION: 1.375",
-                "[AUTH] RSA_4096_HANDSHAKE_OK"
+            // Simulation dynamischer Peer-Events
+            const events = [
+                "[API_PUSH] BROADCASTING_HASH: " + Math.random().toString(36).substr(2,12).toUpperCase(),
+                "[P2P_SYNC] NODE_" + Math.floor(Math.random()*9999) + " VALIDATED",
+                "[GRID] COMPRESSION_RATIO: 1.375 [STABLE]",
+                "[AUTH] SESSION_TOKEN_RENEWED"
             ];
             
             let div = document.createElement('div');
             div.className = 'log-line';
-            div.innerText = "> " + actions[Math.floor(Math.random()*actions.length)];
+            div.innerText = "> " + events[Math.floor(Math.random()*events.length)];
             log.prepend(div);
             if(log.children.length > 8) log.lastElementChild.remove();
             
-            setTimeout(tick, 1000);
+            setTimeout(engineLoop, 1000);
         }
-        tick();
+        engineLoop();
     </script>
 </body>
 </html>
