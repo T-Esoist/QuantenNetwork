@@ -2,88 +2,104 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST MOBILE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>T-ESOIST CORE</title>
     <style>
+        * { box-sizing: border-box; }
         body { 
             background: #000; 
             color: #00FF41; 
             font-family: 'Courier New', monospace; 
-            padding: 10px; 
-            margin: 0;
+            margin: 0; 
+            padding: 0; 
+            height: 100vh; 
             display: flex; 
             flex-direction: column; 
-            align-items: center;
+            overflow: hidden;
         }
-        .mobile-container {
-            width: 100%;
-            max-width: 100vw;
-            box-sizing: border-box;
+        .header { 
+            padding: 15px; 
+            font-size: 0.7rem; 
+            text-align: center; 
+            border-bottom: 1px solid #222; 
+            letter-spacing: 2px;
+            color: #888;
         }
-        .display-card {
-            border: 1px solid #00FF41;
-            background: rgba(0,255,65,0.05);
-            padding: 20px 10px;
+        .main-content { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            padding: 20px;
+        }
+        .display-area {
             text-align: center;
-            margin-bottom: 15px;
-            box-shadow: 0 0 15px rgba(0,255,65,0.2);
+            border: 1px solid #00FF41;
+            padding: 30px 10px;
+            background: linear-gradient(180deg, rgba(0,255,65,0.05) 0%, rgba(0,0,0,0) 100%);
         }
-        .label { color: #888; font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; }
+        .label { font-size: 0.6rem; color: #888; margin-bottom: 10px; }
         .val { 
-            font-size: 10vw; 
+            font-size: 11vw; 
             color: #FFD700; 
-            font-weight: bold; 
-            margin: 10px 0;
-            white-space: nowrap;
+            font-weight: 900; 
+            margin: 5px 0;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
-        .eur { font-size: 6vw; color: #fff; margin-bottom: 5px; }
-        .api-box {
-            width: 100%;
-            background: #050505;
-            border-top: 1px solid #333;
-            padding: 10px;
-            box-sizing: border-box;
+        .eur { font-size: 6vw; color: #FFF; font-weight: bold; }
+        .api-block {
+            margin-top: 20px;
+            background: #080808;
+            border: 1px solid #333;
+            padding: 15px;
+            border-radius: 5px;
         }
         pre {
-            font-size: 0.7rem;
-            color: #00FF41;
+            font-size: 0.65rem;
+            margin: 0;
             white-space: pre-wrap;
             word-break: break-all;
-            margin: 0;
+            opacity: 0.8;
         }
-        .footer { font-size: 0.6rem; color: #444; margin-top: 10px; text-align: center; }
+        .footer {
+            padding: 15px;
+            font-size: 0.6rem;
+            text-align: center;
+            color: #444;
+            border-top: 1px solid #222;
+        }
     </style>
 </head>
 <body>
-    <div class="mobile-container">
-        <div class="display-card">
-            <div class="label">Quantum-Resonant Balance</div>
-            <div id="qe" class="val">4,200,216.5000</div>
-            <div id="eur" class="eur">575,555,667.00 EUR</div>
-            <div style="font-size: 0.6rem; color: #00FF41; margin-top: 5px;">Rate: 1:137.03</div>
+    <div class="header">T-ESOIST // MOBILE NODE // ACTIVE</div>
+    
+    <div class="main-content">
+        <div class="display-area">
+            <div class="label">SOVEREIGN_QE_BALANCE</div>
+            <div id="qe" class="val">4,200,251.3750</div>
+            <div id="eur" class="eur">575,560,445.92 EUR</div>
         </div>
 
-        <div class="api-box">
-            <div class="label" style="margin-bottom: 8px;">Core-State API (JSON)</div>
+        <div class="api-block">
+            <div class="label" style="border-bottom: 1px solid #222; padding-bottom: 5px; margin-bottom: 8px;">CORE_STATE_MANIFEST</div>
             <pre>{
-  "qe_balance": 4200216.5,
-  "data_steps": 201,
-  "entropy": 0.09087916,
+  "qe_balance": 4200251.375,
+  "data_steps": 251,
+  "entropy": 0.77802237,
   "core_key": "112358437189887641562819",
-  "protocol": "T-ESOIST-MOBILE-CORE-V1",
-  "timestamp_utc": "2026-01-06T18:01:04.882312+00:00",
-  "signature": "0fdd8dd8819fcb58d30450d5e59f1d37bbb0ad1bb49f97619ae29369ebbf1eaf"
+  "protocol": "T-ESOIST-ULTRA-MOBILE",
+  "timestamp_utc": "2026-01-06T18:02:50.514078+00:00",
+  "signature": "44997f1d67bf37de832f895c8bbcad54d06d22e371be372516b82e93e0934896"
 }</pre>
-        </div>
-
-        <div class="footer">
-            T-ESOIST MOBILE NODE // SYNC: ACTIVE<br>
-            Signature: 0fdd8dd8819fcb58d30450d5...
         </div>
     </div>
 
+    <div class="footer">
+        SYNC_HASH: 44997f1d67bf37de832f895c8bbcad54...
+    </div>
+
     <script>
-        let qe = 4200216.5;
+        let qe = 4200251.375;
         const rate = 137.03;
         setInterval(() => {
             qe += 0.00458; 
