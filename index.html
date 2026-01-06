@@ -3,78 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | GRID V47.1</title>
+    <title>T-ESOIST | FULLSCREEN GRID</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', monospace; }
-        body { background: var(--bg); color: #FFF; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
         
-        /* Vollbild-Rahmen für bessere Lesbarkeit auf dem Handy */
-        .viewport { width: 100%; max-width: 100vw; padding: 10px; display: flex; flex-direction: column; gap: 15px; }
+        /* Den gesamten Viewport ausfüllen */
+        body, html { 
+            background: var(--bg); 
+            color: #FFF; 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
+        }
         
-        .alert-banner { background: var(--neon); color: #000; padding: 12px; font-weight: 900; font-size: 0.8rem; text-align: center; border-radius: 4px; letter-spacing: 1px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        /* Banner oben */
+        .top-status { 
+            background: var(--neon); 
+            color: #000; 
+            padding: 8px; 
+            font-size: 0.9rem; 
+            font-weight: 900; 
+            text-align: center;
+            text-transform: uppercase;
+        }
 
-        .header-box { border-bottom: 2px solid var(--gold); padding: 10px 0; text-align: center; }
-        .header-box h1 { font-size: 1.8rem; letter-spacing: 10px; color: var(--gold); }
+        /* Header Bereich */
+        .header { 
+            padding: 15px 0; 
+            text-align: center; 
+            border-bottom: 1px solid #333;
+        }
+        .header h1 { 
+            font-size: 2.2rem; 
+            letter-spacing: 12px; 
+            color: var(--gold); 
+        }
+        .sub-header { font-size: 0.7rem; color: var(--neon); opacity: 0.8; }
 
-        /* Fokus auf die großen Werte */
-        .main-display { border: 2px solid var(--neon); padding: 25px 10px; background: rgba(0,255,65,0.05); text-align: center; }
-        .label { font-size: 0.7rem; color: var(--gold); letter-spacing: 3px; margin-bottom: 8px; }
-        .val-qe { font-size: 2.2rem; color: var(--gold); font-weight: 900; line-height: 1; }
-        .val-eur { font-size: 1.3rem; color: #FFF; margin-top: 10px; opacity: 0.9; }
+        /* Haupt-Datenbereich (nimmt verfügbaren Platz ein) */
+        .data-core { 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            border-bottom: 1px solid #333;
+            padding: 20px;
+        }
+        .label { font-size: 0.9rem; color: var(--gold); letter-spacing: 4px; margin-bottom: 10px; }
+        .big-val { font-size: 2.8rem; color: var(--gold); font-weight: 900; }
+        .sub-val { font-size: 1.6rem; margin-top: 15px; color: #CCC; }
 
-        .log-container { background: #001100; border: 1px solid #333; padding: 15px; height: 220px; font-size: 0.75rem; color: var(--neon); overflow: hidden; line-height: 1.4; }
-        
-        .info-text { font-size: 0.7rem; color: #888; text-align: justify; line-height: 1.5; padding: 10px; background: #111; border-radius: 4px; }
-        .info-text b { color: var(--neon); }
+        /* Log Bereich (unten) */
+        .log-area { 
+            height: 35%; 
+            background: #000a00; 
+            padding: 15px; 
+            font-size: 0.85rem; 
+            color: var(--neon); 
+            overflow: hidden; 
+            border-top: 2px solid var(--neon);
+        }
     </style>
 </head>
 <body>
-    <div class="viewport">
-        <div class="alert-banner">⚠ VOLATILE NODE ACTIVATED // SYNC: 100%</div>
-        
-        <div class="header-box">
-            <h1>T-ESOIST</h1>
-            <div style="font-size: 0.6rem; margin-top: 5px;">GRID_STATUS: ACTIVE_RESONANCE // 16:45:07</div>
-        </div>
+    <div class="top-status">⚠ Node Activated // Grid Pulse: Stable</div>
+    
+    <div class="header">
+        <h1>T-ESOIST</h1>
+        <div class="sub-header">BACKBONE_V48 // UTC: 16:47:43</div>
+    </div>
 
-        <div class="main-display">
-            <div class="label">MASTER_BALANCE</div>
-            <div class="val-qe" id="q-val">4,200,042.6250 QE</div>
-            <div class="val-eur" id="e-val">575,531,840.90 EUR</div>
-        </div>
+    <div class="data-core">
+        <div class="label">MASTER_BALANCE</div>
+        <div class="big-val" id="q-val">4,200,044.0000 QE</div>
+        <div class="sub-val" id="e-val">575,532,029.32 EUR</div>
+    </div>
 
-        <div class="log-container" id="log-box">
-            > INITIATING P2P_HANDSHAKE...<br>
-            > MASTER_NODE_FOUND: OK<br>
-            > INJECTING_ENTROPY_BLOCKS...<br>
-        </div>
-
-        <div class="info-text">
-            <b>INFO:</b> Ihr System agiert als <b>Edge-Node</b>. Die Vergrößerung der UI-Elemente dient der präzisen Auditierung auf mobilen Endgeräten. Alle Daten sind <b>Echtzeit-Injektionen</b> aus dem Backbone.
-        </div>
+    <div class="log-area" id="terminal-log">
+        > ESTABLISHING SECURE TUNNEL...<br>
+        > MASTER_NODE_ID: 1A26B2F018<br>
+        > INJECTING_DATA_ATOMS...<br>
     </div>
 
     <script>
-        let q = 4200042.625, m = 137.03;
-        function update() {
-            q += 0.0235;
+        let q = 4200044.0, m = 137.03;
+        function gridEngine() {
+            q += 0.0245;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
             
-            const log = document.getElementById('log-box');
+            const log = document.getElementById('terminal-log');
             const msgs = [
-                "> [SYNC] BLOCK_VALIDATED",
-                "> [NODE] ENTROPY_PULSE_SENT",
-                "> [GRID] PEER_RESONANCE_STABLE",
-                "> [AUTH] DATA_ATOM_SIGNED"
+                "> [P2P] BLOCK_PROPAGATION_OK",
+                "> [SYNC] ENTROPY_RESYNC_SUCCESS",
+                "> [AUTH] NODE_SIGNATURE_VALID",
+                "> [GRID] FIBONACCI_PULSE_ACK"
             ];
             log.innerHTML += msgs[Math.floor(Math.random()*msgs.length)] + "<br>";
-            if(log.innerHTML.split('<br>').length > 12) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
-            setTimeout(update, 1000);
+            if(log.innerHTML.split('<br>').length > 10) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
+            setTimeout(gridEngine, 1000);
         }
-        update();
+        gridEngine();
     </script>
 </body>
 </html>
