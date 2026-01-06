@@ -3,87 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | GRID MODEL V40.1</title>
+    <title>T-ESOIST | QUANTENNETWORK V40.2</title>
     <style>
         :root { --neon: #00FF41; --gold: #FFD700; --bg: #000; --white: #FFF; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--bg); color: var(--white); font-family: 'Courier New', monospace; padding: 15px; display: flex; flex-direction: column; align-items: center; }
         
-        .notice { background: rgba(255, 215, 0, 0.1); border: 1px solid var(--gold); color: var(--gold); padding: 10px; font-size: 0.65rem; text-align: center; margin-bottom: 20px; width: 100%; max-width: 650px; }
+        .notice { background: rgba(0, 255, 65, 0.05); border: 1px solid var(--neon); color: var(--neon); padding: 10px; font-size: 0.65rem; text-align: center; margin-bottom: 20px; width: 100%; max-width: 650px; }
         
-        .terminal { width: 100%; max-width: 650px; border: 2px solid var(--white); padding: 20px; box-shadow: 0 0 30px rgba(0,255,65,0.1); }
-        .header { border-bottom: 2px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
+        .terminal-box { width: 100%; max-width: 650px; border: 1px solid var(--white); padding: 20px; background: #050505; }
+        .header { border-bottom: 1px solid var(--gold); padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
         
-        .grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .stat-node { border: 1px solid #333; padding: 10px; font-size: 0.6rem; background: #050505; }
-        .stat-node b { color: var(--gold); display: block; }
+        .val-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .v-item { border: 1px solid #333; padding: 10px; font-size: 0.6rem; }
+        .v-item b { color: var(--gold); display: block; }
 
-        .yield-display { text-align: center; border: 1px dashed var(--neon); padding: 25px; margin-bottom: 20px; background: #080808; }
-        .val { font-size: clamp(1.4rem, 8vw, 3rem); color: var(--gold); font-weight: bold; }
+        .main-yield { text-align: center; border: 1px dashed var(--white); padding: 25px; margin-bottom: 20px; }
+        .val { font-size: clamp(1.4rem, 8vw, 3rem); color: var(--gold); font-weight: 900; }
         
-        .console { background: #000; border: 1px solid var(--neon); padding: 10px; font-size: 0.7rem; color: var(--neon); height: 140px; overflow: hidden; }
+        .log-stream { background: #000; border: 1px solid var(--neon); padding: 10px; font-size: 0.7rem; color: var(--neon); height: 120px; overflow: hidden; }
         
-        .spec-docs { margin-top: 25px; font-size: 0.75rem; color: #888; border-top: 1px solid #333; padding-top: 15px; line-height: 1.4; }
-        .spec-docs b { color: var(--white); }
+        .footer-info { margin-top: 20px; font-size: 0.7rem; color: #555; text-align: center; width: 100%; }
     </style>
 </head>
 <body>
     <div class="notice">
-        ⚠️ HINWEIS: Dieses Dashboard zeigt ein <b>deklaratives Netzwerkmodell</b> (Simulation). 
-        Alle Werte sind deterministische Outputs der V40-Engine zur Protokoll-Validierung.
+        ✔ T-ESOIST QuantenNetwork vollständig generiert.<br>
+        STATUS: 2026-01-06 15:59:45 | HASH: F8CF03B0DAEF
     </div>
 
-    <div class="terminal">
+    <div class="terminal-box">
         <div class="header">
-            <h1 style="letter-spacing: 5px;">T-ESOIST GRID</h1>
-            <div style="font-size: 0.6rem; color: var(--neon);">ACTIVE SIMULATION // DEPLOYMENT_ID: B92976CE4868</div>
+            <h1 style="letter-spacing: 5px; font-size: 1.2rem;">T-ESOIST GRID</h1>
+            <div style="font-size: 0.6rem; color: var(--gold);">DECLARATIVE MODEL // REPOSITORY READY</div>
         </div>
 
-        <div class="grid-stats">
-            <div class="stat-node"><b>ARCHITEKTUR</b> SIMULATION_V40.1</div>
-            <div class="stat-node"><b>PEER_MODEL</b> 12,418 NODES (DECLARATIVE)</div>
-            <div class="stat-node"><b>SYNC_MODE</b> FIBONACCI_PULSE</div>
-            <div class="stat-node"><b>ENGINE</b> ALGORITHMIC_RESONANCE</div>
+        <div class="val-grid">
+            <div class="v-item"><b>STRUCTURE</b> GPT-HYBRID V40.2</div>
+            <div class="v-item"><b>DEPLOYMENT</b> GITHUB_PAGES_READY</div>
+            <div class="v-item"><b>ENGINE</b> ACTIVE_SIMULATION</div>
+            <div class="v-item"><b>P2P_LAYERS</b> DECLARATIVE_FRAMEWORK</div>
         </div>
 
-        <div class="yield-display">
-            <div style="font-size: 0.6rem; color: var(--gold); letter-spacing: 2px;">MODELLBASIERTER BESITZSTAND</div>
-            <div class="val" id="q-val">4,200,030.2500 QE</div>
-            <div style="font-size: 1.3rem; margin-top: 10px;" id="e-val">575,530,145.16 EUR</div>
+        <div class="main-yield">
+            <div style="font-size: 0.6rem; letter-spacing: 2px;">MODEL_VALUE (QE)</div>
+            <div class="val" id="q-val">4,200,031.6250 QE</div>
+            <div style="font-size: 1.3rem; margin-top: 10px;" id="e-val">575,530,333.57 EUR</div>
         </div>
 
-        <div class="console" id="log">> INITIALIZING SIMULATION ENGINE...<br>> LOADING GRID_STATE...</div>
+        <div class="log-stream" id="logs">> STARTING PROTOCOL INJECTION...<br>> SYNC_READY</div>
 
-        <div class="spec-docs">
-            <b>PROTOKOLL-SPEZIFIKATION:</b><br>
-            <b>QE:</b> Rechnerische Einheit im Modell.<br>
-            <b>Datatom:</b> Deterministische Informationseinheit.<br>
-            <b>Status:</b> Das System dient als <b>funktionales Framework</b> für die Entwicklung 
-            zukünftiger dezentraler Infrastrukturen. Jede Transaktion folgt einer 
-            reproduzierbaren algorithmischen Logik.
+        <div style="margin-top:20px; font-size:0.75rem; color:#888; text-align:justify;">
+            Dieses System integriert GPT-optimierte Strukturen mit der T-ESOIST V40 Engine. 
+            Alle Werte dienen der <b>Protokoll-Validierung</b> innerhalb eines deklarativen 
+            algorithmischen Rahmens.
         </div>
+    </div>
+
+    <div class="footer-info">
+        Ordner: QuantenNetwork | Build: F8CF03B0DAEF | © 2026
     </div>
 
     <script>
-        let q = 4200030.25, m = 137.03;
-        function runSimulation() {
-            q += 0.0137;
+        let q = 4200031.625, m = 137.03;
+        function start() {
+            q += 0.0142;
             document.getElementById('q-val').innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
             document.getElementById('e-val').innerText = (q * m).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
             
-            const log = document.getElementById('log');
-            const logs = [
-                "> [SIM] CALC_DATATOM_HASH: " + Math.random().toString(36).substr(2,8).toUpperCase(),
-                "> [GRID] RESYNCING PEER_ID_" + Math.floor(Math.random()*9999),
-                "> [MODEL] FIBONACCI_STEP_COMPLETE",
-                "> [ENGINE] STATE_VALIDATED"
-            ];
-            log.innerHTML += "<br>" + logs[Math.floor(Math.random()*logs.length)];
-            if(log.innerHTML.split('<br>').length > 6) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
+            const log = document.getElementById('logs');
+            log.innerHTML += "<br>> UPDATE_STREAM: " + Math.random().toString(36).substr(2,8).toUpperCase();
+            if(log.innerHTML.split('<br>').length > 5) log.innerHTML = log.innerHTML.split('<br>').slice(1).join('<br>');
             
-            setTimeout(runSimulation, 1000);
+            setTimeout(start, 1000);
         }
-        runSimulation();
+        start();
     </script>
 </body>
 </html>
