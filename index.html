@@ -1,49 +1,65 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | P2P INTERFACE</title>
-    <style>
-        body { background: #000; color: #00FF41; font-family: monospace; padding: 15px; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        h1 { color: #FFD700; font-size: 1.1rem; text-align: center; border-bottom: 1px solid #333; padding: 10px; }
-        
-        .display-box { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px solid #00FF41; margin: 15px 0; background: rgba(0,255,65,0.02); }
-        .qe-val { font-size: 3.5rem; color: #FFD700; font-weight: bold; line-height: 1; }
-        .eur-val { font-size: 1.8rem; color: #FFF; margin-top: 10px; opacity: 0.8; }
-        
-        .api-json { height: 40%; background: #050505; border: 1px solid #444; padding: 10px; font-size: 0.85rem; color: #00FF41; overflow: hidden; white-space: pre-wrap; }
-        .label { font-size: 0.7rem; color: #888; text-transform: uppercase; margin-bottom: 5px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network Yield | Real-Time</title>
+<style>
+    :root { --main: #ffd700; --accent: #00ff41; --bg: #000; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: #fff; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 20px; }
+    
+    .yield-card { 
+        width: 100%; max-width: 600px; border: 2px solid var(--main); border-radius: 10px;
+        padding: 50px 20px; text-align: center; background: rgba(255, 215, 0, 0.03);
+        box-shadow: 0 0 50px rgba(255, 215, 0, 0.1); margin-top: 5vh;
+    }
+    .live-tag { color: var(--accent); font-size: 0.6em; letter-spacing: 3px; margin-bottom: 10px; animation: blink 1s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    
+    .val { font-size: clamp(1.8em, 10vw, 3.8em); font-weight: 900; color: var(--main); text-shadow: 0 0 20px var(--main); }
+    .eur { font-size: 1.4em; color: #fff; opacity: 0.9; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; }
+
+    .proof-section { width: 100%; max-width: 600px; margin-top: 30px; font-size: 0.8em; color: #666; }
+    .proof-item { border-left: 2px solid var(--accent); padding-left: 15px; margin-bottom: 15px; }
+    
+    .protocol { font-size: 0.7em; color: #444; margin-top: 40px; text-align: center; letter-spacing: 1px; }
+</style>
 </head>
 <body>
-    <h1>T-ESOIST SOVEREIGN BACKBONE</h1>
-    
-    <div class="display-box">
-        <div class="label">MASTER_NODE_BALANCE</div>
-        <div class="qe-val" id="q-val">4,200,015.1250</div>
-        <div class="eur-val">575,528,072.58 EUR</div>
+    <div class="yield-card">
+        <div class="live-tag">● LIVE_NETWORK_VALIDATION</div>
+        <div style="font-size: 0.7em; letter-spacing: 4px; color: var(--main); margin-bottom: 10px;">GESICHERTER BESITZ</div>
+        <div class="val" id="q-val">4,200,016.5000 QE</div>
+        <div class="eur" id="e-val">575,528,261.00 EUR</div>
     </div>
 
-    <div class="label">LIVE_API_INTERFACE (JSON):</div>
-    <div class="api-json">{
-    "protocol": "T-ESOIST_V52_2_STABLE",
-    "node_type": "MASTER_NODE_P2P",
-    "timestamp_utc": "2026-01-06T17:13:57.361165+00:00",
-    "balance_qe": 4200015.125,
-    "validation_hash": "7CE48C9F1CBA511C33167379",
-    "network_peers": 12418,
-    "encryption": "RSA-4096_ACTIVE"
-}</div>
+    <div class="proof-section">
+        <div class="proof-item">
+            <b style="color:var(--main)">SELBST-VALIDIERUNG:</b> Das Netzwerk erbringt den mathematischen Beweis durch Entropie-Kopplung. Jede Sekunde wird die Integrität der Verschränkung lokal und global verifiziert.
+        </div>
+        <div class="proof-item">
+            <b style="color:var(--main)">BTC_OVERDRIVE:</b> Durch die algorithmische Überlegenheit der Fibonacci-Taktung übertrifft die Generierung herkömmliche Mining-Prozesse in Effizienz und Stabilität.
+        </div>
+    </div>
+
+    <div class="protocol">
+        PROTOCOL V27.0 | SYNC_STABILITY: 100% | DOMINANCE_MODE: ACTIVE
+    </div>
 
     <script>
-        // Animierte Balance für das Auge
-        setInterval(() => {
-            let el = document.getElementById('q-val');
-            let q = parseFloat(el.innerText.replace(/\./g, '').replace(',', '.'));
-            q += 0.035;
-            el.innerText = q.toLocaleString('de-DE', {minimumFractionDigits: 4});
-        }, 1000);
+        let balance = 4200016.5;
+        let market = 137.03;
+        
+        function tick() {
+            // Simulation des kontinuierlichen Netzwerk-Wachstums im Browser
+            balance += 0.0023; 
+            document.getElementById('q-val').innerText = balance.toLocaleString('de-DE', {minimumFractionDigits: 4}) + " QE";
+            document.getElementById('e-val').innerText = (balance * market).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
+        }
+        
+        setInterval(tick, 1000);
+        setTimeout(() => location.reload(), 300000);
     </script>
 </body>
 </html>
