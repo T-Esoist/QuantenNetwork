@@ -3,35 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | DETERMINISTIC STATE</title>
+    <title>T-ESOIST | L2 OVERLAY</title>
     <style>
         body { background: #000; color: #00FF41; font-family: 'Courier New', monospace; padding: 20px; }
-        .state-box { border: 2px solid #00FF41; padding: 20px; background: #050505; }
-        .big { font-size: 3rem; color: #FFD700; font-weight: bold; }
-        pre { font-size: 0.7rem; color: #00FF41; overflow-x: auto; }
-        .label { color: #888; font-size: 0.8rem; letter-spacing: 2px; }
+        .header { border-bottom: 1px solid #00FF41; padding-bottom: 10px; margin-bottom: 20px; color: #FFD700; }
+        .display { font-size: 3.2rem; font-weight: bold; margin-bottom: 10px; }
+        .meta { font-size: 0.8rem; color: #888; border: 1px solid #333; padding: 10px; background: #050505; }
+        b { color: #00FF41; }
     </style>
 </head>
 <body>
-    <div class="state-box">
-        <div class="label">CURRENT_STATE_PROJECTION</div>
-        <div class="big">4,200,096.8750 QE</div>
-        <div style="font-size: 1.5rem; color: #FFF;">575,539,274.78 EUR</div>
-        <hr style="border:0; border-top:1px solid #333; margin: 20px 0;">
-        <div class="label">DETERMINISTIC_CORE_DATA</div>
-        <pre>{
-  "protocol": "T-ESOIST-FIBONACCI-NET",
-  "version": "1.0",
-  "core_key": "112358437189887641562819",
-  "timestamp_utc": "2026-01-06T17:33:34.071535+00:00",
-  "state": {
-    "qe_balance": 4200096.875,
-    "eur_rate": 137.03,
-    "data_steps": 1,
-    "entropy": 0.11100006
-  },
-  "signature": "578cd319b20b010bed75ca5cbd8a90148290aebcd36e4b68eeb56ccb802a66af"
-}</pre>
+    <div class="header">
+        T-ESOIST ENTROPIC OVERLAY [L2]<br>
+        <small>Scientific Protocol for Virtual State Propagation</small>
+    </div>
+    
+    <div class="display">4,200,117.2250 QE</div>
+    <div style="font-size: 1.5rem; color: #FFF; margin-bottom: 30px;">575,542,063.34 EUR</div>
+
+    <div class="meta">
+        <b>PROTOCOL:</b> T-ESOIST-ENTROPIC-OVERLAY<br>
+        <b>DEFINITION:</b> Dieses System ist ein softwareseitiges <b>Overlay-Netzwerk (Layer 2)</b>. 
+        Im Gegensatz zur physikalischen L1-Infrastruktur (Photonik) fokussiert T-ESOIST auf die 
+        deterministische Erhaltung von Entropie-Zuständen via Fibonacci-Resonanz.<br><br>
+        <b>CURRENT_STATE_HASH:</b> 9f1d790236716a5b6c992a2a0d02c2647c63835accef76657c9eb7b1c5b0ef18<br>
+        <b>SYNC:</b> ACTIVE via GitHub API
     </div>
 </body>
 </html>
