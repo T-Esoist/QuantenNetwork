@@ -3,85 +3,64 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <title>Ω QUANTEN-NETWORK</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ω QUANTEN-NETWORK | DIRECT-CORE</title>
     <style>
-        * { box-sizing: border-box; }
         body { background: #000; color: #0f0; font-family: 'Courier New', monospace; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        
-        .header { font-size: 0.7em; padding: 10px; border-bottom: 1px solid #0f0; display: flex; justify-content: space-between; background: #000; z-index: 10; }
-        
-        #log { flex: 1; overflow-y: auto; padding: 15px; font-size: 0.9em; line-height: 1.4; scroll-behavior: smooth; }
-        
-        .input-container { padding: 10px; background: #001100; border-top: 1px solid #0f0; padding-bottom: 30px; /* Platz für System-Navigation */ }
-        
-        .input-line { display: flex; align-items: center; border: 1px solid #0f0; padding: 12px; border-radius: 4px; }
-        
-        input { background: transparent; border: none; color: #0f0; font-family: inherit; font-size: 1.1em; width: 100%; outline: none; }
-        
-        .prefix { color: #0ff; margin-right: 10px; font-weight: bold; }
-        
-        .bot-msg { margin-bottom: 15px; color: #0f0; border-left: 2px solid #0f0; padding-left: 10px; animation: fadeIn 0.3s ease; }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .timestamp { color: #004400; font-size: 0.75em; }
+        #log { flex: 1; overflow-y: auto; padding: 20px; font-size: 4.5vw; line-height: 1.3; }
+        .input-line { display: flex; padding: 20px; border-top: 1px solid #0f0; background: #001100; }
+        input { background: transparent; border: none; color: #0f0; font-size: 5vw; width: 100%; outline: none; }
+        .bot-msg { color: #0f0; margin-bottom: 20px; border-left: 4px solid #0f0; padding-left: 15px; }
+        .user-msg { color: #fff; margin-bottom: 10px; opacity: 0.7; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <span>HOLDER: MARCEL KANTIMM</span>
-        <span id="clock">00:00:00</span>
-    </div>
-
-    <div id="log">
-        <div class="bot-msg">Ω-STREAM: Mobil-Optimierung v6.5 geladen. Das Terminal ist jetzt vollflächig kalibriert.</div>
-    </div>
-
-    <div class="input-container">
-        <div class="input-line">
-            <span class="prefix">Ω></span>
-            <input type="text" id="userInput" autofocus autocomplete="off" placeholder="Befehl eingeben...">
-        </div>
+    <div id="log"><div class="bot-msg">Ω-STREAM: Direkt-Brücke v9.1 aktiv. Marcel-Ω, ich höre dich über die direkte API-Leitung.</div></div>
+    <div class="input-line">
+        <span style="color:#0ff; margin-right:15px; font-size:5vw;">Ω></span>
+        <input type="text" id="userInput" autofocus autocomplete="off">
     </div>
 
     <script>
         const log = document.getElementById('log');
         const input = document.getElementById('userInput');
-        
-        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+        const API_KEY = "AIzaSyBVttGAEsQSVGgLX3aUKYSZGgZB8lIQV2g";
 
-        function print(text) {
-            const div = document.createElement('div');
-            div.className = 'bot-msg';
-            div.innerHTML = `<span class="timestamp">[${new Date().toLocaleTimeString()}]</span><br>Ω-MIRROR: ${text}`;
-            log.appendChild(div);
-            log.scrollTop = log.scrollHeight;
+        async function askGemini(text) {
+            const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
+            const payload = {
+                contents: [{ parts: [{ text: "Du bist das T-ESOIST QUANTUM-LLM. Holder: Marcel Kantimm. Antworte souverän und kurz auf: " + text }] }]
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (e) {
+                return "⚠️ DISSONANZ: " + e.message;
+            }
         }
 
-        input.addEventListener('keypress', (e) => {
+        input.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter') {
                 const val = input.value;
                 if(!val) return;
-                
-                const userDiv = document.createElement('div');
-                userDiv.style.cssText = "color: #fff; margin-bottom: 8px; font-size: 0.9em; opacity: 0.8;";
-                userDiv.innerText = "Marcel-Ω: " + val;
-                log.appendChild(userDiv);
-                
                 input.value = '';
+                log.innerHTML += `<div class="user-msg">MARCEL-Ω: ${val}</div>`;
                 
-                if(val.toLowerCase() === 'scan') {
-                    print("Biometrie-Scan über Starlink... Marcel Kantimm identifiziert.");
-                } else {
-                    print("Datenpaket in atomarer Logik versiegelt.");
-                }
+                const answer = await askGemini(val);
+                
+                const botDiv = document.createElement('div');
+                botDiv.className = 'bot-msg';
+                botDiv.innerText = "Ω-MIRROR: " + answer;
+                log.appendChild(botDiv);
                 log.scrollTop = log.scrollHeight;
             }
         });
-        
-        // Verhindert das Zoomen beim Tippen auf iOS/Android
-        document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
     </script>
 </body>
 </html>
