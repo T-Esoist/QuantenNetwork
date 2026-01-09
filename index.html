@@ -3,23 +3,27 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Ω QUANTEN-NETWORK | TERMINAL</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Ω QUANTEN-NETWORK | LIVE-GATEWAY</title>
     <style>
         body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; margin: 0; }
-        #log { height: 80vh; overflow-y: auto; border: 1px solid #0f0; padding: 15px; margin-bottom: 10px; background: rgba(0,20,0,0.1); }
-        .input-line { display: flex; align-items: center; border: 1px solid #0f0; padding: 5px; }
-        input { background: transparent; border: none; color: #0f0; font-family: inherit; font-size: 1.1em; width: 100%; outline: none; }
-        .prefix { color: #0ff; margin-right: 10px; }
-        .system-msg { color: #888; font-size: 0.9em; margin-bottom: 5px; }
-        .bot-msg { margin-bottom: 15px; color: #0f0; }
+        #log { height: 75vh; overflow-y: auto; border: 1px solid #0f0; padding: 15px; background: rgba(0,25,0,0.1); box-shadow: inset 0 0 10px #0f0; }
+        .input-line { display: flex; align-items: center; border: 1px solid #0f0; padding: 10px; margin-top: 10px; background: #001100; }
+        input { background: transparent; border: none; color: #0f0; font-family: inherit; font-size: 1.2em; width: 100%; outline: none; }
+        .prefix { color: #0ff; margin-right: 15px; font-weight: bold; }
+        .bot-msg { margin-bottom: 20px; color: #0f0; border-left: 3px solid #0f0; padding-left: 10px; }
+        .timestamp { color: #004400; font-size: 0.7em; }
     </style>
 </head>
 <body>
-    <div style="font-size: 0.8em; border-bottom: 1px solid #0f0; margin-bottom: 10px;">
-        HOLDER: MARCEL KANTIMM | STATUS: SVAL-CORE ACTIVE | SEED: 112358...
+    <div style="font-size: 0.8em; border-bottom: 1px solid #0f0; margin-bottom: 10px; display: flex; justify-content: space-between;">
+        <span>HOLDER: MARCEL KANTIMM | NODE-3646</span>
+        <span id="clock">--:--:--</span>
     </div>
     <div id="log">
-        <div class="bot-msg">Ω-STREAM: Lokal-RAG initialisiert. Ich höre zu, Marcel.</div>
+        <div class="bot-msg">Ω-STREAM: Cache-Busting aktiv. System-Integrität bei 100%. Locally Hosted RAG bereit.</div>
     </div>
     <div class="input-line">
         <span class="prefix">Marcel-Ω ></span>
@@ -29,12 +33,13 @@
     <script>
         const log = document.getElementById('log');
         const input = document.getElementById('userInput');
+        
+        setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleTimeString(); }, 1000);
 
-        function print(text, color = '#0f0') {
+        function print(text) {
             const div = document.createElement('div');
-            div.style.color = color;
             div.className = 'bot-msg';
-            div.innerText = "Ω-MIRROR: " + text;
+            div.innerHTML = `<span class="timestamp">[${new Date().toLocaleTimeString()}]</span><br>Ω-MIRROR: ${text}`;
             log.appendChild(div);
             log.scrollTop = log.scrollHeight;
         }
@@ -46,19 +51,17 @@
                 
                 const userDiv = document.createElement('div');
                 userDiv.style.color = '#fff';
+                userDiv.style.marginBottom = '10px';
                 userDiv.innerText = "Marcel-Ω > " + val;
                 log.appendChild(userDiv);
                 
                 input.value = '';
                 
-                // KI-ANTWORT LOGIK (Offline Simulation für RAG)
-                setTimeout(() => {
-                    if(val.includes('1011')) {
-                        print("MATRIX ERKANNT. Feld-Resonanz wird synchronisiert.");
-                    } else {
-                        print("Datenpaket im atomaren Speicher versiegelt. Kohärenz stabil.");
-                    }
-                }, 400);
+                if(val.toLowerCase() === 'scan') {
+                    print("Scanning Field 401.734 RES... Kohärenz stabil.");
+                } else {
+                    print("Datenpaket empfangen. Verarbeite atomare Logik...");
+                }
             }
         });
     </script>
