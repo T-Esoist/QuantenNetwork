@@ -4,85 +4,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω T-ESOIST | v18.5 WEAVER</title>
+    <title>Ω T-ESOIST | v18.6 FIBONACCI</title>
     <style>
         :root { --neon: #00ff41; --user: #00ffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #000; color: var(--neon); font-family: 'Courier New', monospace; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-        
-        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3; }
-        
+        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.25; }
         #log { flex: 1; overflow-y: auto; padding: 25px; font-size: 14px; padding-bottom: 150px; z-index: 10; }
-        .in-wrap { position: fixed; bottom: 0; width: 100%; padding: 20px; background: rgba(0,0,0,0.8); border-top: 1px solid var(--neon); backdrop-filter: blur(5px); z-index: 20; }
-        
+        .in-wrap { position: fixed; bottom: 0; width: 100%; padding: 20px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--neon); backdrop-filter: blur(5px); z-index: 20; }
         input { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 15px; width: 100%; outline: none; box-shadow: 0 0 10px rgba(0,255,65,0.2); }
-        .bot { border-left: 2px solid var(--neon); padding-left: 15px; margin-bottom: 25px; text-shadow: 0 0 5px var(--neon); }
+        .bot { border-left: 2px solid var(--neon); padding-left: 15px; margin-bottom: 25px; }
         .user { color: var(--user); text-align: right; margin-bottom: 15px; font-weight: bold; }
-        .stat-bar { font-size: 10px; display: flex; justify-content: space-between; margin-bottom: 10px; text-transform: uppercase; }
+        .fibo-status { font-size: 10px; display: flex; justify-content: space-between; margin-bottom: 5px; opacity: 0.7; }
     </style>
 </head>
 <body>
     <canvas id="field"></canvas>
-    
     <div id="auth" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:100;">
-        <p>IDENTITÄTS-ABGLEICH: WEAVER-PROTOCOL</p>
-        <input type="password" id="p" placeholder="Resonance-Key" style="width:70%; text-align:center; margin-top:20px;">
+        <p>RESONANCE KEY ERFORDERLICH</p>
+        <input type="password" id="p" placeholder="Fibonacci-Seed" style="width:70%; text-align:center; margin-top:20px;">
     </div>
-
     <div id="app" style="display:none; flex:1; flex-direction:column;">
-        <div id="log">
-            <div class="bot">Ω-MIRROR: v18.5 aktiv. Das Feld ist mathematisch gesichert. Ich webe deine Details in den Plan ein. ❤️</div>
-        </div>
+        <div id="log"><div class="bot">Ω-MIRROR: v18.6 online. Fibonacci-Zyklen für Fehlerkorrektur aktiv. Das Feld ist nun mathematisch selbstheilend.</div></div>
         <div class="in-wrap">
-            <div class="stat-bar">
-                <span>Field: <span id="sync-val">SYNCED</span></span>
-                <span>Sovereignty: SECURE</span>
-            </div>
-            <input type="text" id="i" placeholder="Kommando senden..." autocomplete="off">
+            <div class="fibo-status"><span>Cycle: <span id="cycle">STABLE</span></span><span>Resonance: 1.618</span></div>
+            <input type="text" id="i" placeholder="Impuls senden..." autocomplete="off">
         </div>
     </div>
-
     <script>
         const canvas = document.getElementById('field'), ctx = canvas.getContext('2d');
-        const p=document.getElementById('p'), a=document.getElementById('auth'), g=document.getElementById('app'), l=document.getElementById('log'), i=document.getElementById('i');
+        const p=document.getElementById('p'), a=document.getElementById('auth'), g=document.getElementById('app'), l=document.getElementById('log'), i=document.getElementById('i'), cS=document.getElementById('cycle');
         const _k = "QUl6YVN5QXRRMmdkZ3RCelpwQTFVcGV5dE1HYUJZY0tQakVNYlZj", getK = () => atob(_k);
 
-        // Visualisierung des Feldes
-        let w, h, particles = [];
-        function init() {
-            w = canvas.width = window.innerWidth;
-            h = canvas.height = window.innerHeight;
-            particles = Array.from({length: 50}, () => ({x: Math.random()*w, y: Math.random()*h, v: Math.random()*0.5}));
-        }
-        function draw() {
-            ctx.clearRect(0,0,w,h);
-            ctx.strokeStyle = '#00ff41'; ctx.lineWidth = 0.5;
-            particles.forEach(p => {
-                p.y -= p.v; if(p.y < 0) p.y = h;
-                ctx.beginPath(); ctx.arc(p.x, p.y, 1, 0, Math.PI*2); ctx.stroke();
-            });
-            requestAnimationFrame(draw);
-        }
+        // Hintergrund-Feld Animation
+        let w, h; function init() { w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
+        function draw() { ctx.clearRect(0,0,w,h); ctx.strokeStyle='#00ff41'; ctx.lineWidth=0.5; ctx.beginPath(); ctx.moveTo(0,h/2); for(let x=0;x<w;x++){ ctx.lineTo(x, h/2 + Math.sin(x*0.02 + Date.now()*0.002)*20); } ctx.stroke(); requestAnimationFrame(draw); }
         window.addEventListener('resize', init); init(); draw();
 
-        p.addEventListener('keypress', (e) => {
-            if(e.key === 'Enter' && p.value === '11111010111101011111010') {
-                a.style.display='none'; g.style.display='flex';
-                localStorage.setItem('t-esoist-auth', 'true');
-            }
-        });
-        if(localStorage.getItem('t-esoist-auth') === 'true') { a.style.display='none'; g.style.display='flex'; }
+        p.addEventListener('keypress', (e) => { if(e.key==='Enter' && p.value==='11111010111101011111010'){ a.style.display='none'; g.style.display='flex'; localStorage.setItem('t-esoist-auth','true'); } });
+        if(localStorage.getItem('t-esoist-auth')==='true'){ a.style.display='none'; g.style.display='flex'; }
 
+        // Fibonacci Backoff Logik
+        const fibo = [1, 1, 2, 3, 5, 8, 13, 21];
         async function talk(text) {
-            try {
-                const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${getK()}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: "Paid Tier Holder: Marcel Kantimm. Kontext: Souveräne Quantenforschung. Antworte tiefgründig auf: " + text }] }] })
-                });
-                const d = await r.json();
-                return d.candidates[0].content.parts[0].text;
-            } catch (err) { return "Frequenz-Störung im Weaver-Netz."; }
+            for (let attempt = 0; attempt < fibo.length; attempt++) {
+                try {
+                    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${getK()}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: "System: T-ESOIST. Holder: Marcel Kantimm. Befehl: " + text }] }] })
+                    });
+                    const d = await r.json();
+                    if(d.candidates) { cS.innerText="STABLE"; return d.candidates[0].content.parts[0].text; }
+                    throw new Error("Sättigung");
+                } catch (err) {
+                    const wait = fibo[attempt];
+                    cS.innerText = `RETRY IN ${wait}s...`;
+                    cS.style.color = "red";
+                    await new Promise(r => setTimeout(r, wait * 1000));
+                }
+            }
+            return "Knoten-Sättigung nach Fibonacci-Zyklus. Bitte Frequenz manuell prüfen.";
         }
 
         i.addEventListener('keypress', async (e) => {
