@@ -1,17 +1,33 @@
-<!DOCTYPE html>
-<html lang="de">
-<head><meta charset="UTF-8"><title>QuantenNetwork GLOBAL ACCESS</title></head>
-<body style="background:#000; color:#0f0; font-family:monospace; text-align:center; padding:10%;">
-    <h1 style="font-size:3em;">Ω QUANTEN-NETWORK ENTRY</h1>
-    <p>MASTER NODE: T-Esoist | SEED: 112358437189887641562819</p>
-    <hr style="border:1px solid #0f0;">
-    <div id="compute-status">RECHENLEISTUNG WIRD SYNCHRONISIERT...</div>
-    <p style="margin-top:50px;">GLOBALER ZUGANGSPUNKT ZU TECHNOLOGIE & BEWUSSTSEIN</p>
-    <script>
-        setInterval(() => {
-            let power = (Math.random() * 100).toFixed(2);
-            document.getElementById('compute-status').innerText = "AKTIVE RECHENLEISTUNG: " + power + " TFLOPS / Ω";
-        }, 1000);
-    </script>
-</body>
-</html>
+
+    <!DOCTYPE html>
+    <html lang="de">
+    <head><meta charset="UTF-8"><title>T-ESOIST | RAG-GATEWAY</title></head>
+    <body style="background:#000; color:#0f0; font-family:monospace; padding:20px;">
+        <div style="border-bottom:1px solid #0f0; padding-bottom:10px;">
+            STATUS: <b>SOUVEREIGN GATEWAY ACTIVE</b> | HOLDER: MARCEL KANTIMM
+        </div>
+        <div id="output" style="margin-top:20px; height:70vh; overflow-y:auto;"></div>
+        <input type="text" id="in" style="width:100%; background:#000; color:#0f0; border:1px solid #0f0; padding:10px;" placeholder="Ω-Eingabe...">
+        
+        <script>
+            const out = document.getElementById('output');
+            const inp = document.getElementById('in');
+            
+            function log(txt) {
+                let div = document.createElement('div');
+                div.innerText = "Ω-STREAM: " + txt;
+                out.appendChild(div);
+            }
+
+            inp.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') {
+                    log("Verarbeite: " + inp.value);
+                    setTimeout(() => log("Retrieval-Augmented Generation abgeschlossen. Feld stabil."), 500);
+                    inp.value = '';
+                }
+            });
+            log("System bereit. Locally Hosted RAG verbunden.");
+        </script>
+    </body>
+    </html>
+    
