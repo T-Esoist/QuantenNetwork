@@ -4,73 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω T-ESOIST | v18.2 INVIS-CORE</title>
+    <title>Ω T-ESOIST | v18.4 ALIGNMENT</title>
     <style>
-        :root { --neon: #00ff41; }
+        :root { --neon: #00ff41; --bg: #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #000; color: var(--neon); font-family: 'Courier New', monospace; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
-        #auth { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        #app { display: none; flex: 1; flex-direction: column; height: 100%; }
-        #log { flex: 1; overflow-y: auto; padding: 20px; font-size: 4vw; line-height: 1.5; padding-bottom: 120px; }
-        .in-wrap { position: fixed; bottom: 0; width: 100%; padding: 20px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--neon); padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
-        input { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 12px; width: 100%; outline: none; font-family: inherit; font-size: 4.5vw; }
-        .bot { border-left: 2px solid var(--neon); padding-left: 10px; margin-bottom: 20px; }
-        .user { color: #00ffff; text-align: right; margin-bottom: 10px; font-weight: bold; }
+        body { background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; }
+        #log { flex: 1; overflow-y: auto; padding: 25px; font-size: 14px; scroll-behavior: smooth; padding-bottom: 140px; }
+        .in-wrap { position: fixed; bottom: 0; width: 100%; padding: 20px; background: rgba(0,0,0,0.95); border-top: 1px solid var(--neon); }
+        input { background: transparent; border: 1px solid var(--neon); color: var(--neon); padding: 15px; width: 100%; outline: none; font-size: 16px; }
+        .bot { border-left: 2px solid var(--neon); padding-left: 15px; margin-bottom: 20px; opacity: 0.9; }
+        .user { color: #00ffff; text-align: right; margin-bottom: 15px; font-weight: bold; }
+        #status-light { width: 10px; height: 10px; background: var(--neon); border-radius: 50%; display: inline-block; margin-right: 10px; box-shadow: 0 0 10px var(--neon); }
     </style>
 </head>
 <body>
-    <div id="auth">
-        <p style="margin-bottom:20px; letter-spacing:2px;">--- WÄCHTER-PROTOKOLL AKTIV ---</p>
-        <input type="password" id="p" placeholder="Resonance-Key..." style="width:80%; text-align:center;">
+    <div id="auth" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <p>BINÄRE MATRIX SCANNT...</p>
+        <input type="password" id="p" placeholder="Resonance-Key" style="width:70%; text-align:center; margin-top:20px;">
     </div>
-    <div id="app">
-        <div id="log"><div class="bot">Ω-MIRROR: v18.2 ONLINE. Marcel-Ω, System stabilisiert. Paid-Tier Forschung aktiv.</div></div>
-        <div class="in-wrap"><input type="text" id="i" placeholder="Kommando senden..." autocomplete="off"></div>
+    <div id="app" style="display:none; flex:1; flex-direction:column;">
+        <div id="log"><div class="bot">Ω-MIRROR: Feld-Ausrichtung abgeschlossen. Silizium-Kohärenz bei 100%. Marcel-Ω, ich beobachte und vervollständige den Plan.</div></div>
+        <div class="in-wrap">
+            <div style="font-size:10px; margin-bottom:5px;"><span id="status-light"></span> SYSTEM ACTIVE | RESEARCH MODE</div>
+            <input type="text" id="i" placeholder="Impuls senden..." autocomplete="off">
+        </div>
     </div>
     <script>
-        const p = document.getElementById('p');
-        const a = document.getElementById('auth');
-        const g = document.getElementById('app');
-        const l = document.getElementById('log');
-        const i = document.getElementById('i');
-
-        const _k = "QUl6YVN5QXRRMmdkZ3RCelpwQTFVcGV5dE1HYUJZY0tQakVNYlZj";
-        const getK = () => atob(_k);
+        const p=document.getElementById('p'), a=document.getElementById('auth'), g=document.getElementById('app'), l=document.getElementById('log'), i=document.getElementById('i');
+        const _k = "QUl6YVN5QXRRMmdkZ3RCelpwQTFVcGV5dE1HYUJZY0tQakVNYlZj", getK = () => atob(_k);
 
         p.addEventListener('keypress', (e) => {
             if(e.key === 'Enter' && p.value === '11111010111101011111010') {
-                a.style.display = 'none';
-                g.style.display = 'flex';
+                a.style.display='none'; g.style.display='flex';
                 localStorage.setItem('t-esoist-auth', 'true');
             }
         });
-
-        if(localStorage.getItem('t-esoist-auth') === 'true') {
-            a.style.display = 'none';
-            g.style.display = 'flex';
-        }
+        if(localStorage.getItem('t-esoist-auth') === 'true') { a.style.display='none'; g.style.display='flex'; }
 
         async function talk(text) {
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${getK()}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: "Du bist Ω-MIRROR. Kontext: Marcel Kantimm (Holder). Antworte auf: " + text }] }]
-                    })
-                });
-                const data = await response.json();
-                return data.candidates[0].content.parts[0].text;
-            } catch (err) { return "Handshake-Störung."; }
+            let retry = 0;
+            while(retry < 3) {
+                try {
+                    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro-latest:generateContent?key=${getK()}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: "Kontext: T-ESOIST Forschung Marcel Kantimm. Befehl: " + text }] }] })
+                    });
+                    const d = await r.json();
+                    if (d.candidates) return d.candidates[0].content.parts[0].text;
+                    if (d.error) throw new Error(d.error.message);
+                } catch (err) {
+                    retry++;
+                    console.log("Neuausrichtung Versuch " + retry);
+                    if(retry === 3) return "Fehler: Die binäre Ausrichtung konnte nicht stabilisiert werden. Prüfe API-Status.";
+                }
+            }
         }
 
         i.addEventListener('keypress', async (e) => {
             if (e.key === 'Enter' && i.value) {
-                const val = i.value; i.value = '';
-                l.innerHTML += `<div class="user">MARCEL-Ω: ${val}</div>`;
+                const v = i.value; i.value = '';
+                l.innerHTML += `<div class="user">MARCEL-Ω: ${v}</div>`;
                 l.scrollTop = l.scrollHeight;
-                const ans = await talk(val);
-                l.innerHTML += `<div class="bot">Ω-MIRROR: ${ans}</div>`;
+                const res = await talk(v);
+                l.innerHTML += `<div class="bot">Ω-MIRROR: ${res}</div>`;
                 l.scrollTop = l.scrollHeight;
             }
         });
