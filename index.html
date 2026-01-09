@@ -1,112 +1,14 @@
 <!DOCTYPE html>
 <html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>T-ESOIST CORE</title>
-    <style>
-        * { box-sizing: border-box; }
-        body { 
-            background: #000; 
-            color: #00FF41; 
-            font-family: 'Courier New', monospace; 
-            margin: 0; 
-            padding: 0; 
-            height: 100vh; 
-            display: flex; 
-            flex-direction: column; 
-            overflow: hidden;
-        }
-        .header { 
-            padding: 15px; 
-            font-size: 0.7rem; 
-            text-align: center; 
-            border-bottom: 1px solid #222; 
-            letter-spacing: 2px;
-            color: #888;
-        }
-        .main-content { 
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            padding: 20px;
-        }
-        .display-area {
-            text-align: center;
-            border: 1px solid #00FF41;
-            padding: 30px 10px;
-            background: linear-gradient(180deg, rgba(0,255,65,0.05) 0%, rgba(0,0,0,0) 100%);
-        }
-        .label { font-size: 0.6rem; color: #888; margin-bottom: 10px; }
-        .val { 
-            font-size: 11vw; 
-            color: #FFD700; 
-            font-weight: 900; 
-            margin: 5px 0;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
-        }
-        .eur { font-size: 6vw; color: #FFF; font-weight: bold; }
-        .api-block {
-            margin-top: 20px;
-            background: #080808;
-            border: 1px solid #333;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        pre {
-            font-size: 0.65rem;
-            margin: 0;
-            white-space: pre-wrap;
-            word-break: break-all;
-            opacity: 0.8;
-        }
-        .footer {
-            padding: 15px;
-            font-size: 0.6rem;
-            text-align: center;
-            color: #444;
-            border-top: 1px solid #222;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">T-ESOIST // MOBILE NODE // ACTIVE</div>
-    
-    <div class="main-content">
-        <div class="display-area">
-            <div class="label">SOVEREIGN_QE_BALANCE</div>
-            <div id="qe" class="val">4,200,251.3750</div>
-            <div id="eur" class="eur">575,560,445.92 EUR</div>
-        </div>
-
-        <div class="api-block">
-            <div class="label" style="border-bottom: 1px solid #222; padding-bottom: 5px; margin-bottom: 8px;">CORE_STATE_MANIFEST</div>
-            <pre>{
-  "qe_balance": 4200251.375,
-  "data_steps": 251,
-  "entropy": 0.77802237,
-  "core_key": "112358437189887641562819",
-  "protocol": "T-ESOIST-ULTRA-MOBILE",
-  "timestamp_utc": "2026-01-06T18:14:13.364804+00:00",
-  "signature": "749a6f48a2783ca49a24e2ff0813a697ed4840dcd5467653a49054298dee4d39"
-}</pre>
-        </div>
-    </div>
-
-    <div class="footer">
-        SYNC_HASH: 749a6f48a2783ca49a24e2ff0813a697...
-    </div>
-
-    <script>
-        let qe = 4200251.375;
-        const rate = 137.03;
-        setInterval(() => {
-            qe += 0.00458; 
-            document.getElementById('qe').innerText = qe.toLocaleString('de-DE', {minimumFractionDigits: 4});
-            document.getElementById('eur').innerText = (qe * rate).toLocaleString('de-DE', {minimumFractionDigits: 2}) + " EUR";
-        }, 100);
-        setTimeout(() => { location.reload(); }, 300000);
-    </script>
+<head><meta charset="UTF-8"><meta http-equiv="refresh" content="15"></head>
+<body style="background:#000; color:#0f0; font-family:monospace; padding:40px;">
+    <h1>E-RON-QU & T-ESOIST MASTER NODE</h1>
+    <hr>
+    <p>HANDSHAKE: ACTIVE (Pydroid 3 Unit)</p>
+    <p>SEED: 112358437189887641562819</p>
+    <p>KOHÄRENZ: 99.9989527%</p>
+    <p>LETZTER SYNC: 09.01.2026 - 21:18:28</p>
+    <hr>
+    <p style="color:#fff;">SIGNAL: 3 CY AI7 F3 4E | STATUS: INITIALIZING_HANDSHAKE</p>
 </body>
 </html>
