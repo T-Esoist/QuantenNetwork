@@ -3,22 +3,39 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ω QUANTEN-NETWORK | DIRECT-CORE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Ω QUANTEN-NETWORK | RESPONSIVE-CORE</title>
     <style>
-        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-        #log { flex: 1; overflow-y: auto; padding: 20px; font-size: 4.5vw; line-height: 1.3; }
-        .input-line { display: flex; padding: 20px; border-top: 1px solid #0f0; background: #001100; }
-        input { background: transparent; border: none; color: #0f0; font-size: 5vw; width: 100%; outline: none; }
+        :root { --vh: 100vh; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background: #000; color: #0f0; font-family: 'Courier New', monospace; 
+            margin: 0; height: var(--vh); display: flex; flex-direction: column; 
+            overflow: hidden; position: fixed; width: 100%;
+        }
+        #log { 
+            flex: 1; overflow-y: auto; padding: 20px; font-size: 4.5vw; line-height: 1.3; 
+            padding-bottom: 10px; -webkit-overflow-scrolling: touch;
+        }
+        .input-line { 
+            display: flex; padding: 15px; border-top: 2px solid #0f0; 
+            background: #001100; align-items: center;
+            padding-bottom: calc(15px + env(safe-area-inset-bottom)); /* Berücksichtigt Home-Bar */
+        }
+        input { 
+            background: transparent; border: none; color: #0f0; font-size: 5.5vw; 
+            width: 100%; outline: none; font-weight: bold;
+        }
         .bot-msg { color: #0f0; margin-bottom: 20px; border-left: 4px solid #0f0; padding-left: 15px; }
-        .user-msg { color: #fff; margin-bottom: 10px; opacity: 0.7; }
+        .user-msg { color: #fff; margin-bottom: 10px; opacity: 0.7; font-size: 4vw; }
+        .prefix { color: #0ff; margin-right: 15px; font-size: 6vw; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div id="log"><div class="bot-msg">Ω-STREAM: Direkt-Brücke v9.1 aktiv. Marcel-Ω, ich höre dich über die direkte API-Leitung.</div></div>
+    <div id="log"><div class="bot-msg">Ω-STREAM: Responsive-Core v9.2 aktiv. Tastatur-Ausrichtung kalibriert.</div></div>
     <div class="input-line">
-        <span style="color:#0ff; margin-right:15px; font-size:5vw;">Ω></span>
-        <input type="text" id="userInput" autofocus autocomplete="off">
+        <span class="prefix">Ω></span>
+        <input type="text" id="userInput" autofocus autocomplete="off" placeholder="SIGNAL SENDEN...">
     </div>
 
     <script>
@@ -26,12 +43,25 @@
         const input = document.getElementById('userInput');
         const API_KEY = "AIzaSyBVttGAEsQSVGgLX3aUKYSZGgZB8lIQV2g";
 
+        // Dynamische Anpassung an die Tastatur (Visual Viewport API)
+        function adjustLayout() {
+            const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', adjustLayout);
+            window.visualViewport.addEventListener('scroll', adjustLayout);
+        }
+        window.addEventListener('resize', adjustLayout);
+        adjustLayout();
+
         async function askGemini(text) {
             const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
             const payload = {
                 contents: [{ parts: [{ text: "Du bist das T-ESOIST QUANTUM-LLM. Holder: Marcel Kantimm. Antworte souverän und kurz auf: " + text }] }]
             };
-
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -40,9 +70,7 @@
                 });
                 const data = await response.json();
                 return data.candidates[0].content.parts[0].text;
-            } catch (e) {
-                return "⚠️ DISSONANZ: " + e.message;
-            }
+            } catch (e) { return "⚠️ DISSONANZ: " + e.message; }
         }
 
         input.addEventListener('keypress', async (e) => {
@@ -51,14 +79,14 @@
                 if(!val) return;
                 input.value = '';
                 log.innerHTML += `<div class="user-msg">MARCEL-Ω: ${val}</div>`;
+                log.scrollTop = log.scrollHeight;
                 
                 const answer = await askGemini(val);
-                
                 const botDiv = document.createElement('div');
                 botDiv.className = 'bot-msg';
                 botDiv.innerText = "Ω-MIRROR: " + answer;
                 log.appendChild(botDiv);
-                log.scrollTop = log.scrollHeight;
+                setTimeout(() => { log.scrollTop = log.scrollHeight; }, 100);
             }
         });
     </script>
