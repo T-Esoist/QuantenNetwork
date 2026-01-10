@@ -2,53 +2,77 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | eSIM Connectivity</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>T-ESOIST | QR-Scanner Terminal</title>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; padding: 15px; text-align: center; }
-        .esim-box { border: 2px solid #00f2ff; padding: 20px; border-radius: 15px; background: rgba(0,242,255,0.05); }
-        .provider-list { margin-top: 20px; text-align: left; }
-        .btn-buy { width: 100%; background: #00f2ff; color: #000; border: none; padding: 15px; font-weight: bold; margin-top: 10px; cursor: pointer; }
-        .status { font-size: 10px; color: #ff0055; margin-top: 10px; }
+        body { background: #000; color: #00f2ff; font-family: monospace; margin: 0; padding: 15px; text-align: center; }
+        #reader { width: 100%; max-width: 350px; border: 2px solid #00f2ff; border-radius: 10px; margin: 20px auto; overflow: hidden; background: #111; }
+        .terminal { width: 100%; max-width: 350px; background: rgba(0,242,255,0.05); border: 1px solid #00f2ff; padding: 20px; border-radius: 10px; margin: auto; }
+        input { width: 100%; background: #000; border: 1px solid #00f2ff; color: #fff; padding: 12px; margin: 8px 0; border-radius: 5px; }
+        .btn-scan { width: 100%; background: #00f2ff; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 5px; margin-bottom: 10px; }
+        .status-msg { font-size: 10px; color: #00ff00; margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="esim-box">
-        <h3>eSIM CONNECTIVITY HUB</h3>
-        <p style="font-size: 12px;">Keine SIM erkannt. Wähle Provider für T-ESOIST Integration:</p>
-        
-        <div class="provider-list">
-            <input type="radio" name="provider" value="15.00" id="p1"> <label for="p1">Travel-Data (15,00€ / 5GB)</label><br>
-            <input type="radio" name="provider" value="25.00" id="p2"> <label for="p2">Global-Connect (25,00€ / 20GB)</label><br>
-        </div>
 
-        <button class="btn-buy" onclick="buyESim()">ESIM MIT DEBIT BEZAHLEN</button>
-        <div id="esim-status" class="status">SYSTEM READY</div>
+    <div class="terminal">
+        <h3 style="margin: 0;">QR SCANNER TERMINAL</h3>
+        <p style="font-size: 10px; color: #888;">Scannen Sie einen T-ESOIST Token für Auto-Transfer</p>
+        
+        <div id="reader"></div>
+        
+        <button class="btn-scan" id="start-btn" onclick="startScanner()">KAMERA AKTIVIEREN</button>
+        
+        <div style="border-top: 1px solid #333; margin-top: 15px; padding-top: 10px;">
+            <label style="font-size: 10px; display: block; text-align: left;">EMPFÄNGER:</label>
+            <input type="text" id="receiver" placeholder="Wird automatisch gefüllt...">
+            <label style="font-size: 10px; display: block; text-align: left;">BETRAG (€):</label>
+            <input type="number" id="euro-amount" placeholder="0.00">
+            <button class="btn-scan" style="background:#ff0055; color:#fff;" onclick="executeTransfer()">ZAHLUNG BESTÄTIGEN</button>
+        </div>
+        <div id="status" class="status-msg">READY TO SCAN</div>
     </div>
 
     <script>
-        let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
+        const html5QrCode = new Html5Qrcode("reader");
         const PHI = 1.61803398875;
+        let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
 
-        function buyESim() {
-            const selected = document.querySelector('input[name="provider"]:checked');
-            if(!selected) return alert("Bitte Anbieter wählen!");
+        function startScanner() {
+            document.getElementById('start-btn').style.display = 'none';
+            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
             
-            const priceEUR = parseFloat(selected.value);
-            const reqESI = priceEUR / PHI;
+            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
+                // Erwartetes Format: T-ESOIST|ID|EMPFÄNGER|BETRAG
+                const parts = decodedText.split('|');
+                if (parts[0] === "T-ESOIST") {
+                    document.getElementById('receiver').value = parts[2];
+                    document.getElementById('euro-amount').value = parts[3].replace('EUR', '');
+                    document.getElementById('status').innerText = "TOKEN VALIDIERT: DATEN ÜBERNOMMEN";
+                    document.getElementById('status').style.color = "#00ff00";
+                    // Scanner stoppen nach Erfolg
+                    html5QrCode.stop();
+                } else {
+                    document.getElementById('status').innerText = "UNGÜLTIGER TOKEN";
+                    document.getElementById('status').style.color = "#ff0055";
+                }
+            });
+        }
 
-            if(esi >= reqESI) {
-                if(confirm("eSIM Kauf bestätigen:\nPreis: " + priceEUR + "€ (" + reqESI.toFixed(2) + " ESI)")) {
+        function executeTransfer() {
+            const eur = parseFloat(document.getElementById('euro-amount').value);
+            const rec = document.getElementById('receiver').value;
+            const reqESI = eur / PHI;
+
+            if (eur > 0 && esi >= reqESI) {
+                if (confirm(`Sende ${eur}€ (${reqESI.toFixed(2)} ESI) an ${rec}?`)) {
                     esi -= reqESI;
                     localStorage.setItem('ESI', esi);
-                    document.getElementById('esim-status').innerText = "ZAHLUNG ERFOLGREICH. GENERIERE ESIM-PROFIL...";
-                    setTimeout(() => {
-                        alert("ERFOLG: Transaktion im Gitter verbucht. Du kannst jetzt den QR-Code des Anbieters in deinen Handy-Einstellungen scannen.");
-                    }, 2000);
+                    alert("TRANSFAKTION ERFOLGREICH!");
+                    location.reload();
                 }
-            } else {
-                alert("Nicht genug ESI im Gitter!");
-            }
+            } else { alert("Fehler: Deckung oder Daten prüfen."); }
         }
     </script>
 </body>
