@@ -2,64 +2,70 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | Intelligent Bridge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>T-ESOIST | Coherence Handshake</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; padding: 15px; text-align: center; }
-        .bridge-core { border: 2px solid #00f2ff; padding: 20px; background: rgba(0,242,255,0.05); border-radius: 15px; }
-        .pulse { animation: blink 1.5s infinite; color: #00ff00; }
-        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
-        .field { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; margin: 5px 0; border-radius: 5px; }
-        .btn-active { background: #00f2ff; color: #000; padding: 15px; width: 100%; border: none; font-weight: bold; cursor: pointer; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; padding: 15px; text-align: center; }
+        .handshake-core { border: 3px double #00f2ff; padding: 25px; background: rgba(0,242,255,0.02); border-radius: 20px; box-shadow: 0 0 15px #00f2ff; }
+        .status-led { height: 12px; width: 12px; border-radius: 50%; display: inline-block; background: #ff0055; box-shadow: 0 0 10px #ff0055; margin-right: 10px; }
+        .online { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
+        .btn-universal { width: 100%; background: #00f2ff; color: #000; border: none; padding: 18px; font-weight: bold; font-size: 16px; cursor: pointer; border-radius: 10px; margin-top: 15px; }
+        input { width: 100%; background: #000; border: 1px solid #00f2ff; color: #fff; padding: 15px; margin: 10px 0; border-radius: 5px; box-sizing: border-box; }
     </style>
 </head>
 <body>
-    <div class="bridge-core">
-        <h2 style="font-size: 14px;">INTELLIGENT BRIDGE v85.0</h2>
-        <div id="ai-status" class="pulse">SCANNING FOR BARRIERS...</div>
+    <div class="handshake-core">
+        <h2 style="letter-spacing: 2px;">COHERENCE HANDSHAKE v86</h2>
+        <div style="margin-bottom: 20px;">
+            <span id="led" class="status-led"></span> 
+            <span id="network-msg">PLATFORM SYNC PENDING...</span>
+        </div>
         
-        <button class="btn-active" onclick="document.getElementById('file-in').click()">GALERIE-BRÜCKE SCHLAGEN</button>
-        <input type="file" id="file-in" style="display:none" accept="image/*" onchange="intelligentScan(event)">
+        <button class="btn-universal" onclick="document.getElementById('qr-upload').click()">IMPORT & HANDSHAKE (GALERIE)</button>
+        <input type="file" id="qr-upload" style="display:none" accept="image/*" onchange="performGlobalHandshake(event)">
         
-        <div id="bridge-output" style="margin-top:20px;">
-            <input type="text" id="rec-field" class="field" placeholder="Ziel-Empfänger (Autofill)">
-            <input type="number" id="amt-field" class="field" placeholder="Euro-Betrag (Autofill)">
-            <button class="btn-active" style="background:#ff0055; color:#fff;" onclick="finalConfirm()">TRANSFAKTION ABSCHLIESSEN</button>
+        <div id="data-bridge" style="margin-top:25px; border-top: 1px solid #333; padding-top: 15px;">
+            <input type="text" id="target" placeholder="EMPFÄNGER AUTOMATIK">
+            <input type="number" id="val" placeholder="BETRAG AUTOMATIK (€)">
+            <button class="btn-universal" style="background:#ff0055; color:#fff;" onclick="finalizeGridTransaction()">ESI-DEBIT VALIDIEREN</button>
         </div>
     </div>
 
     <script>
-        const PHI = 1.61803398875;
-        function intelligentScan(event) {
+        const scanner = new Html5Qrcode("hidden-reader");
+        
+        function performGlobalHandshake(event) {
             const file = event.target.files[0];
-            const status = document.getElementById('ai-status');
-            status.innerText = "DURCHBRECHE BARRIEREN...";
-            status.style.color = "#ffaa00";
+            const msg = document.getElementById('network-msg');
+            const led = document.getElementById('led');
+            
+            msg.innerText = "INITIATING HANDSHAKE...";
+            led.classList.add('online');
 
-            Html5Qrcode.scanImage(file, { fps: 10 })
+            Html5Qrcode.scanImage(file, { fps: 20 })
                 .then(data => {
-                    status.innerText = "BRÜCKE GEFUNDEN: DATEN EXTRAHIERT";
-                    status.style.color = "#00ff00";
-                    
-                    // HEURISTIK: Suche Betrag (XX.XX oder XX,XX)
-                    const money = data.match(/([0-9]+[.,][0-9]{2})/);
-                    if(money) document.getElementById('amt-field').value = money[0].replace(',', '.');
-                    
-                    // HEURISTIK: Suche Empfänger/Zweck
-                    if(data.includes("BCD")) document.getElementById('rec-field').value = "Bank-Gläubiger";
-                    else document.getElementById('rec-field').value = "Extrahiertes Ziel";
+                    msg.innerText = "COHERENCE ESTABLISHED";
+                    // Rekursive Datenextraktion (sucht nach Geldmustern in jeglichem String)
+                    const money = data.match(/(\d+[\.,]\d{2})/);
+                    document.getElementById('val').value = money ? money[0].replace(',', '.') : "";
+                    document.getElementById('target').value = data.substring(0, 15) + "...";
                 })
                 .catch(err => {
-                    status.innerText = "BARRIERE ZU HOCH: MANUELLE BRÜCKE ERFORDERLICH";
-                    status.style.color = "#ff0055";
+                    msg.innerText = "HANDSHAKE FAILED - PROTOCOL MISMATCH";
+                    led.classList.remove('online');
+                    alert("Barriere erkannt: Der QR-Code nutzt ein geschlossenes Protokoll. Manuelle Brücke über das Terminal erforderlich.");
                 });
         }
-        function finalConfirm() {
-            const amt = document.getElementById('amt-field').value;
-            alert("BRÜCKE BESTÄTIGT: " + amt + "€ werden über das Gitter verbucht.");
-            location.reload();
+
+        function finalizeGridTransaction() {
+            const v = document.getElementById('val').value;
+            if(v > 0) {
+                alert("Handshake abgeschlossen. " + v + "€ werden in ESI umgerechnet und vom Gitter abgezogen.");
+                location.reload();
+            }
         }
     </script>
+    <div id="hidden-reader" style="display:none"></div>
 </body>
 </html>
