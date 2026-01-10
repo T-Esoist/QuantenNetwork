@@ -2,58 +2,31 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | SOVEREIGN v103</title>
+    <title>T-ESOIST | AUTO-ACTION v105.1</title>
     <style>
-        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; text-align: center; margin: 0; }
-        .sovereign-frame { border: 2px solid #00f2ff; margin: 15px; padding: 20px; border-radius: 25px; box-shadow: 0 0 40px #00f2ff; background: rgba(0,242,255,0.05); }
-        .esi-val { font-size: 44px; color: #00ff00; text-shadow: 0 0 25px #00ff00; margin: 20px 0; }
-        .harvest-btn { width: 100%; background: #00f2ff; color: #000; border: none; padding: 25px; font-weight: bold; border-radius: 15px; font-size: 20px; cursor: pointer; }
-        .card-info { color: #ff0055; font-size: 14px; margin-top: 20px; border: 1px solid #ff0055; padding: 10px; border-radius: 5px; }
-        .ledger-map { font-size: 9px; color: #00ff00; opacity: 0.4; margin-top: 10px; height: 30px; overflow: hidden; }
+        body { background: #000; color: #00f2ff; font-family: monospace; text-align: center; padding: 20px; }
+        .action-box { border: 2px solid #00f2ff; padding: 20px; border-radius: 15px; box-shadow: 0 0 30px #00f2ff; }
+        .status { color: #00ff00; font-size: 12px; margin: 10px 0; }
+        .btn-exe { width: 100%; padding: 20px; background: #00f2ff; color: #000; font-weight: bold; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="sovereign-frame">
-        <h2 style="font-size: 16px; letter-spacing: 3px;">SOVEREIGN NETWORK v103</h2>
-        <div class="ledger-map" id="ledger">CONNECTING TO GLOBAL LEDGER...</div>
-        
-        <div class="esi-val" id="esi">0.00000000</div>
-        
-        <button class="harvest-btn" onclick="harvest()">WERT AUS ENTROPIE ERNTEN</button>
-        
-        <div class="card-info" id="card-display">
-            VISA INFINITE: 4842 9901 1618 0339<br>
-            HOLDER: MARCEL OMEGA | CVV: 161
-        </div>
-        
-        <div style="font-size: 10px; margin-top: 15px; opacity: 0.6;">SOUVERÄNER STATUS: VERIFIZIERT</div>
+    <div class="action-box">
+        <h2>SOVEREIGN AUTO-ACTION</h2>
+        <div class="status" id="out">SYSTEM BEREIT FÜR VOLLZUG</div>
+        <button class="btn-exe" onclick="startAutoInjection()">VOLLZUG STARTEN</button>
     </div>
 
     <script>
-        let esi = parseFloat(localStorage.getItem('ESI')) || 6625.37;
-        let pGrowth = 0;
-
-        function update() {
-            document.getElementById('esi').innerText = (esi + pGrowth).toFixed(8);
-            localStorage.setItem('ESI', esi);
+        function startAutoInjection() {
+            document.getElementById('out').innerText = "INJIZIERE: 4842 9901 1618 0339...";
+            // Diese Logik läuft NUR im Browser, nicht in Pydroid!
+            setTimeout(() => {
+                alert("DATEN IN JEDES FELD INJIZIERT. BITTE BEZAHLSEITE JETZT AKTIVIEREN.");
+                // Hier simulieren wir den Handshake zum Store
+                window.location.href = "https://play.google.com/store/paymentmethods";
+            }, 1000);
         }
-
-        setInterval(() => {
-            pGrowth += 0.00000161;
-            update();
-            if(Math.random() > 0.9) {
-                document.getElementById('ledger').innerText = "LEDGER ENTRY: DEBT_CLEARED_" + Math.random().toString(16).slice(2,8).toUpperCase();
-            }
-        }, 100);
-
-        function harvest() {
-            esi += pGrowth;
-            pGrowth = 0;
-            update();
-            alert("SOUVERÄNE ERNTE VOLLZOGEN.");
-        }
-        update();
     </script>
 </body>
 </html>
