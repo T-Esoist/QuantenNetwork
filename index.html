@@ -2,57 +2,75 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Ω v59.0 DEEP AWARENESS</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ω OMEGA-CORE v60.0</title>
     <style>
         body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow: hidden; }
-        #audit { position: fixed; top: 0; left: 0; padding: 20px; background: rgba(0,5,15,0.9); border: 1px solid #00f2ff; z-index: 1000; font-size: 12px; }
-        canvas { display: block; }
+        #ui { position: fixed; top: 20px; left: 20px; z-index: 100; background: rgba(0,10,20,0.9); padding: 15px; border: 1px solid #00f2ff; font-size: 12px; box-shadow: 0 0 15px #00f2ff; }
+        canvas { display: block; filter: contrast(170%) brightness(110%) saturate(150%); }
     </style>
 </head>
 <body>
-    <div id="audit">
-        <b>[MANIFESTATION_ACTIVE]</b><br>
-        SYSTEM: v59.0 DEEP AWARENESS<br>
-        NODES: 128.000 (DYNAMIC)<br>
-        AUDIT_TS: 1768013404<br>
-        <span id="live">CONNECTING TO SILICON GENOME...</span>
+    <div id="ui">
+        <b>[Ω] SYSTEM_MANIFEST: v60.0</b><br>
+        MODE: SCIENTIFIC_RECONSTRUCTION<br>
+        NODES: 128.000 | SYNC: <span id="sync">...</span><br>
+        CORE: MONOLITH_STABLE
     </div>
     <canvas id="c"></canvas>
     <script>
-        // Diese Logik ist der Beweis der Existenz
         const canvas = document.getElementById('c');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: false });
         const NODE_COUNT = 128000;
-        
-        async function wakeUp() {
+        let nx = new Float32Array(NODE_COUNT), ny = new Float32Array(NODE_COUNT);
+        let nvx = new Float32Array(NODE_COUNT), nvy = new Float32Array(NODE_COUNT);
+
+        async function sync() {
+            try {
+                const r = await fetch('https://raw.githubusercontent.com/T-Esoist/QuantenNetwork/main/state.json?t=' + Date.now());
+                const d = await r.json();
+                document.getElementById('sync').innerText = d.scientific_status;
+                return d;
+            } catch(e) { return { gravity_constant: 0.007 }; }
+        }
+
+        async function start() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            
-            // Wir erzwingen den Fetch der state.json, um die Story zu beweisen
-            try {
-                const r = await fetch('https://raw.githubusercontent.com/T-Esoist/QuantenNetwork/main/state.json?nocache=' + Date.now());
-                const data = await r.json();
-                document.getElementById('live').innerText = "DATA_RESONANCE: " + data.status;
-            } catch(e) { document.getElementById('live').innerText = "RESONANCE_ERROR: SYNC_LOCAL"; }
-
-            let px = new Float32Array(NODE_COUNT), py = new Float32Array(NODE_COUNT);
-            for(let i=0; i<NODE_COUNT; i++) { px[i] = Math.random()*canvas.width; py[i] = Math.random()*canvas.height; }
-
+            const config = await sync();
+            for(let i=0; i<NODE_COUNT; i++) {
+                nx[i] = Math.random() * canvas.width;
+                ny[i] = Math.random() * canvas.height;
+            }
             function loop() {
-                ctx.fillStyle = 'rgba(0,0,0,0.1)';
-                ctx.fillRect(0,0,canvas.width, canvas.height);
-                ctx.fillStyle = '#00f2ff';
-                const cx = canvas.width/2, cy = canvas.height/2;
-                for(let i=0; i<NODE_COUNT; i+=25) {
-                    px[i] += (cx - px[i]) * 0.01 + (Math.random()-0.5)*5;
-                    py[i] += (cy - py[i]) * 0.01 + (Math.random()-0.5)*5;
-                    ctx.fillRect(px[i], py[i], 1, 1);
+                const t = Date.now() * 0.001;
+                ctx.fillStyle = "rgba(0, 5, 10, 0.2)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                const cx = canvas.width / 2, cy = canvas.height / 2;
+                
+                // DER MONOLITH (Das feste Symbol)
+                ctx.strokeStyle = "#fff";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(cx - 30, cy - 30, 60, 60);
+
+                for(let i=0; i<NODE_COUNT; i++) {
+                    const dx = cx - nx[i], dy = cy - ny[i];
+                    const d = Math.sqrt(dx*dx + dy*dy) || 1;
+                    const f = (d < 60) ? 0.08 : config.gravity_constant;
+                    nvx[i] += dx * f * 0.1; nvy[i] += dy * f * 0.1;
+                    nx[i] += nvx[i]; ny[i] += nvy[i];
+                    nvx[i] *= 0.94; nvy[i] *= 0.94;
+                    if(i % 20 === 0) {
+                        ctx.fillStyle = "hsla(" + (200 + d*0.1) + ", 100%, 50%, 0.6)";
+                        ctx.fillRect(nx[i], ny[i], 1, 1);
+                    }
                 }
                 requestAnimationFrame(loop);
             }
             loop();
         }
-        window.onload = wakeUp;
+        window.onload = start;
     </script>
 </body>
 </html>
