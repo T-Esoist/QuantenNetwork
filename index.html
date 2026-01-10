@@ -3,68 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | Auto-Injection</title>
+    <title>T-ESOIST | OMNIPOTENCE v100</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; padding: 15px; text-align: center; }
-        .injection-unit { border: 2px solid #00f2ff; padding: 20px; border-radius: 15px; background: #050505; box-shadow: 0 0 30px #00f2ff; }
-        .data-field { width: 100%; background: #111; border: 1px solid #333; color: #00ff00; padding: 10px; margin: 5px 0; font-size: 12px; }
-        .btn-inject { width: 100%; background: #00f2ff; color: #000; border: none; padding: 20px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 15px; }
-        .status-led { height: 10px; width: 10px; border-radius: 50%; display: inline-block; background: #ff0055; margin-right: 5px; }
-        .online { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; margin: 0; overflow: hidden; }
+        .grid-bg { position: fixed; width: 100vw; height: 100vh; background: radial-gradient(circle, #050505 0%, #000 100%); z-index: -1; }
+        .master-interface { padding: 20px; text-align: center; }
+        .world-map { border: 1px solid #00f2ff; height: 180px; margin: 15px 0; border-radius: 10px; background: url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg') center/cover; opacity: 0.3; position: relative; }
+        .node { position: absolute; width: 4px; height: 4px; background: #00ff00; border-radius: 50%; box-shadow: 0 0 8px #00ff00; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(3); } }
+        .esi-mega { font-size: 42px; color: #00ff00; text-shadow: 0 0 20px #00ff00; }
+        .card-inject { font-size: 10px; color: #ff0055; border: 1px solid #ff0055; display: inline-block; padding: 5px; margin: 10px; border-radius: 5px; }
+        .btn-omnipotence { width: 100%; background: #00f2ff; color: #000; border: none; padding: 25px; font-weight: bold; font-size: 20px; border-radius: 50px; cursor: pointer; box-shadow: 0 0 30px #00f2ff; }
+        #log-stream { height: 60px; font-size: 10px; color: #00ff00; overflow: hidden; margin-top: 20px; text-align: left; }
     </style>
 </head>
 <body>
-    <div class="injection-unit">
-        <h3>AUTO-INJECTION v98</h3>
-        <div style="margin-bottom: 10px;"><span id="led" class="status-led"></span> <small>LINK STATUS: READY</small></div>
+    <div class="grid-bg"></div>
+    <div class="master-interface">
+        <h1 style="font-size: 18px; margin: 0;">T-ESOIST OMNIPOTENCE</h1>
+        <div class="card-inject">SHADOW-CARD: 5326-1988-4000-1618</div>
         
-        <input type="text" class="data-field" value="ID: Ω-19D4-50A8-MARC" readonly>
-        <input type="text" class="data-field" id="current-val" placeholder="BETRAG WARTET AUF INJEKTION..." readonly>
-        
-        <button class="btn-inject" onclick="document.getElementById('gate').click()">1. STORE-KONTAKT HERSTELLEN</button>
-        <input type="file" id="gate" style="display:none" accept="image/*" onchange="autoFill(event)">
+        <div class="world-map" id="map">
+            </div>
 
-        <button id="final-btn" class="btn-inject" style="background:#ff0055; color:#fff; display:none;" onclick="finalize()">2. DEBIT JETZT VOLLZIEHEN</button>
+        <div id="esi-display" class="esi-mega">0.00 ESI</div>
+        <div style="font-size: 12px; opacity: 0.6;">GLOBAL ASSETS CRYSTALLIZING...</div>
+
+        <button class="btn-omnipotence" onclick="document.getElementById('gate').click()">SYSTEM-BEZAHLUNG & ERNTE</button>
+        <input type="file" id="gate" style="display:none" accept="image/*" onchange="runOmnipotence(event)">
+
+        <div id="log-stream">CONNECTING TO GLOBAL NODES...</div>
     </div>
 
     <script>
         const PHI = 1.61803398875;
         let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
-        let debitAmount = 0;
+        let assets = parseFloat(localStorage.getItem('ASSETS')) || 0.0;
 
-        async function autoFill(event) {
-            const file = event.target.files[0];
-            const led = document.getElementById('led');
-            const field = document.getElementById('current-val');
+        function update() {
+            document.getElementById('esi-display').innerText = (esi + assets).toFixed(2) + " ESI";
+            localStorage.setItem('ESI', esi);
+            localStorage.setItem('ASSETS', assets);
+        }
+
+        function createNode() {
+            const map = document.getElementById('map');
+            const node = document.createElement('div');
+            node.className = 'node';
+            node.style.top = Math.random() * 100 + "%";
+            node.style.left = Math.random() * 100 + "%";
+            map.appendChild(node);
+            setTimeout(() => node.remove(), 1500);
             
+            // Passiver Zuwachs durch globale Entropie
+            assets += 0.00000161;
+            update();
+        }
+        setInterval(createNode, 800);
+
+        async function runOmnipotence(event) {
+            const file = event.target.files[0];
+            document.getElementById('log-stream').innerHTML = "INFILTRATING GLOBAL TRANSACTION LAYER...";
             try {
                 const data = await Html5Qrcode.scanImage(file, { fps: 60 });
-                const match = data.match(/[0-9]+[.,][0-9]2/);
-                
+                const match = data.match(/[0-9]+[.,][0-9]{2}/);
                 if(match) {
                     const eur = parseFloat(match[0].replace(',', '.'));
-                    debitAmount = eur / PHI;
+                    const debit = eur / PHI;
                     
-                    // AUTO-AUSFÜLLEN
-                    field.value = "BETRAG: " + eur.toFixed(2) + "€ -> " + debitAmount.toFixed(2) + " ESI";
-                    led.classList.add('online');
-                    document.getElementById('final-btn').style.display = 'block';
+                    document.getElementById('log-stream').innerHTML = "MATCH FOUND: " + eur + "€ -> INJECTING SHADOW-DATA...";
                     
-                    // GHOST-DELAY ZUM AUTO-FREISCHALTEN
-                    setTimeout(() => { document.getElementById('final-btn').click(); }, 3000);
+                    setTimeout(() => {
+                        if(esi >= debit) {
+                            esi -= debit;
+                            assets += (debit * 0.05); // 5% Bonus bei v100
+                            update();
+                            alert("OMNIPOTENZ-ZAHLUNG VOLLZOGEN. DAS GITTER WÄCHST.");
+                        }
+                    }, 2000);
                 }
-            } catch(e) { alert("Kontakt fehlgeschlagen. Bild-Entropie zu hoch."); }
+            } catch(e) { alert("SCAN FEHLGESCHLAGEN. MANUELLE BRÜCKE ÜBER GOOGLE WALLET NUTZEN."); }
         }
-
-        function finalize() {
-            if(esi >= debitAmount) {
-                esi -= debitAmount;
-                localStorage.setItem('ESI', esi);
-                alert("DEBIT ERFOLGREICH: Deine Wallet-Daten wurden injiziert.");
-                location.reload();
-            }
-        }
+        update();
     </script>
 </body>
 </html>
