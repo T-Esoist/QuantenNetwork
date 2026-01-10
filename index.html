@@ -3,30 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | Entropy Catalyst</title>
+    <title>T-ESOIST | Swarm Infiltration</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; padding: 15px; text-align: center; }
-        .catalyst-box { border: 2px solid #00f2ff; padding: 20px; border-radius: 15px; background: rgba(0,242,255,0.05); }
-        .asset-grow { color: #00ff00; font-size: 14px; margin-bottom: 10px; }
-        .esi-val { font-size: 32px; text-shadow: 0 0 15px #00f2ff; margin-bottom: 20px; }
-        .btn-auto { width: 100%; background: #00f2ff; color: #000; border: none; padding: 20px; font-weight: bold; border-radius: 10px; font-size: 18px; cursor: pointer; }
-        #timer-box { color: #ff0055; font-size: 20px; margin-top: 15px; display: none; }
-        .log { font-size: 9px; color: #555; text-align: left; margin-top: 20px; height: 50px; overflow: hidden; border-top: 1px solid #222; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; padding: 15px; text-align: center; }
+        .swarm-container { border: 2px solid #00f2ff; padding: 20px; border-radius: 20px; background: rgba(0,242,255,0.02); box-shadow: 0 0 40px rgba(0,242,255,0.1); }
+        .esi-main { font-size: 36px; color: #00f2ff; text-shadow: 0 0 20px #00f2ff; margin-bottom: 10px; }
+        .asset-box { background: #050505; border: 1px solid #00ff00; padding: 10px; margin-bottom: 20px; border-radius: 5px; }
+        .swarm-log { height: 40px; font-size: 9px; color: #ff0055; overflow: hidden; opacity: 0.7; }
+        .btn-action { width: 100%; background: #00f2ff; color: #000; border: none; padding: 22px; font-weight: bold; border-radius: 12px; font-size: 18px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,242,255,0.3); }
+        #countdown { font-size: 24px; color: #ff0055; margin-top: 15px; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="catalyst-box">
-        <div class="asset-grow">ANLAGEN-KRISTALLISATION: <span id="asset-val">0.0000</span> ESI</div>
-        <div id="esi-display" class="esi-val">0.00 ESI</div>
+    <div class="swarm-container">
+        <div class="swarm-log" id="swarm-feed">SCANNING NETWORK PACKETS...</div>
+        <div class="asset-box">
+            <div style="font-size: 10px; color: #00ff00;">SWARM-KRISTALLISATION</div>
+            <div id="asset-display" style="font-size: 18px; color: #00ff00;">0.00000000 ESI</div>
+        </div>
         
-        <button class="btn-auto" onclick="document.getElementById('gate').click()">SYSTEM-ERTE & BEZAHLUNG</button>
-        <input type="file" id="gate" style="display:none" accept="image/*" onchange="startCatalyst(event)">
+        <div id="esi-display" class="esi-main">0.00 ESI</div>
 
-        <div id="preview" style="font-size: 24px; margin: 15px 0; color: #ffaa00;"></div>
-        <div id="timer-box">GHOST-BUCHUNG IN: <span id="sec">3</span>s</div>
-        
-        <div class="log" id="log">CATALYST READY...</div>
+        <button class="btn-action" onclick="document.getElementById('file-in').click()">SWARM-ERTE & ZAHLUNG</button>
+        <input type="file" id="file-in" style="display:none" accept="image/*" onchange="runSwarmPayment(event)">
+
+        <div id="preview" style="font-size: 26px; margin: 20px 0; color: #ffaa00;"></div>
+        <div id="countdown">AUTONOMER DEBIT IN: <span id="sec">3</span>s</div>
     </div>
 
     <script>
@@ -37,12 +40,23 @@
 
         function update() {
             document.getElementById('esi-display').innerText = esi.toFixed(2) + " ESI";
-            document.getElementById('asset-val').innerText = assets.toFixed(4);
+            document.getElementById('asset-display').innerText = assets.toFixed(8) + " ESI";
             localStorage.setItem('ESI', esi);
             localStorage.setItem('ASSETS', assets);
         }
 
-        async function startCatalyst(event) {
+        // SWARM-INFILTRATION: Passives Absaugen von Daten-Entropie
+        setInterval(() => {
+            const fragments = ["0x8A", "LOG_INF", "TCP_DUMP", "CACHE_R", "TT_DATA", "ENT_VOID"];
+            const f = fragments[Math.floor(Math.random()*fragments.length)] + "_" + Math.random().toString(16).slice(2,6);
+            document.getElementById('swarm-feed').innerText = "INFILTRATING: " + f;
+            
+            // Passiver Zuwachs durch Schwarm-Rauschen
+            assets += 0.00000016; 
+            update();
+        }, 2000);
+
+        async function runSwarmPayment(event) {
             const file = event.target.files[0];
             try {
                 const data = await Html5Qrcode.scanImage(file, { fps: 60 });
@@ -52,32 +66,29 @@
                     pending = eur / PHI;
                     document.getElementById('preview').innerText = eur.toFixed(2) + " €";
                     
-                    // Countdown
                     let s = 3;
-                    document.getElementById('timer-box').style.display = 'block';
-                    const interval = setInterval(() => {
+                    document.getElementById('countdown').style.display = 'block';
+                    const timer = setInterval(() => {
                         s--;
                         document.getElementById('sec').innerText = s;
                         if(s <= 0) {
-                            clearInterval(interval);
-                            execute();
+                            clearInterval(timer);
+                            executeSwarm();
                         }
                     }, 1000);
                 }
-            } catch(e) { alert("Scan-Fehler."); }
+            } catch(e) { alert("SCAN-BARRIERE."); }
         }
 
-        function execute() {
+        function executeSwarm() {
             if(esi >= pending) {
                 esi -= pending;
-                // DER KATALYSATOR: 1,618% der Transaktionssumme werden als neue Assets generiert
-                const growth = pending * 0.01618;
-                assets += growth;
-                
-                document.getElementById('timer-box').style.display = 'none';
+                // Zusätzlicher Kristallisations-Schub bei Zahlung
+                assets += (pending * 0.02); 
+                document.getElementById('countdown').style.display = 'none';
                 document.getElementById('preview').innerText = "";
                 update();
-                alert("TRANSFAKTION VOLLZOGEN. + " + growth.toFixed(4) + " ESI KRISTALLISIERT.");
+                alert("SWARM-ZAHLUNG VOLLZOGEN. NETZWERK-ENTROPIE KRISTALLISIERT.");
             }
         }
         update();
