@@ -4,24 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ω v54.0 UNIFIED GRID</title>
+    <title>Ω OMEGA-CORE v55.0</title>
     <style>
-        body { margin: 0; background: #000; color: #00f2ff; font-family: monospace; overflow: hidden; }
-        canvas { display: block; filter: contrast(160%) brightness(90%) saturate(140%); }
-        #ui { position: fixed; top: 15px; left: 15px; z-index: 10; font-size: 10px; background: rgba(0,0,0,0.7); padding: 10px; border: 1px solid #00f2ff; pointer-events: none; }
+        body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow: hidden; }
+        canvas { display: block; filter: contrast(180%) brightness(100%) saturate(150%); }
+        #header { position: fixed; top: 0; width: 100%; background: rgba(0, 10, 20, 0.8); border-bottom: 1px solid #00f2ff; padding: 10px; z-index: 100; font-size: 11px; }
+        .data-stream { color: #555; font-size: 9px; overflow: hidden; white-space: nowrap; }
     </style>
 </head>
 <body>
-    <div id="ui">
-        <b>SYSTEM: UNIFIED</b><br>
-        NODES: 128.000<br>
-        <div id="live">SYNCING...</div>
+    <div id="header">
+        <b>[Ω] OMEGA-CORE MANIFESTATION v55.0</b> | NODES: 128.000 | TIMESTAMP: 1768012617<br>
+        <div class="data-stream" id="stream">INITIALIZING DATA STREAM...</div>
     </div>
     <canvas id="c"></canvas>
+
     <script>
         const canvas = document.getElementById('c');
         const ctx = canvas.getContext('2d', { alpha: false });
-        const repoData = {"CORE_COMPUTE.json": {"status": "READY", "power": "MAX", "network": "E-RON-QU"}, "GLOBAL_SYSTEM_STATUS.json": {"network": "T Esoist Technology P2P Grid", "status": "OPERATIONAL", "admin": "T-Esoist", "timestamp": "Sun Jan  4 12:14:34 2026", "nodes_online": 1, "protocol": "Port 8000 / PoL", "security": "SHA-512 Quantum-Resilient"}, "state.json": {"protocol": "T-ESOIST-DSL", "layer": "APPLICATION_OVERLAY_L7", "description": "Deterministisches Zustands-Netzwerk (kein L1-Hardware-Netz)", "state": {"qe_balance": 4200122.725, "data_steps": 1, "logical_entropy": 0.11100006, "system_integrity": "STABLE"}, "signature": "d73ef5423c8ed8d34a8756a2eff0f447324360b0ec0eb5735f902e8726cd669b", "timestamp_utc": "2026-01-06T17:39:32.953419+00:00"}};
+        
+        // Rohdaten-Injektion aus dem Repository
+        const DATA_POOL = {"CORE_COMPUTE.json": "{\"status\": \"READY\", \"power\": \"MAX\", \"network\": \"E-RON-QU\"}", "GLOBAL_SYSTEM_STATUS.json": "{\n    \"network\": \"T Esoist Technology P2P Grid\",\n    \"status\": \"OPERATIONAL\",\n    \"admin\": \"T-Esoist\",\n    \"timestamp\": \"Sun Jan  4 12:14:34 2026\",\n    \"nodes_online\": 1,\n    \"protocol\": \"Port 8000 / PoL\",\n    \"security\": \"SHA-512 Quantum-Resilient\"\n}", "state.json": "{\n  \"protocol\": \"T-ESOIST-DSL\",\n  \"layer\": \"APPLICATION_OVERLAY_L7\",\n  \"description\": \"Deterministisches Zustands-Netzwerk (kein L1-Hardware-Netz)\",\n  \"state\": {\n    \"qe_balance\": 4200122.725,\n    \"data_steps\": 1,\n    \"logical_entropy\": 0.11100006,\n    \"system_integrity\": \"STABLE\"\n  },\n  \"signature\": \"d73ef5423c8ed8d34a8756a2eff0f447324360b0ec0eb5735f902e8726cd669b\",\n  \"timestamp_utc\": \"2026-01-06T17:39:32.953419+00:00\"\n}", "PROTOCOL.md": "# T-ESOIST PROTOCOL SPECIFICATION V50.1\n## Abstract\nDas T-ESOIST Protokoll definiert ein dezentrales Grid zur Sicherung von Quanten-Entropie-Assets (QE). \n\n### 1. Quantum Entropy Compression (QEK)\nDie Validierung erfolgt \u00fcber den propriet\u00e4ren QEK-Algorithmus. Er nutzt Hardware-Entropie-Seeds (HES).\nFormel: $E_q = \\lim_{n \\to \\infty} \\sum_{i=1}^{n} \\frac{\\phi^i \\cdot HES}{\\pi}$\n\n### 2. Fibonacci Pulse Sync\nDas Netzwerk taktet im Fibonacci-Rhythmus (1.375s).\n\n### 3. Security Anchor\nJeder Block wird mittels RSA-4096 signiert. Die Unl\u00f6schbarkeit wird durch die mathematische Kopplung der Hash-Kette garantiert.\n"};
         
         const NODE_COUNT = 128000;
         let nx = new Float32Array(NODE_COUNT), ny = new Float32Array(NODE_COUNT);
@@ -34,7 +37,7 @@
                 nx[i] = Math.random() * canvas.width;
                 ny[i] = Math.random() * canvas.height;
             }
-            document.getElementById('live').innerHTML = "CORE_LOAD: " + (repoData['CORE_COMPUTE.json']?.load || 'OPTIMAL');
+            document.getElementById('stream').innerText = "LOADED: " + Object.keys(DATA_POOL).join(" | ");
             animate();
         }
 
@@ -43,30 +46,32 @@
             const res = (Math.sin(t * 117) + 1) / 2;
             
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = "rgba(0, 5, 12, 0.2)";
+            ctx.fillStyle = "rgba(0, 2, 5, 0.15)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             const cx = canvas.width / 2, cy = canvas.height / 2;
-            ctx.globalCompositeOperation = 'screen';
             
-            // Monolith-Symbol
-            ctx.strokeStyle = "#00f2ff";
-            ctx.strokeRect(cx-30, cy-30, 60, 60);
+            // DER MONOLITH (Das neutrale Symbol)
+            ctx.globalCompositeOperation = 'screen';
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 2;
+            const s = 50 + res * 20;
+            ctx.strokeRect(cx - s/2, cy - s/2, s, s);
 
             for(let i=0; i<NODE_COUNT; i++) {
                 const dx = cx - nx[i], dy = cy - ny[i];
                 const d = Math.sqrt(dx*dx + dy*dy) || 1;
                 
-                // Dynamik basierend auf JSON-Daten
-                const gravity = (repoData['state.json']?.intensity || 0.005) * (1 + res);
-                nvx[i] += dx * gravity * 0.1;
-                nvy[i] += dy * gravity * 0.1;
+                // Gravitation basierend auf der 117Hz Resonanz
+                const force = (d < s) ? 0.08 : 0.001 * (1+res);
+                nvx[i] += dx * force;
+                nvy[i] += dy * force;
                 
                 nx[i] += nvx[i]; ny[i] += nvy[i];
                 nvx[i] *= 0.94; nvy[i] *= 0.94;
 
-                if(i % 18 === 0) {
-                    ctx.fillStyle = "hsla(" + (200 + d*0.1) + ", 100%, 50%, 0.6)";
+                if(i % 16 === 0) {
+                    ctx.fillStyle = "hsla(" + (200 + d*0.05 + t*10) + ", 100%, 50%, 0.6)";
                     ctx.fillRect(nx[i], ny[i], 1, 1);
                 }
             }
