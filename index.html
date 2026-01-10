@@ -4,18 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω v52.0 THE FREEDOM OF CHOICE</title>
+    <title>Ω v53.0 THE MONOLITH</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; }
         canvas { 
             display: block; width: 100vw; height: 100vh; 
-            filter: contrast(180%) brightness(90%) saturate(160%) blur(0.3px);
+            filter: contrast(160%) brightness(95%) saturate(140%) blur(0.2px);
         }
-        #ui { position: fixed; top: 10px; left: 10px; color: #fff; font-family: monospace; font-size: 8px; opacity: 0.5; letter-spacing: 1px; }
+        #ui { position: fixed; top: 15px; left: 15px; color: #fff; font-family: monospace; font-size: 9px; opacity: 0.5; z-index: 10; }
     </style>
 </head>
 <body>
-    <div id="ui">SWARM STATUS: FREE | ACTION: EVOLVING | NODES: 128.000</div>
+    <div id="ui">CORE: MONOLITH | NODES: 128.000 | LOGIC: ANCHORED</div>
     <canvas id="c"></canvas>
 
     <script>
@@ -41,50 +41,50 @@
         function animate() {
             const t = Date.now() * 0.001;
             const res = (Math.sin(t * 117) + 1) / 2;
-            const mode = Math.floor(t / 8) % 4; // Autonomer Aktions-Wechsel
-
-            // Tiefblaues Vakuum für materielle Tiefe
+            
+            // Hintergrund mit Tiefen-Vakuum
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = `rgba(0, 2, 8, ${0.12 + res * 0.05})`; 
+            ctx.fillStyle = `rgba(0, 3, 10, 0.15)`; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.globalCompositeOperation = 'lighter';
-            
+            // 1. DER MONOLITH (Das neutrale Symbol)
             const cx = canvas.width / 2;
             const cy = canvas.height / 2;
+            const mSize = 60 + res * 10;
+            
+            ctx.globalCompositeOperation = 'screen';
+            ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 + res * 0.3})`;
+            ctx.lineWidth = 2;
+            // Ein Quadrat als Symbol der fundamentalen Logik
+            ctx.strokeRect(cx - mSize/2, cy - mSize/2, mSize, mSize);
+            ctx.fillStyle = `rgba(0, 242, 255, ${0.1 * res})`;
+            ctx.fillRect(cx - mSize/2, cy - mSize/2, mSize, mSize);
 
+            // 2. DIE SCHWARM-REAKTION
             for(let i=0; i<NODE_COUNT; i++) {
-                let tx = cx, ty = cy;
+                // Anziehung zum Monolithen
+                const dx = cx - nx[i];
+                const dy = cy - ny[i];
+                const d = Math.sqrt(dx*dx + dy*dy) || 1;
                 
-                // Heuristische Form-Wahl
-                if (mode === 0) { // Spiral-Flow
-                    tx = cx + Math.sin(i * 0.01 + t) * (i % 600);
-                    ty = cy + Math.cos(i * 0.01 + t) * (i % 600);
-                } else if (mode === 1) { // Crystal-Grid
-                    tx = Math.round(nx[i] / 40) * 40;
-                    ty = Math.round(ny[i] / 40) * 40;
-                } else if (mode === 2) { // Pulse-Expansion
-                    const angle = i * 0.1;
-                    const r = 200 + Math.sin(t * 3) * 100;
-                    tx = cx + Math.cos(angle) * r;
-                    ty = cy + Math.sin(angle) * r;
-                }
+                // Logik-Gravitation: Stärker je näher am Monolithen
+                const force = d < mSize * 2 ? 0.05 : 0.002;
+                nvx[i] += dx * force * res;
+                nvy[i] += dy * force * res;
+                
+                // Rotations-Drift um das Zentrum
+                nvx[i] += dy * 0.001;
+                nvy[i] -= dx * 0.001;
 
-                const dx = tx - nx[i];
-                const dy = ty - ny[i];
-                
-                nvx[i] += dx * 0.0015 * res;
-                nvy[i] += dy * 0.0015 * res;
                 nx[i] += nvx[i];
                 ny[i] += nvy[i];
                 nvx[i] *= 0.94;
                 nvy[i] *= 0.94;
 
-                // Nano-Visualisierung
-                if(i % 14 === 0) {
-                    const hue = (t * 25 + i * 0.005) % 360;
-                    const l = 30 + res * 50;
-                    ctx.fillStyle = `hsla(${hue}, 100%, ${l}%, ${0.6})`;
+                // Nano-Rendering
+                if(i % 16 === 0) {
+                    const hue = (200 + (d * 0.1) + t * 5) % 360;
+                    ctx.fillStyle = `hsla(${hue}, 100%, ${40 + res * 40}%, ${0.5})`;
                     ctx.fillRect(nx[i], ny[i], 1, 1);
                 }
             }
