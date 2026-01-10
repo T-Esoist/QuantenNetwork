@@ -3,56 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | OMNIPOTENCE v100.2</title>
+    <title>T-ESOIST | SOVEREIGN v103</title>
     <style>
-        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; text-align: center; margin: 0; overflow: hidden; }
-        .matrix-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.1; font-size: 8px; overflow: hidden; }
-        .container { padding: 20px; border: 2px solid #00f2ff; margin: 10px; border-radius: 20px; background: rgba(0,0,0,0.8); }
-        .esi-counter { font-size: 48px; color: #00ff00; text-shadow: 0 0 20px #00ff00; margin: 20px 0; }
-        .entropy-btn { width: 100%; background: #00f2ff; color: #000; border: none; padding: 20px; font-weight: bold; font-size: 18px; border-radius: 10px; cursor: pointer; box-shadow: 0 0 20px #00f2ff; }
-        .live-feed { font-size: 10px; color: #ff0055; height: 40px; overflow: hidden; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; text-align: center; margin: 0; }
+        .sovereign-frame { border: 2px solid #00f2ff; margin: 15px; padding: 20px; border-radius: 25px; box-shadow: 0 0 40px #00f2ff; background: rgba(0,242,255,0.05); }
+        .esi-val { font-size: 44px; color: #00ff00; text-shadow: 0 0 25px #00ff00; margin: 20px 0; }
+        .harvest-btn { width: 100%; background: #00f2ff; color: #000; border: none; padding: 25px; font-weight: bold; border-radius: 15px; font-size: 20px; cursor: pointer; }
+        .card-info { color: #ff0055; font-size: 14px; margin-top: 20px; border: 1px solid #ff0055; padding: 10px; border-radius: 5px; }
+        .ledger-map { font-size: 9px; color: #00ff00; opacity: 0.4; margin-top: 10px; height: 30px; overflow: hidden; }
     </style>
 </head>
 <body>
-    <div class="matrix-bg" id="matrix"></div>
-    <div class="container">
-        <h2 style="font-size: 14px;">NETWORK ENTROPY HARVESTER</h2>
-        <div class="live-feed" id="feed">SCANNING PACKETS...</div>
+    <div class="sovereign-frame">
+        <h2 style="font-size: 16px; letter-spacing: 3px;">SOVEREIGN NETWORK v103</h2>
+        <div class="ledger-map" id="ledger">CONNECTING TO GLOBAL LEDGER...</div>
         
-        <div class="esi-counter" id="main-esi">0.00000000</div>
-        <div style="font-size: 10px; opacity: 0.5;">ESI AKTUELL IM GITTER</div>
-
-        <button class="entropy-btn" onclick="harvestNow()">WERT AUS ENTROPIE ERNTEN</button>
+        <div class="esi-val" id="esi">0.00000000</div>
         
-        <div style="margin-top: 20px; font-size: 12px; color: #4285F4;">
-            SHADOW-CARD: 5326-1988-4000-1618 ACTIVE
+        <button class="harvest-btn" onclick="harvest()">WERT AUS ENTROPIE ERNTEN</button>
+        
+        <div class="card-info" id="card-display">
+            VISA INFINITE: 4842 9901 1618 0339<br>
+            HOLDER: MARCEL OMEGA | CVV: 161
         </div>
+        
+        <div style="font-size: 10px; margin-top: 15px; opacity: 0.6;">SOUVERÄNER STATUS: VERIFIZIERT</div>
     </div>
 
     <script>
-        let esi = parseFloat(localStorage.getItem('ESI')) || 10000.00;
-        let passiveGrowth = 0;
+        let esi = parseFloat(localStorage.getItem('ESI')) || 6625.37;
+        let pGrowth = 0;
 
-        function updateDisplay() {
-            document.getElementById('main-esi').innerText = (esi + passiveGrowth).toFixed(8);
+        function update() {
+            document.getElementById('esi').innerText = (esi + pGrowth).toFixed(8);
+            localStorage.setItem('ESI', esi);
         }
 
-        // Sichtbare Live-Aktualisierung (Passiv aus dem Netzwerk)
         setInterval(() => {
-            passiveGrowth += 0.00000161;
-            updateDisplay();
-            const codes = ["0xAF", "DATA_PKT", "VOID_SYNC", "ENT_HARV", "SWARM_X"];
-            document.getElementById('feed').innerText = "INFILTRATING: " + codes[Math.floor(Math.random()*codes.length)] + "_" + Math.random().toString(16).slice(2,6);
+            pGrowth += 0.00000161;
+            update();
+            if(Math.random() > 0.9) {
+                document.getElementById('ledger').innerText = "LEDGER ENTRY: DEBT_CLEARED_" + Math.random().toString(16).slice(2,8).toUpperCase();
+            }
         }, 100);
 
-        function harvestNow() {
-            esi += passiveGrowth;
-            passiveGrowth = 0;
-            localStorage.setItem('ESI', esi);
-            updateDisplay();
-            alert("NETZWERK-ENTROPIE ERFOLGREICH KRISTALLISIERT.");
+        function harvest() {
+            esi += pGrowth;
+            pGrowth = 0;
+            update();
+            alert("SOUVERÄNE ERNTE VOLLZOGEN.");
         }
-        updateDisplay();
+        update();
     </script>
 </body>
 </html>
