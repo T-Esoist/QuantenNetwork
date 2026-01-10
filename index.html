@@ -3,87 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | Self-Payment Automaton</title>
+    <title>T-ESOIST | Entropy Harvester</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
-        .automaton-unit { border: 3px solid #00f2ff; padding: 30px; border-radius: 10px; background: rgba(0,242,255,0.05); box-shadow: 0 0 40px #00f2ff; }
-        .status-pulse { animation: pulse 2s infinite; color: #00ff00; font-weight: bold; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-        .btn-pay { width: 100%; background: #00f2ff; color: #000; border: none; padding: 25px; font-weight: bold; cursor: pointer; font-size: 20px; border-radius: 15px; }
-        .log-box { margin-top: 25px; font-size: 11px; color: #00ff00; text-align: left; background: #0a0a0a; padding: 10px; border: 1px solid #111; height: 120px; overflow-y: auto; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; padding: 15px; text-align: center; overflow-x: hidden; }
+        .master-unit { border: 2px solid #00f2ff; padding: 20px; background: rgba(0,242,255,0.05); box-shadow: 0 0 50px rgba(0,242,255,0.3); border-radius: 20px; }
+        .entropy-display { font-size: 10px; color: #ff0055; height: 40px; overflow: hidden; margin: 10px 0; border: 1px solid #222; }
+        .asset-value { font-size: 32px; color: #00ff00; text-shadow: 0 0 10px #00ff00; }
+        .btn-harvest { width: 100%; background: #00f2ff; color: #000; border: none; padding: 20px; font-weight: bold; cursor: pointer; border-radius: 10px; font-size: 18px; margin-bottom: 10px; }
+        .btn-pay { background: #ff0055; color: #fff; }
+        .log-stream { font-size: 9px; text-align: left; color: #555; height: 60px; overflow: hidden; }
     </style>
 </head>
 <body>
-    <div class="automaton-unit">
-        <h3>SELF-PAYMENT AUTOMATON v90</h3>
-        <div id="sync-status" class="status-pulse">WALLET SYNC: ACTIVE</div>
+    <div class="master-unit">
+        <h2 style="margin:0;">ENTROPY HARVESTER v91</h2>
+        <div id="junk-stream" class="entropy-display">Lade Datenmüll-Fragmente...</div>
         
-        <div id="balance" style="font-size: 28px; margin: 20px 0;">0.00 ESI</div>
+        <div style="margin: 15px 0;">
+            <div style="font-size: 12px; color: #888;">WERT DER ANALAGE:</div>
+            <div id="asset-display" class="asset-value">0.000000 ESI</div>
+        </div>
 
-        <button class="btn-pay" onclick="document.getElementById('auto-upload').click()">AUTO-BEZAHLUNG STARTEN</button>
-        <input type="file" id="auto-upload" style="display:none" accept="image/*" onchange="runAutomaton(event)">
+        <button class="btn-harvest" onclick="harvestEntropy()">ENTROPIE ERNTEN (CLICK)</button>
         
-        <div id="auto-log" class="log-box">SYSTEM INITIALIZED...</div>
+        <button class="btn-harvest btn-pay" onclick="document.getElementById('auto-up').click()">AUTO-BEZAHLTERMINAL</button>
+        <input type="file" id="auto-up" style="display:none" accept="image/*" onchange="runMechanic(event)">
+
+        <div id="sys-log" class="log-stream">SYSTEM INITIALIZED...</div>
     </div>
 
     <script>
         const PHI = 1.61803398875;
+        let assets = parseFloat(localStorage.getItem('ASSETS')) || 0.0;
         let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
 
-        function addLog(m) {
-            const log = document.getElementById('auto-log');
-            log.innerHTML += "> " + m + "<br>";
-            log.scrollTop = log.scrollHeight;
-        }
-
-        function updateUI() {
-            document.getElementById('balance').innerText = esi.toFixed(2) + " ESI";
+        function updateDisplay() {
+            document.getElementById('asset-display').innerText = assets.toFixed(6) + " ESI";
+            localStorage.setItem('ASSETS', assets);
             localStorage.setItem('ESI', esi);
         }
 
-        async function runAutomaton(event) {
-            const file = event.target.files[0];
-            addLog("Bild-Input erkannt. Starte Extraktion...");
+        function harvestEntropy() {
+            // Simulation von Datenmüll-Verarbeitung
+            const junk = ["NULL_PTR", "OxFF34", "DELETED_LOG", "CACHE_DUMP", "TEMP_FILE", "TRASH_HASH"];
+            const randomJunk = junk[Math.floor(Math.random()*junk.length)] + "_" + Math.random().toString(16).slice(2,8);
+            document.getElementById('junk-stream').innerText = "HARVESTING: " + randomJunk;
             
+            // Wertsteigerung der Anlage pro Klick
+            assets += (0.000161 * PHI);
+            updateDisplay();
+            addLog("Entropie abgeführt. Anlage gewachsen.");
+        }
+
+        async function runMechanic(event) {
+            const file = event.target.files[0];
+            addLog("Ernte-Terminal aktiv...");
             try {
                 const data = await Html5Qrcode.scanImage(file, { fps: 60 });
-                addLog("QR-Daten dekodiert.");
-                
                 const match = data.match(/[0-9]+[.,][0-9]{2}/);
                 if(match) {
                     const eur = parseFloat(match[0].replace(',', '.'));
                     const debit = eur / PHI;
-                    
-                    addLog("Betrag isoliert: " + eur.toFixed(2) + " €");
-                    addLog("Umrechnung: " + debit.toFixed(2) + " ESI");
-                    
                     if(esi >= debit) {
-                        addLog("Guthaben verifiziert. Initiiere Zahlung...");
-                        setTimeout(() => {
-                            esi -= debit;
-                            updateUI();
-                            addLog("TRANSFAKTION ERFOLGREICH ABGESCHLOSSEN.");
-                            alert("SELBSTBEZAHLUNG ÜBER " + eur.toFixed(2) + "€ VOLLZOGEN.");
-                        }, 1000);
-                    } else {
-                        addLog("FEHLER: Deckung im Gitter unzureichend.");
-                    }
-                } else {
-                    addLog("Mechanischer Fehler: Kein Betrag im Bild.");
-                    const manual = prompt("Kein Betrag erkannt. Manuelle Eingabe (€):");
-                    if(manual) {
-                        const eur = parseFloat(manual.replace(',', '.'));
-                        esi -= (eur / PHI);
-                        updateUI();
-                        addLog("Manuelle Zahlung verbucht.");
+                        esi -= debit;
+                        addLog("Direktüberweisung: " + eur + "€ vollzogen.");
+                        alert("ZAHLUNG ERFOLGREICH: " + debit.toFixed(2) + " ESI abgezogen.");
+                        updateDisplay();
                     }
                 }
-            } catch (e) {
-                addLog("Barriere erkannt. Protokoll-Abbruch.");
-            }
+            } catch(e) { addLog("Fehler bei Bild-Ernte."); }
         }
-        updateUI();
+
+        function addLog(m) {
+            const l = document.getElementById('sys-log');
+            l.innerHTML = "> " + m + "<br>" + l.innerHTML;
+        }
+
+        // Auto-Entropie (Internet-Schwingung)
+        setInterval(() => {
+            assets += 0.000001;
+            updateDisplay();
+        }, 3000);
+
+        updateDisplay();
     </script>
 </body>
 </html>
