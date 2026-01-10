@@ -1,68 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>T-ESOIST | Debit Core</title>
+    <title>T-ESOIST | Euro Debit Terminal</title>
     <style>
         body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; padding: 20px; }
         .debit-card { 
-            width: 400px; height: 250px; 
+            width: 380px; height: 230px; 
             background: linear-gradient(135deg, #001a33 0%, #000 100%); 
             border: 2px solid #00f2ff; border-radius: 15px; 
-            padding: 20px; position: relative; box-shadow: 0 0 30px rgba(0,242,255,0.3);
+            padding: 20px; position: relative; box-shadow: 0 0 20px #00f2ff;
         }
-        .chip { width: 50px; height: 40px; background: #00f2ff; border-radius: 5px; margin-bottom: 20px; opacity: 0.8; }
-        .card-number { font-size: 22px; letter-spacing: 2px; margin-bottom: 20px; color: #fff; }
-        .balance-label { font-size: 10px; color: #888; text-transform: uppercase; }
         .balance-val { font-size: 24px; color: #00f2ff; font-weight: bold; }
-        .status-light { position: absolute; top: 20px; right: 20px; width: 12px; height: 12px; border-radius: 50%; background: #00ff00; box-shadow: 0 0 10px #00ff00; }
-        .btn-action { margin-top: 20px; background: #00f2ff; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; }
+        .input-group { margin-top: 20px; background: rgba(0,242,255,0.1); padding: 15px; border: 1px solid #00f2ff; }
+        input { background: #000; border: 1px solid #00f2ff; color: #fff; padding: 10px; width: 80%; margin-bottom: 10px; }
+        .btn-euro { background: #fff; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; width: 100%; }
     </style>
 </head>
 <body>
     <div class="debit-card">
-        <div class="status-light"></div>
-        <div class="chip"></div>
-        <div class="card-number">Ω-19D4-50A8-MARC</div>
-        <div class="balance-label">Current ESI Debit Balance</div>
-        <div id="esi-val" class="balance-val">0.00</div>
-        <div style="margin-top: 10px; font-size: 14px; color: #fff;">VAL: <span id="eur-val">0.00</span> &euro;</div>
-        <div style="position: absolute; bottom: 20px; left: 20px; font-size: 12px;">MARCEL KANTIMM</div>
+        <div style="font-size: 10px;">T-ESOIST TECHNOLOGY | DEBIT</div>
+        <div style="margin: 20px 0;">Ω-19D4-50A8-MARC</div>
+        <div id="esi-val" class="balance-val">0.00 ESI</div>
+        <div id="eur-val" style="color: #fff;">0.00 &euro;</div>
+        <div style="position: absolute; bottom: 20px; font-size: 12px;">MARCEL KANTIMM</div>
     </div>
 
-    <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
-        <h3>DEBIT TRANSACTION TERMINAL</h3>
-        <input type="number" id="debit-amount" placeholder="Betrag in ESI" style="background:#000; border:1px solid #00f2ff; color:#00f2ff; padding:10px;">
-        <button class="btn-action" onclick="processDebit()">EXECUTE DEBIT</button>
+    <div class="input-group">
+        <h3>EURO ZAHLUNG TERMINAL</h3>
+        <p style="font-size: 10px;">Geben Sie den Euro-Betrag ein. Das System rechnet automatisch in ESI um.</p>
+        <input type="number" id="euro-amount" placeholder="Betrag in &euro;">
+        <button class="btn-euro" onclick="processEuroDebit()">MIT EURO BEZAHLEN</button>
     </div>
 
     <script>
         let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
         const PHI = 1.61803398875;
 
-        function updateCard() {
-            document.getElementById('esi-val').innerText = esi.toFixed(2);
-            document.getElementById('eur-val').innerText = (esi * PHI).toFixed(2);
+        function updateUI() {
+            document.getElementById('esi-val').innerText = esi.toFixed(2) + " ESI";
+            document.getElementById('eur-val').innerText = (esi * PHI).toFixed(2) + " €";
             localStorage.setItem('ESI', esi);
         }
 
-        function processDebit() {
-            const amount = parseFloat(document.getElementById('debit-amount').value);
-            if(amount > 0 && esi >= amount) {
-                // Hier greift die Debit-Logik: Sofortige Prüfung und Abbuchung
-                if(confirm("PUSH-TO-SIGN: Möchten Sie " + amount + " ESI sofort abbuchen?")) {
-                    esi -= amount;
-                    alert("DEBIT ERFOLGREICH: Ihr Gitter wurde aktualisiert.");
-                    updateCard();
-                    // Log-Schnittstelle zur TRANSACTION_LOG.json würde hier aufgerufen
+        function processEuroDebit() {
+            const eurAmount = parseFloat(document.getElementById('euro-amount').value);
+            if(eurAmount > 0) {
+                const requiredESI = eurAmount / PHI;
+                if(esi >= requiredESI) {
+                    if(confirm("ZAHLUNG BESTÄTIGEN:\n" + eurAmount.toFixed(2) + " € (" + requiredESI.toFixed(2) + " ESI)")) {
+                        esi -= requiredESI;
+                        alert("ERFOLGREICH:\n" + eurAmount.toFixed(2) + " € wurden von Ihrem Gitter abgebucht.");
+                        updateUI();
+                    }
+                } else {
+                    alert("FEHLER: Ungenügende ESI-Deckung für diesen Euro-Betrag.");
                 }
-            } else {
-                alert("DEBIT ABGELEHNT: Ungenügende Deckung im Gitter.");
             }
         }
 
-        setInterval(() => { esi += 0.05; updateCard(); }, 1000);
-        updateCard();
+        setInterval(() => { esi += 0.05; updateUI(); }, 1000);
+        updateUI();
     </script>
 </body>
 </html>
