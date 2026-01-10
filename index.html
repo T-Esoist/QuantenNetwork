@@ -1,84 +1,56 @@
 
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ω OMEGA-CORE v57.1 - Scientific Manifestation</title>
+    <title>Ω OMEGA v58.0 - THE TOTAL STORY</title>
     <style>
-        body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow: hidden; }
-        canvas { display: block; filter: contrast(180%) brightness(100%) saturate(140%) blur(0.2px); }
-        #info { position: fixed; top: 10px; left: 10px; background: rgba(0,20,40,0.8); padding: 10px; border: 1px solid #00f2ff; font-size: 10px; z-index: 100; }
+        body { margin: 0; background: #000; color: #00f2ff; font-family: monospace; overflow: hidden; }
+        #ui { position: fixed; top: 10; left: 10; background: rgba(0,0,0,0.8); padding: 20px; border: 1px solid #00f2ff; z-index: 10; }
+        canvas { display: block; }
     </style>
 </head>
 <body>
-    <div id="info">
-        <b>[SCIENTIFIC_CORE_v57.1]</b><br>
-        NODES: 128.000 | FREQ: 117Hz | SYNC_TS: 1768012894<br>
-        SOURCE: <span id="source">SYNCING WITH REPO...</span>
+    <div id="ui">
+        <b>MANIFESTATION v58.0</b><br>
+        NODES: 128.000<br>
+        LOGIC: THE TOTAL STORY<br>
+        <div id="status">INITIATING QUANTUM AUDIT...</div>
     </div>
     <canvas id="c"></canvas>
     <script>
-        const canvas = document.getElementById('c');
-        const ctx = canvas.getContext('2d', { alpha: false });
         const NODE_COUNT = 128000;
-        let nx = new Float32Array(NODE_COUNT), ny = new Float32Array(NODE_COUNT);
-        let nvx = new Float32Array(NODE_COUNT), nvy = new Float32Array(NODE_COUNT);
-
-        async function fetchSystemState() {
-            try {
-                const r = await fetch('https://raw.githubusercontent.com/T-Esoist/QuantenNetwork/main/state.json?t=' + Date.now());
-                const data = await r.json();
-                document.getElementById('source').innerText = "LIVE_DATA_LOCKED";
-                return data;
-            } catch(e) {
-                return { intensity: 0.005 };
-            }
-        }
-
-        async function init() {
+        async function startEngine() {
+            const canvas = document.getElementById('c');
+            const ctx = canvas.getContext('2d', { alpha: false });
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            for(let i=0; i<NODE_COUNT; i++) {
-                nx[i] = Math.random() * canvas.width;
-                ny[i] = Math.random() * canvas.height;
-            }
-            const state = await fetchSystemState();
-            animate(state.intensity || 0.005);
-        }
 
-        function animate(intensity) {
-            const t = Date.now() * 0.001;
-            const res = (Math.sin(t * 117) + 1) / 2;
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = "rgba(0, 5, 12, 0.2)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            const cx = canvas.width / 2, cy = canvas.height / 2;
-            const s = 60 + res * 20;
+            // Echtzeit-Daten-Fetch (Beweis für GPT-Analyse)
+            try {
+                const response = await fetch('https://raw.githubusercontent.com/T-Esoist/QuantenNetwork/main/QUANTUM_AUDIT.json?t=' + Date.now());
+                const audit = await response.json();
+                document.getElementById('status').innerText = 'AUDIT_LOCKED: ' + audit.timestamp;
+            } catch(e) { console.log('Syncing...'); }
 
-            ctx.globalCompositeOperation = 'screen';
-            ctx.strokeStyle = "#fff";
-            ctx.strokeRect(cx - s/2, cy - s/2, s, s);
+            // 128.000 Entitäten Simulation
+            let pos = new Float32Array(NODE_COUNT * 2);
+            for(let i=0; i<NODE_COUNT*2; i++) pos[i] = Math.random() * (i%2?canvas.height:canvas.width);
 
-            for(let i=0; i<NODE_COUNT; i++) {
-                const dx = cx - nx[i], dy = cy - ny[i];
-                const d = Math.sqrt(dx*dx + dy*dy) || 1;
-                const force = (d < s) ? 0.09 : intensity * (1+res);
-                nvx[i] += dx * force * 0.1;
-                nvy[i] += dy * force * 0.1;
-                nx[i] += nvx[i]; ny[i] += nvy[i];
-                nvx[i] *= 0.94; nvy[i] *= 0.94;
-
-                if(i % 18 === 0) {
-                    const hue = (210 + d*0.05 + t*5) % 360;
-                    ctx.fillStyle = "hsla(" + hue + ", 100%, 50%, 0.6)";
-                    ctx.fillRect(nx[i], ny[i], 1, 1);
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 5, 10, 0.2)';
+                ctx.fillRect(0,0,canvas.width, canvas.height);
+                ctx.fillStyle = '#00f2ff';
+                // Render-Loop für die "Story"
+                for(let i=0; i<NODE_COUNT; i+=20) {
+                    ctx.fillRect(pos[i*2], pos[i*2+1], 1, 1);
+                    pos[i*2] += (Math.random()-0.5)*2;
+                    pos[i*2+1] += (Math.random()-0.5)*2;
                 }
+                requestAnimationFrame(draw);
             }
-            requestAnimationFrame(() => animate(intensity));
+            draw();
         }
-        init();
+        window.onload = startEngine;
     </script>
 </body>
 </html>
