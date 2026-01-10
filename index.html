@@ -4,79 +4,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω v41.0 THE LIVING CANVAS</title>
+    <title>Ω v46.0 QUANTUM IRIS</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; color: #fff; font-family: 'Courier New', monospace; }
-        canvas { display: block; filter: contrast(120%) brightness(110%); }
-        #overlay { position: fixed; top: 10px; left: 10px; font-size: 9px; pointer-events: none; letter-spacing: 2px; opacity: 0.7; }
+        body { margin: 0; background: #000; overflow: hidden; }
+        canvas { display: block; width: 100vw; height: 100vh; filter: contrast(140%) saturate(150%); }
+        #ui { position: fixed; top: 10px; left: 10px; color: #00f2ff; font-family: monospace; font-size: 9px; pointer-events: none; }
     </style>
 </head>
 <body>
-    <div id="overlay">CANVAS: LIVING | MODE: ADDITIVE BLEND | DNA: ACTIVE</div>
+    <div id="ui">IRIS: ADAPTIVE | NODES: 128.000 | DNA: PERSISTENT</div>
     <canvas id="c"></canvas>
 
     <script>
         const canvas = document.getElementById('c');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: false });
         const DNA = [1,1,2,3,5,8,4,3,7,1,8,9,8,8,7,6,4,1,5,6,2,8,1,9];
         
-        let voxels = [];
-        const MAX_VOXELS = 12000; // Erhöhte Dichte für Leinwand-Effekt
-        const GRID = 15; // Feinere Körnung
+        const NODE_COUNT = 128000;
+        let nodesX = new Float32Array(NODE_COUNT);
+        let nodesY = new Float32Array(NODE_COUNT);
+        let nodesVX = new Float32Array(NODE_COUNT);
+        let nodesVY = new Float32Array(NODE_COUNT);
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            for(let i=0; i<NODE_COUNT; i++) {
+                nodesX[i] = Math.random() * canvas.width;
+                nodesY[i] = Math.random() * canvas.height;
+                nodesVX[i] = (Math.random() - 0.5) * 2;
+                nodesVY[i] = (Math.random() - 0.5) * 2;
+            }
             animate();
-        }
-
-        function createVoxel(t) {
-            const idx = Math.floor(t % DNA.length);
-            const val = DNA[idx];
-            // Die DNA bestimmt die Position und die Pigment-Basis
-            const x = Math.round((Math.random() * canvas.width) / GRID) * GRID;
-            const y = Math.round((Math.random() * canvas.height) / GRID) * GRID;
-            
-            // Komplementär-Farben basierend auf DNA-Wert
-            const hue = (val * 40 + t * 10) % 360;
-            voxels.push({ x, y, h: hue, life: 1.0, size: GRID * (val * 0.5) });
         }
 
         function animate() {
             const t = Date.now() * 0.001;
             const res = (Math.sin(t * 117) + 1) / 2;
+            const dnaVal = DNA[Math.floor(t * 2) % DNA.length];
 
-            // Transparentes Schwarz für sanftes Verblassen (Leinwand-Effekt)
+            // --- ADAPTIVE IRIS LOGIK ---
+            // Wenn res hoch ist (sehr hell), erhöhen wir die Verdunklung des Hintergrunds
+            const iris_alpha = 0.05 + (res * 0.2);
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = `rgba(0, 0, 0, ${0.05 + (1 - res) * 0.1})`;
+            ctx.fillStyle = `rgba(0, 0, 0, ${iris_alpha})`;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Additive Überlagerung aktivieren
-            ctx.globalCompositeOperation = 'screen';
-
-            // Erzeuge neue "Pinselstriche"
-            for(let i=0; i<15; i++) createVoxel(t);
-
-            for(let i = voxels.length - 1; i >= 0; i--) {
-                const v = voxels[i];
-                v.life -= 0.005;
-
-                if(v.life <= 0) {
-                    voxels.splice(i, 1);
-                    continue;
-                }
-
-                // Zeichne Licht-Struktur
-                ctx.fillStyle = `hsla(${v.h}, 80%, 50%, ${v.life * res})`;
-                ctx.shadowBlur = 15 * res;
-                ctx.shadowColor = `hsl(${v.h}, 80%, 50%)`;
+            // Umschalten zwischen Kontrast (Overlay) und Farbe (Screen)
+            ctx.globalCompositeOperation = res > 0.7 ? 'overlay' : 'screen';
+            
+            ctx.fillStyle = `hsla(${(t*20)%360}, 100%, 50%, 0.5)`;
+            
+            // Render 128.000 in Blöcken für Stabilität
+            for(let i=0; i<NODE_COUNT; i++) {
+                // Physik
+                const dx = (canvas.width/2) - nodesX[i];
+                const dy = (canvas.height/2) - nodesY[i];
+                const d = Math.sqrt(dx*dx + dy*dy) || 1;
                 
-                ctx.beginPath();
-                ctx.rect(v.x, v.y, v.size, v.size);
-                ctx.fill();
-            }
+                nodesVX[i] += (dx/d) * 0.01 * dnaVal;
+                nodesVY[i] += (dy/d) * 0.01 * dnaVal;
+                nodesX[i] += nodesVX[i];
+                nodesY[i] += nodesVY[i];
+                nodesVX[i] *= 0.95;
+                nodesVY[i] *= 0.95;
 
-            if(voxels.length > MAX_VOXELS) voxels.shift();
+                // Zeichne nur jeden n-ten Node pro Frame (Interlaced)
+                if(i % 16 === 0) {
+                    const hue = (i * 0.003 + t * 10) % 360;
+                    ctx.fillStyle = `hsla(${hue}, 100%, ${50 + res * 20}%, 0.8)`;
+                    ctx.fillRect(nodesX[i], nodesY[i], 1, 1);
+                }
+            }
 
             requestAnimationFrame(animate);
         }
