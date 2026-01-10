@@ -3,108 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | Mobile Terminal</title>
+    <title>T-ESOIST | P2P Terminal</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <style>
-        body { 
-            background: #000; color: #00f2ff; font-family: 'Courier New', monospace; 
-            margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center;
-        }
-        .debit-card { 
-            width: 100%; max-width: 350px; height: 200px; 
-            background: linear-gradient(135deg, #001a33 0%, #000 100%); 
-            border: 2px solid #00f2ff; border-radius: 15px; 
-            padding: 20px; box-sizing: border-box; position: relative;
-            box-shadow: 0 0 20px rgba(0,242,255,0.4); margin-bottom: 20px;
-        }
-        .balance-val { font-size: 26px; font-weight: bold; margin-top: 10px; }
-        
-        .terminal { 
-            width: 100%; max-width: 350px; background: rgba(0,242,255,0.05);
-            border: 1px solid #00f2ff; padding: 20px; box-sizing: border-box;
-            border-radius: 10px; text-align: center;
-        }
-        input { 
-            width: 100%; background: #000; border: 1px solid #00f2ff; 
-            color: #fff; padding: 15px; font-size: 18px; margin: 10px 0;
-            box-sizing: border-box; text-align: center;
-        }
-        .btn-pay { 
-            width: 100%; background: #00f2ff; color: #000; border: none; 
-            padding: 15px; font-weight: bold; font-size: 18px; cursor: pointer;
-            border-radius: 5px; margin-top: 10px;
-        }
-        
-        #qr-container { 
-            margin-top: 20px; padding: 15px; background: #fff; 
-            border-radius: 10px; display: none; flex-direction: column; align-items: center;
-        }
-        #qr-label { color: #000; font-size: 12px; margin-bottom: 5px; font-weight: bold; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
+        .debit-card { width: 100%; max-width: 350px; background: linear-gradient(135deg, #001a33 0%, #000 100%); border: 2px solid #00f2ff; border-radius: 15px; padding: 20px; box-sizing: border-box; box-shadow: 0 0 20px #00f2ff; margin-bottom: 20px; }
+        .terminal { width: 100%; max-width: 350px; background: rgba(0,242,255,0.05); border: 1px solid #00f2ff; padding: 20px; box-sizing: border-box; border-radius: 10px; }
+        input { width: 100%; background: #000; border: 1px solid #00f2ff; color: #fff; padding: 12px; font-size: 16px; margin: 8px 0; box-sizing: border-box; }
+        .btn-pay { width: 100%; background: #00f2ff; color: #000; border: none; padding: 15px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        #history { width: 100%; max-width: 350px; margin-top: 20px; font-size: 11px; color: #888; }
+        .history-item { border-bottom: 1px solid #333; padding: 5px 0; display: flex; justify-content: space-between; }
+        #qr-container { margin-top: 20px; padding: 15px; background: #fff; border-radius: 10px; display: none; flex-direction: column; align-items: center; }
     </style>
 </head>
 <body>
 
     <div class="debit-card">
-        <div style="font-size: 10px; opacity: 0.7;">T-ESOIST TECHNOLOGY | MOBILE</div>
-        <div style="margin: 15px 0; font-size: 14px;">Ω-19D4-50A8-MARC</div>
-        <div id="esi-val" class="balance-val">0.00 ESI</div>
-        <div id="eur-val" style="color: #fff; font-size: 18px;">0.00 &euro;</div>
-        <div style="position: absolute; bottom: 20px; font-size: 12px;">Marcel Kantimm</div>
+        <div style="font-size: 10px;">T-ESOIST P2P CORE</div>
+        <div style="margin: 10px 0;">Ω-19D4-50A8-MARC</div>
+        <div id="esi-val" style="font-size: 24px; font-weight: bold;">0.00 ESI</div>
+        <div id="eur-val">0.00 &euro;</div>
     </div>
 
     <div class="terminal">
-        <h3 style="margin: 0;">EURO TERMINAL</h3>
+        <h3 style="margin: 0; font-size: 14px;">TRANSFER TERMINAL</h3>
+        <input type="text" id="receiver" placeholder="Empfänger (Name / Wallet)">
         <input type="number" id="euro-amount" placeholder="Betrag in &euro;" step="0.01">
-        <button class="btn-pay" onclick="generatePayment()">QR-CODE GENERIEREN</button>
-        <button class="btn-pay" style="background:#ff0055; color:#fff; margin-top:10px;" onclick="processPayment()">DIREKT BEZAHLEN</button>
+        <button class="btn-pay" onclick="generateP2P()">QR-TOKEN ERZEUGEN</button>
+        <button class="btn-pay" style="background:#ff0055; color:#fff;" onclick="executeP2P()">SOFORT SENDEN</button>
     </div>
 
     <div id="qr-container">
-        <div id="qr-label">ZAHLUNGS-TOKEN</div>
         <canvas id="qrcode"></canvas>
-        <div id="qr-details" style="color:#000; font-size:10px; margin-top:5px;"></div>
+        <div id="qr-info" style="color:#000; font-size:10px; text-align:center; font-weight:bold;"></div>
+    </div>
+
+    <div id="history">
+        <strong>LETZTE TRANSAKTIONEN:</strong>
+        <div id="history-list"></div>
     </div>
 
     <script>
         let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
+        let history = JSON.parse(localStorage.getItem('HISTORY')) || [];
         const PHI = 1.61803398875;
 
         function updateUI() {
             document.getElementById('esi-val').innerText = esi.toFixed(2) + " ESI";
             document.getElementById('eur-val').innerText = (esi * PHI).toFixed(2) + " €";
             localStorage.setItem('ESI', esi);
+            renderHistory();
         }
 
-        function generatePayment() {
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = history.slice(-3).reverse().map(item => `
+                <div class="history-item">
+                    <span>${item.to}</span>
+                    <span style="color:#00f2ff;">-${item.eur}€</span>
+                </div>
+            `).join('');
+        }
+
+        function generateP2P() {
+            const rec = document.getElementById('receiver').value;
             const amt = document.getElementById('euro-amount').value;
-            if(!amt) return alert("Betrag eingeben!");
+            if(!rec || !amt) return alert("Empfänger und Betrag fehlen!");
             
-            const qrContainer = document.getElementById('qr-container');
-            const qrDetails = document.getElementById('qr-details');
-            qrContainer.style.display = 'flex';
-            
-            // QR Daten: Wallet + Betrag + Timestamp
-            const qrData = "T-ESOIST|Ω-19D4-50A8-MARC|" + amt + "|" + Date.now();
-            
-            QRCode.toCanvas(document.getElementById('qrcode'), qrData, { width: 200 }, function (error) {
-                if (error) console.error(error);
-                qrDetails.innerText = "BETRAG: " + amt + " € | STATUS: PENDING";
-            });
+            document.getElementById('qr-container').style.display = 'flex';
+            const data = `T-ESOIST|Ω-19D4-50A8-MARC|TO:${rec}|${amt}EUR`;
+            QRCode.toCanvas(document.getElementById('qrcode'), data, {width: 180});
+            document.getElementById('qr-info').innerText = "AN: " + rec + " | " + amt + " €";
         }
 
-        function processPayment() {
-            const eurAmount = parseFloat(document.getElementById('euro-amount').value);
-            if(eurAmount > 0) {
-                const reqESI = eurAmount / PHI;
-                if(esi >= reqESI) {
+        function executeP2P() {
+            const rec = document.getElementById('receiver').value;
+            const eur = parseFloat(document.getElementById('euro-amount').value);
+            const reqESI = eur / PHI;
+
+            if(rec && eur > 0 && esi >= reqESI) {
+                if(confirm(`Zahlung an ${rec} über ${eur}€ bestätigen?`)) {
                     esi -= reqESI;
-                    alert("ZAHLUNG ERFOLGREICH\n" + eurAmount.toFixed(2) + " € abgebucht.");
-                    document.getElementById('qr-container').style.display = 'none';
+                    history.push({to: rec, eur: eur.toFixed(2), date: new Date().toLocaleTimeString()});
+                    localStorage.setItem('HISTORY', JSON.stringify(history));
+                    alert("Zahlung erfolgreich gesendet!");
                     updateUI();
-                } else {
-                    alert("Deckung nicht ausreichend!");
                 }
-            }
+            } else { alert("Fehler: Daten prüfen oder Deckung unzureichend."); }
         }
 
         setInterval(() => { esi += 0.05; updateUI(); }, 1000);
