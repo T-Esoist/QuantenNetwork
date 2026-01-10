@@ -1,49 +1,68 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
     <meta charset="UTF-8">
-    <title>T-ESOIST | Secure Signing</title>
+    <title>T-ESOIST | Debit Core</title>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; padding: 20px; text-align: center; }
-        .signing-hub { border: 2px solid #00f2ff; padding: 30px; background: rgba(0,20,40,0.9); display: inline-block; }
-        .status-dot { height: 15px; width: 15px; background-color: #bbb; border-radius: 50%; display: inline-block; margin-right: 10px; }
-        .active { background-color: #00ff00; box-shadow: 0 0 10px #00ff00; }
-        .btn { background: #ff0055; color: #fff; border: none; padding: 15px 30px; cursor: pointer; font-weight: bold; margin-top: 20px; }
-        #log { margin-top: 20px; font-size: 10px; color: #888; text-align: left; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; padding: 20px; }
+        .debit-card { 
+            width: 400px; height: 250px; 
+            background: linear-gradient(135deg, #001a33 0%, #000 100%); 
+            border: 2px solid #00f2ff; border-radius: 15px; 
+            padding: 20px; position: relative; box-shadow: 0 0 30px rgba(0,242,255,0.3);
+        }
+        .chip { width: 50px; height: 40px; background: #00f2ff; border-radius: 5px; margin-bottom: 20px; opacity: 0.8; }
+        .card-number { font-size: 22px; letter-spacing: 2px; margin-bottom: 20px; color: #fff; }
+        .balance-label { font-size: 10px; color: #888; text-transform: uppercase; }
+        .balance-val { font-size: 24px; color: #00f2ff; font-weight: bold; }
+        .status-light { position: absolute; top: 20px; right: 20px; width: 12px; height: 12px; border-radius: 50%; background: #00ff00; box-shadow: 0 0 10px #00ff00; }
+        .btn-action { margin-top: 20px; background: #00f2ff; color: #000; border: none; padding: 10px 20px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="signing-hub">
-        <h2>T-ESOIST SECURE SIGNING v73.0</h2>
-        <div style="margin-bottom: 20px;">
-            <span id="dot" class="status-dot active"></span> 
-            <span>DEVICE CONNECTED: Ω-MARC-MOBILE</span>
-        </div>
-        
-        <p>Aktion: ESI-TRANSFER VALIDIERUNG</p>
-        <div id="status-text">BEREIT FÜR SIGNATUR...</div>
-        
-        <button class="btn" onclick="requestSignature()">TEST PUSH-TO-SIGN</button>
-        
-        <div id="log">
-            [SYS] Bridge: irn-relay active<br>
-            [SEC] symKey: ffe4...296a<br>
-            [AUTH] User: Marcel Kantimm
-        </div>
+    <div class="debit-card">
+        <div class="status-light"></div>
+        <div class="chip"></div>
+        <div class="card-number">Ω-19D4-50A8-MARC</div>
+        <div class="balance-label">Current ESI Debit Balance</div>
+        <div id="esi-val" class="balance-val">0.00</div>
+        <div style="margin-top: 10px; font-size: 14px; color: #fff;">VAL: <span id="eur-val">0.00</span> &euro;</div>
+        <div style="position: absolute; bottom: 20px; left: 20px; font-size: 12px;">MARCEL KANTIMM</div>
+    </div>
+
+    <div style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
+        <h3>DEBIT TRANSACTION TERMINAL</h3>
+        <input type="number" id="debit-amount" placeholder="Betrag in ESI" style="background:#000; border:1px solid #00f2ff; color:#00f2ff; padding:10px;">
+        <button class="btn-action" onclick="processDebit()">EXECUTE DEBIT</button>
     </div>
 
     <script>
-        function requestSignature() {
-            const status = document.getElementById('status-text');
-            status.innerHTML = "<span style='color:#ff0055'>WARTE AUF BESTÄTIGUNG AM HANDY...</span>";
-            console.log("Push-to-Sign Request gesendet via symKey.");
-            
-            // Simulation der Rückmeldung vom Handy
-            setTimeout(() => {
-                status.innerHTML = "<span style='color:#00ff00'>SIGNATUR ERHALTEN. TRANSAKTION VALIDIERT.</span>";
-                alert("Erfolg: Transaktion kryptografisch durch Marcel Kantimm signiert.");
-            }, 4000);
+        let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
+        const PHI = 1.61803398875;
+
+        function updateCard() {
+            document.getElementById('esi-val').innerText = esi.toFixed(2);
+            document.getElementById('eur-val').innerText = (esi * PHI).toFixed(2);
+            localStorage.setItem('ESI', esi);
         }
+
+        function processDebit() {
+            const amount = parseFloat(document.getElementById('debit-amount').value);
+            if(amount > 0 && esi >= amount) {
+                // Hier greift die Debit-Logik: Sofortige Prüfung und Abbuchung
+                if(confirm("PUSH-TO-SIGN: Möchten Sie " + amount + " ESI sofort abbuchen?")) {
+                    esi -= amount;
+                    alert("DEBIT ERFOLGREICH: Ihr Gitter wurde aktualisiert.");
+                    updateCard();
+                    // Log-Schnittstelle zur TRANSACTION_LOG.json würde hier aufgerufen
+                }
+            } else {
+                alert("DEBIT ABGELEHNT: Ungenügende Deckung im Gitter.");
+            }
+        }
+
+        setInterval(() => { esi += 0.05; updateCard(); }, 1000);
+        updateCard();
     </script>
 </body>
 </html>
