@@ -2,76 +2,54 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | Auto-Debit Terminal</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-ESOIST | eSIM Connectivity</title>
     <style>
-        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; }
-        .monitor-ring { border: 2px solid #00f2ff; border-radius: 50%; padding: 5px; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 5px #00f2ff; } 50% { box-shadow: 0 0 20px #00f2ff; } 100% { box-shadow: 0 0 5px #00f2ff; } }
-        .terminal { width: 100%; max-width: 350px; background: rgba(0,242,255,0.05); border: 1px solid #00f2ff; padding: 20px; box-sizing: border-box; border-radius: 10px; position: relative; }
-        input { width: 100%; background: #000; border: 1px solid #00f2ff; color: #fff; padding: 12px; font-size: 16px; margin: 8px 0; border-radius: 5px; }
-        .status-bar { font-size: 10px; color: #00ff00; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-main { width: 100%; background: #00f2ff; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 5px; }
-        #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
+        body { background: #000; color: #00f2ff; font-family: monospace; padding: 15px; text-align: center; }
+        .esim-box { border: 2px solid #00f2ff; padding: 20px; border-radius: 15px; background: rgba(0,242,255,0.05); }
+        .provider-list { margin-top: 20px; text-align: left; }
+        .btn-buy { width: 100%; background: #00f2ff; color: #000; border: none; padding: 15px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+        .status { font-size: 10px; color: #ff0055; margin-top: 10px; }
     </style>
 </head>
 <body>
-
-    <div class="status-bar" id="sys-status">● SYSTEM MONITOR ACTIVE | AUTO-CONNECT ENABLED</div>
-
-    <div class="terminal">
-        <div class="monitor-ring" style="width: 100%; border-radius: 10px; border-style: dashed;">
-            <div style="padding: 10px;">
-                <label style="font-size: 10px;">AUTOFILLED ID:</label>
-                <input type="text" id="wallet-id" value="Ω-19D4-50A8-MARC" readonly style="opacity: 0.6;">
-                <input type="text" id="receiver" placeholder="Empfänger Kontakt">
-                <input type="number" id="euro-amount" placeholder="Euro Betrag" oninput="monitorPayment()">
-                <button class="btn-main" onclick="initiateSecurePayment()">ZAHLUNG VALIDIEREN</button>
-            </div>
+    <div class="esim-box">
+        <h3>eSIM CONNECTIVITY HUB</h3>
+        <p style="font-size: 12px;">Keine SIM erkannt. Wähle Provider für T-ESOIST Integration:</p>
+        
+        <div class="provider-list">
+            <input type="radio" name="provider" value="15.00" id="p1"> <label for="p1">Travel-Data (15,00€ / 5GB)</label><br>
+            <input type="radio" name="provider" value="25.00" id="p2"> <label for="p2">Global-Connect (25,00€ / 20GB)</label><br>
         </div>
-    </div>
 
-    <div id="overlay">
-        <h2 style="color: #00f2ff;">PROZESS ÜBERWACHUNG</h2>
-        <div id="qr-target"></div>
-        <p id="process-log" style="font-size: 12px; color: #00ff00;"></p>
-        <button class="btn-main" style="width: 200px; background: #ff0055; color: #fff;" onclick="closeOverlay()">ABBRECHEN</button>
+        <button class="btn-buy" onclick="buyESim()">ESIM MIT DEBIT BEZAHLEN</button>
+        <div id="esim-status" class="status">SYSTEM READY</div>
     </div>
 
     <script>
-        const PHI = 1.61803398875;
         let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
+        const PHI = 1.61803398875;
 
-        function monitorPayment() {
-            const amt = document.getElementById('euro-amount').value;
-            const status = document.getElementById('sys-status');
-            if(amt > 0) {
-                status.innerText = "● MONITORING TRANSACTION: " + amt + "€ (" + (amt/PHI).toFixed(2) + " ESI)";
-                status.style.color = "#ff0055";
+        function buyESim() {
+            const selected = document.querySelector('input[name="provider"]:checked');
+            if(!selected) return alert("Bitte Anbieter wählen!");
+            
+            const priceEUR = parseFloat(selected.value);
+            const reqESI = priceEUR / PHI;
+
+            if(esi >= reqESI) {
+                if(confirm("eSIM Kauf bestätigen:\nPreis: " + priceEUR + "€ (" + reqESI.toFixed(2) + " ESI)")) {
+                    esi -= reqESI;
+                    localStorage.setItem('ESI', esi);
+                    document.getElementById('esim-status').innerText = "ZAHLUNG ERFOLGREICH. GENERIERE ESIM-PROFIL...";
+                    setTimeout(() => {
+                        alert("ERFOLG: Transaktion im Gitter verbucht. Du kannst jetzt den QR-Code des Anbieters in deinen Handy-Einstellungen scannen.");
+                    }, 2000);
+                }
+            } else {
+                alert("Nicht genug ESI im Gitter!");
             }
         }
-
-        function initiateSecurePayment() {
-            const receiver = document.getElementById('receiver').value;
-            const amount = document.getElementById('euro-amount').value;
-            if(!receiver || !amount) return alert("Fehlende Daten!");
-
-            document.getElementById('overlay').style.display = 'flex';
-            const log = document.getElementById('process-log');
-            
-            log.innerText = "Verbinde mit Gitter...";
-            setTimeout(() => { log.innerText = "Prüfe Deckung..."; }, 1000);
-            setTimeout(() => { 
-                log.innerText = "Generiere QR-Auth-Token...";
-                QRCode.toCanvas(document.getElementById('qr-target'), "T-ESOIST|Ω-19D4-50A8-MARC|"+receiver+"|"+amount, {width: 250});
-            }, 2000);
-            setTimeout(() => { log.innerText = "WARTET AUF BESTÄTIGUNG..."; }, 3000);
-        }
-
-        function closeOverlay() { document.getElementById('overlay').style.display = 'none'; }
-        
-        setInterval(() => { esi += 0.05; localStorage.setItem('ESI', esi); }, 1000);
     </script>
 </body>
 </html>
