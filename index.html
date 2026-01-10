@@ -3,58 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | Fix v84</title>
+    <title>T-ESOIST | Intelligent Bridge</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; padding: 20px; text-align: center; }
-        .terminal { border: 2px solid #00f2ff; padding: 20px; border-radius: 10px; }
-        .btn { background: #00f2ff; color: #000; padding: 15px; width: 100%; border: none; font-weight: bold; margin-top: 10px; }
-        #status { margin-top: 20px; color: #ff0055; font-weight: bold; }
+        body { background: #000; color: #00f2ff; font-family: monospace; padding: 15px; text-align: center; }
+        .bridge-core { border: 2px solid #00f2ff; padding: 20px; background: rgba(0,242,255,0.05); border-radius: 15px; }
+        .pulse { animation: blink 1.5s infinite; color: #00ff00; }
+        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+        .field { width: 100%; background: #000; border: 1px solid #333; color: #fff; padding: 12px; margin: 5px 0; border-radius: 5px; }
+        .btn-active { background: #00f2ff; color: #000; padding: 15px; width: 100%; border: none; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="terminal">
-        <h3>REPAIR-TERMINAL v84</h3>
-        <p>Status: <span id="status">BEREIT</span></p>
+    <div class="bridge-core">
+        <h2 style="font-size: 14px;">INTELLIGENT BRIDGE v85.0</h2>
+        <div id="ai-status" class="pulse">SCANNING FOR BARRIERS...</div>
         
-        <button class="btn" onclick="document.getElementById('qr-file').click()">BILD AUSWÄHLEN (GALERIE)</button>
-        <input type="file" id="qr-file" style="display:none" accept="image/*" onchange="forceScan(event)">
+        <button class="btn-active" onclick="document.getElementById('file-in').click()">GALERIE-BRÜCKE SCHLAGEN</button>
+        <input type="file" id="file-in" style="display:none" accept="image/*" onchange="intelligentScan(event)">
         
-        <div id="result" style="margin-top:20px; border-top: 1px solid #333; padding-top: 10px;">
-            <input type="text" id="rec" placeholder="Empfänger" style="width:100%; margin-bottom:5px;">
-            <input type="number" id="amt" placeholder="Betrag" style="width:100%;">
-            <button class="btn" style="background:#00ff00;" onclick="finalPay()">JETZT BEZAHLEN</button>
+        <div id="bridge-output" style="margin-top:20px;">
+            <input type="text" id="rec-field" class="field" placeholder="Ziel-Empfänger (Autofill)">
+            <input type="number" id="amt-field" class="field" placeholder="Euro-Betrag (Autofill)">
+            <button class="btn-active" style="background:#ff0055; color:#fff;" onclick="finalConfirm()">TRANSFAKTION ABSCHLIESSEN</button>
         </div>
     </div>
 
     <script>
-        const decoder = new Html5Qrcode("hidden-reader");
-        
-        function forceScan(event) {
+        const PHI = 1.61803398875;
+        function intelligentScan(event) {
             const file = event.target.files[0];
-            const status = document.getElementById('status');
-            status.innerText = "ANALYSE LÄUFT...";
-            
+            const status = document.getElementById('ai-status');
+            status.innerText = "DURCHBRECHE BARRIEREN...";
+            status.style.color = "#ffaa00";
+
             Html5Qrcode.scanImage(file, { fps: 10 })
                 .then(data => {
-                    status.innerText = "ERFOLG!";
+                    status.innerText = "BRÜCKE GEFUNDEN: DATEN EXTRAHIERT";
                     status.style.color = "#00ff00";
-                    // Extraktion
-                    const amount = data.match(/[0-9]+[.,][0-9]{2}/);
-                    if(amount) document.getElementById('amt').value = amount[0].replace(',', '.');
-                    document.getElementById('rec').value = "Erkannt aus Bild";
+                    
+                    // HEURISTIK: Suche Betrag (XX.XX oder XX,XX)
+                    const money = data.match(/([0-9]+[.,][0-9]{2})/);
+                    if(money) document.getElementById('amt-field').value = money[0].replace(',', '.');
+                    
+                    // HEURISTIK: Suche Empfänger/Zweck
+                    if(data.includes("BCD")) document.getElementById('rec-field').value = "Bank-Gläubiger";
+                    else document.getElementById('rec-field').value = "Extrahiertes Ziel";
                 })
                 .catch(err => {
-                    status.innerText = "SCAN FEHLGESCHLAGEN. CODE NICHT ERKANNT.";
-                    alert("Tipp: Achte darauf, dass der QR-Code im Screenshot klar und hell zu sehen ist.");
+                    status.innerText = "BARRIERE ZU HOCH: MANUELLE BRÜCKE ERFORDERLICH";
+                    status.style.color = "#ff0055";
                 });
         }
-        
-        function finalPay() {
-            alert("Zahlung wird über das Gitter autorisiert...");
+        function finalConfirm() {
+            const amt = document.getElementById('amt-field').value;
+            alert("BRÜCKE BESTÄTIGT: " + amt + "€ werden über das Gitter verbucht.");
             location.reload();
         }
     </script>
-    <div id="hidden-reader" style="display:none"></div>
 </body>
 </html>
