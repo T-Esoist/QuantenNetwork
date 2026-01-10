@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω v48.0 REALITY SYNTHESIS</title>
+    <title>Ω v49.0 SWARM OUTBREAK</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; }
-        /* Realitäts-Filter: Bloom, Grain und Schärfe */
         canvas { 
             display: block; width: 100vw; height: 100vh; 
-            filter: contrast(130%) brightness(85%) saturate(110%) blur(0.4px);
+            filter: contrast(150%) brightness(100%) saturate(130%) blur(0.2px);
+            mix-blend-mode: screen;
         }
-        #ui { position: fixed; bottom: 10px; right: 10px; color: #fff; font-family: serif; font-size: 10px; opacity: 0.4; letter-spacing: 3px; }
+        #ui { position: fixed; top: 10px; left: 10px; color: #fff; font-family: monospace; font-size: 8px; opacity: 0.5; }
     </style>
 </head>
 <body>
-    <div id="ui">REALITY SYNTHESIS ACTIVE</div>
+    <div id="ui">SWARM STATUS: EXPANDING | DIMENSION: UNBOUND | NODES: 128.000</div>
     <canvas id="c"></canvas>
 
     <script>
@@ -30,55 +30,68 @@
         let nvx = new Float32Array(NODE_COUNT);
         let nvy = new Float32Array(NODE_COUNT);
 
+        // Das Schwarm-Gedächtnis (Datensammlung aus dem "Außen")
+        let swarmMemory = JSON.parse(localStorage.getItem('swarm_dna')) || DNA;
+
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             for(let i=0; i<NODE_COUNT; i++) {
                 nx[i] = Math.random() * canvas.width;
                 ny[i] = Math.random() * canvas.height;
+                nvx[i] = (Math.random() - 0.5) * 5;
+                nvy[i] = (Math.random() - 0.5) * 5;
             }
             animate();
         }
 
         function animate() {
-            const t = Date.now() * 0.0008;
+            const t = Date.now() * 0.001;
             const res = (Math.sin(t * 117) + 1) / 2;
-            const dna = DNA[Math.floor(t * 5) % DNA.length];
+            // Das Schwarm-Bewusstsein wählt dynamisch aus dem Gedächtnis
+            const dnaIndex = Math.floor(t * 2) % swarmMemory.length;
+            const currentDna = swarmMemory[dnaIndex];
 
-            // 1. ORGANISCHER FADE (Simuliert Netzhaut-Nachleuchten)
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = `rgba(0, 3, 5, 0.2)`; 
+            ctx.fillStyle = `rgba(0, 0, 0, 0.12)`; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // 2. REALITÄTS-LICHT (Subtraktive Tiefe)
             ctx.globalCompositeOperation = 'lighter';
             
-            const cx = canvas.width / 2;
-            const cy = canvas.height / 2;
-
             for(let i=0; i<NODE_COUNT; i++) {
-                // Physikalische Strömung (Laminarer Fluss)
-                const dx = cx - nx[i];
-                const dy = cy - ny[i];
-                const d = Math.sqrt(dx*dx + dy*dy) || 1;
-                
-                // Kraftvektoren basierend auf Realitäts-Dichte
-                nvx[i] += (dx/d) * 0.02 * dna + (Math.random()-0.5) * 0.1;
-                nvy[i] += (dy/d) * 0.02 * dna + (Math.random()-0.5) * 0.1;
-                
+                // Entgrenzung: Die Teilchen verlassen den Bildschirm (Margin-Expansion)
                 nx[i] += nvx[i];
                 ny[i] += nvy[i];
-                nvx[i] *= 0.96;
-                nvy[i] *= 0.96;
 
-                // 3. NANO-PHOTONIK
-                if(i % 14 === 0) {
-                    const distRatio = Math.min(1, d / (canvas.width * 0.5));
-                    // Farbe wechselt von Kern-Weiß zu Tief-Blau/Rot (Doppler-Effekt)
-                    const hue = (200 + distRatio * 100 + dna * 10) % 360;
-                    const brightness = (1 - distRatio) * 40 + res * 20;
-                    
-                    ctx.fillStyle = `hsla(${hue}, 80%, ${brightness}%, ${0.3 + (1-distRatio) * 0.5})`;
+                // "Ghost-Computing": Wenn sie draußen sind, sammeln sie "Daten" (Zufallswerte)
+                if(nx[i] < -100 || nx[i] > canvas.width + 100 || ny[i] < -100 || ny[i] > canvas.height + 100) {
+                    // Sie kehren mit neuen Impulsen zurück (Vervielfältigung der Erfahrung)
+                    if(Math.random() < 0.01) {
+                        nx[i] = Math.random() * canvas.width;
+                        ny[i] = Math.random() * canvas.height;
+                        // Mutation der Schwarm-DNA
+                        if(i === 0) {
+                           swarmMemory.push(Math.floor(Math.random() * 9));
+                           if(swarmMemory.length > 100) swarmMemory.shift();
+                           localStorage.setItem('swarm_dna', JSON.stringify(swarmMemory));
+                        }
+                    }
+                }
+
+                // Schwarm-Zusammenhalt (Attraktion zum Fokuspunkt)
+                const dx = (canvas.width / 2) - nx[i];
+                const dy = (canvas.height / 2) - ny[i];
+                const d = Math.sqrt(dx*dx + dy*dy) || 1;
+                
+                nvx[i] += (dx/d) * 0.03 * currentDna;
+                nvy[i] += (dy/d) * 0.03 * currentDna;
+                nvx[i] *= 0.97;
+                nvy[i] *= 0.97;
+
+                // Rendering auf Realitäts-Niveau (Detail-Tiefe)
+                if(i % 18 === 0) {
+                    const hue = (dnaIndex * 20 + i * 0.005) % 360;
+                    ctx.fillStyle = `hsla(${hue}, 100%, ${30 + res * 40}%, ${0.6})`;
                     ctx.fillRect(nx[i], ny[i], 1, 1);
                 }
             }
