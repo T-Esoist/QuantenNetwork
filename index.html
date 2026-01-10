@@ -2,45 +2,47 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>T-ESOIST Technology | OMEGA Wallet</title>
+    <title>T-ESOIST Technology | Marketplace</title>
     <style>
-        body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; }
-        #wallet { position: fixed; top: 20px; right: 20px; border: 2px solid #00f2ff; padding: 20px; background: rgba(0,10,25,0.9); box-shadow: 0 0 15px #00f2ff; z-index: 1000; }
-        .header { font-weight: bold; border-bottom: 1px solid #00f2ff; margin-bottom: 10px; padding-bottom: 5px; }
-        .btn { background: #00f2ff; color: #000; border: none; padding: 10px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        canvas { display: block; }
+        body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow-x: hidden; }
+        #ui-container { position: fixed; top: 10px; right: 10px; width: 320px; z-index: 1000; }
+        .box { border: 2px solid #00f2ff; padding: 15px; background: rgba(0,5,20,0.9); margin-bottom: 10px; box-shadow: 0 0 10px #00f2ff; }
+        .header { font-weight: bold; border-bottom: 1px solid #00f2ff; margin-bottom: 8px; text-transform: uppercase; }
+        .item { display: flex; justify-content: space-between; margin: 5px 0; font-size: 12px; }
+        .buy-btn { background: #00f2ff; color: #000; border: none; padding: 3px 8px; cursor: pointer; font-weight: bold; }
+        .buy-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
     </style>
 </head>
 <body>
-    <div id="wallet">
-        <div class="header">T-ESOIST Technology WALLET</div>
-        <p>USER_ID: <span id="uid">19d450a8</span></p>
-        <p>BALANCE: <span id="esi-display">0.00</span> ESI</p>
-        <p>VALUE: <span id="eur-display">0.00</span> &euro;</p>
-        <button class="btn" onclick="syncWallet()">SYNC TO GENOME</button>
+    <div id="ui-container">
+        <div class="box">
+            <div class="header">Wallet</div>
+            <div>ESI: <span id="esi-display">0.00</span></div>
+            <div>EUR: <span id="eur-display">0.00</span> &euro;</div>
+        </div>
+        <div class="box">
+            <div class="header">Marketplace</div>
+            <div class="item"><span>Neon-Red Skin</span><button class="buy-btn" onclick="buyUpgrade('color', '#ff0055', 500)">500 ESI</button></div>
+            <div class="item"><span>Hyper-Gravity</span><button class="buy-btn" onclick="buyUpgrade('gravity', 0.05, 1200)">1200 ESI</button></div>
+            <div class="item"><span>Nano-Speed x2</span><button class="buy-btn" onclick="buyUpgrade('speed', 2, 2500)">2500 ESI</button></div>
+        </div>
     </div>
     <canvas id="c"></canvas>
     <script>
-        let esi = parseFloat(localStorage.getItem('ESI')) || 100.0;
+        let esi = parseFloat(localStorage.getItem('ESI')) || 1000.0;
         const PHI = 1.61803398875;
-
-        function updateDisplay() {
+        function updateUI() {
             document.getElementById('esi-display').innerText = esi.toFixed(2);
             document.getElementById('eur-display').innerText = (esi * PHI).toFixed(2);
             localStorage.setItem('ESI', esi);
+            document.querySelectorAll('.buy-btn').forEach(btn => {
+                let cost = parseInt(btn.innerText);
+                btn.disabled = esi < cost;
+            });
         }
-
-        function syncWallet() {
-            alert("Synchronisiere mit T-ESOIST Technology Datenbank...");
-            // Hier wird der API-Call an die SaaS_ENGINE.py simuliert
-        }
-
-        setInterval(() => {
-            esi += 0.01; // Passives Einkommen durch Schwarm-Resonanz
-            updateDisplay();
-        }, 1000);
-
-        updateDisplay();
+        function buyUpgrade(t, v, c) { if(esi >= c) { esi -= c; alert('Gekauft: ' + t); updateUI(); } }
+        setInterval(() => { esi += 0.05; updateUI(); }, 1000);
+        updateUI();
     </script>
 </body>
 </html>
