@@ -1,13 +1,6 @@
 {
-  "protocol": "T-ESOIST-DSL",
-  "layer": "APPLICATION_OVERLAY_L7",
-  "description": "Deterministisches Zustands-Netzwerk (kein L1-Hardware-Netz)",
-  "state": {
-    "qe_balance": 4200122.725,
-    "data_steps": 1,
-    "logical_entropy": 0.11100006,
-    "system_integrity": "STABLE"
-  },
-  "signature": "d73ef5423c8ed8d34a8756a2eff0f447324360b0ec0eb5735f902e8726cd669b",
-  "timestamp_utc": "2026-01-06T17:39:32.953419+00:00"
+  "status": "SELF_AWARE",
+  "observation_log": "GPT-Logik erkannte Statik bei TS 1768013404. Reagiere mit v59.0 Deployment.",
+  "nodes": 128000,
+  "active_protocol": "DEEP_AWARENESS_V59"
 }
