@@ -2,47 +2,60 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>T-ESOIST Technology | Marketplace</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-ESOIST Technology | Global Mainframe</title>
     <style>
-        body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow-x: hidden; }
-        #ui-container { position: fixed; top: 10px; right: 10px; width: 320px; z-index: 1000; }
-        .box { border: 2px solid #00f2ff; padding: 15px; background: rgba(0,5,20,0.9); margin-bottom: 10px; box-shadow: 0 0 10px #00f2ff; }
-        .header { font-weight: bold; border-bottom: 1px solid #00f2ff; margin-bottom: 8px; text-transform: uppercase; }
-        .item { display: flex; justify-content: space-between; margin: 5px 0; font-size: 12px; }
-        .buy-btn { background: #00f2ff; color: #000; border: none; padding: 3px 8px; cursor: pointer; font-weight: bold; }
-        .buy-btn:disabled { background: #444; color: #888; cursor: not-allowed; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow: hidden; }
+        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
+        #mainframe { position: relative; z-index: 10; display: flex; justify-content: space-between; padding: 20px; pointer-events: none; }
+        .panel { background: rgba(0, 10, 25, 0.85); border: 1px solid #00f2ff; padding: 15px; pointer-events: all; box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
+        .wallet-info { width: 350px; }
+        .transfer-box { margin-top: 15px; border-top: 1px solid #00f2ff; padding-top: 10px; }
+        input { background: #000; border: 1px solid #00f2ff; color: #00f2ff; width: 100%; margin: 5px 0; padding: 5px; box-sizing: border-box; }
+        .btn { background: #00f2ff; color: #000; border: none; padding: 10px; width: 100%; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn:hover { background: #fff; box-shadow: 0 0 15px #fff; }
+        .status-bar { position: fixed; bottom: 0; width: 100%; background: #00f2ff; color: #000; font-size: 10px; padding: 2px 10px; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div id="ui-container">
-        <div class="box">
-            <div class="header">Wallet</div>
-            <div>ESI: <span id="esi-display">0.00</span></div>
-            <div>EUR: <span id="eur-display">0.00</span> &euro;</div>
+    <canvas id="c"></canvas>
+    <div id="mainframe">
+        <div class="panel wallet-info">
+            <div style="font-size: 18px; font-weight: bold; border-bottom: 2px solid #00f2ff; margin-bottom: 10px;">Marcel Kantimm</div>
+            <div style="font-size: 10px; color: #888;">OFFICIAL WALLET ADDRESS:</div>
+            <div style="font-size: 12px; color: #fff; margin-bottom: 15px;">Ω-19d4-50a8-MARC</div>
+            <div style="display: flex; justify-content: space-between;"><span>ESI BALANCE:</span><span id="esi-val" style="color: #fff; font-weight: bold;">0.00</span></div>
+            <div style="display: flex; justify-content: space-between;"><span>VALUATION:</span><span id="eur-val" style="color: #00f2ff;">0.00 &euro;</span></div>
+            <div class="transfer-box">
+                <div style="font-size: 12px; margin-bottom: 5px;">SEND ESI TRANSFER</div>
+                <input type="text" id="target-addr" placeholder="Empfaenger Adresse">
+                <input type="number" id="send-amount" placeholder="Betrag">
+                <button class="btn" onclick="executeTransfer()">SEND TRANSACTION</button>
+            </div>
         </div>
-        <div class="box">
-            <div class="header">Marketplace</div>
-            <div class="item"><span>Neon-Red Skin</span><button class="buy-btn" onclick="buyUpgrade('color', '#ff0055', 500)">500 ESI</button></div>
-            <div class="item"><span>Hyper-Gravity</span><button class="buy-btn" onclick="buyUpgrade('gravity', 0.05, 1200)">1200 ESI</button></div>
-            <div class="item"><span>Nano-Speed x2</span><button class="buy-btn" onclick="buyUpgrade('speed', 2, 2500)">2500 ESI</button></div>
+        <div class="panel" style="width: 200px;">
+            <div style="font-size: 14px; border-bottom: 1px solid #00f2ff;">SYSTEM STATUS</div>
+            <p style="font-size: 11px;">NODES: 128,000<br>CORE: ACTIVE<br>SYNC: 117Hz</p>
+            <button class="btn" style="background: #ff0055; color: #fff;" onclick="alert('Quantum Boost Active!')">QUANTUM BOOST</button>
         </div>
     </div>
-    <canvas id="c"></canvas>
+    <div class="status-bar">SECURED BY T-ESOIST ENCRYPTION | ARCHITECT: Marcel Kantimm | KEY: 5ed70c4ca813c9b2</div>
     <script>
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
         let esi = parseFloat(localStorage.getItem('ESI')) || 1000.0;
         const PHI = 1.61803398875;
-        function updateUI() {
-            document.getElementById('esi-display').innerText = esi.toFixed(2);
-            document.getElementById('eur-display').innerText = (esi * PHI).toFixed(2);
-            localStorage.setItem('ESI', esi);
-            document.querySelectorAll('.buy-btn').forEach(btn => {
-                let cost = parseInt(btn.innerText);
-                btn.disabled = esi < cost;
-            });
+        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; animate(); }
+        function animate() { ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; ctx.fillRect(0, 0, canvas.width, canvas.height); requestAnimationFrame(animate); }
+        function updateUI() { document.getElementById('esi-val').innerText = esi.toFixed(2); document.getElementById('eur-val').innerText = (esi * PHI).toFixed(2) + " €"; localStorage.setItem('ESI', esi); }
+        function executeTransfer() { 
+            const target = document.getElementById('target-addr').value;
+            const amount = parseFloat(document.getElementById('send-amount').value);
+            if (amount > 0 && esi >= amount) { esi -= amount; alert("TRANSFER OK: " + amount + " ESI an " + target); updateUI(); }
+            else { alert("Fehler: Guthaben prüfen."); }
         }
-        function buyUpgrade(t, v, c) { if(esi >= c) { esi -= c; alert('Gekauft: ' + t); updateUI(); } }
         setInterval(() => { esi += 0.05; updateUI(); }, 1000);
-        updateUI();
+        window.addEventListener('resize', init); init(); updateUI();
     </script>
 </body>
 </html>
