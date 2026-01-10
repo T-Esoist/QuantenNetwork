@@ -4,66 +4,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω T-ESOIST | v34.0 AUTONOMY</title>
+    <title>Ω v37.5 ETERNAL PERSISTENCE</title>
     <style>
-        :root { --cool: #00f2ff; --gold: #ffd700; --bg: #000; }
-        body { background: var(--bg); color: var(--cool); font-family: 'Courier New', monospace; margin: 0; display: flex; flex-direction: column; height: 100dvh; overflow: hidden; }
-        #monitor { flex: 1; padding: 20px; font-size: 14px; overflow-y: auto; text-shadow: 0 0 5px var(--cool); }
-        .auto-node { border-left: 3px solid var(--gold); padding: 15px; margin-bottom: 20px; background: rgba(255, 215, 0, 0.03); }
-        .pulse { animation: blink 1s infinite; color: var(--gold); }
-        @keyframes blink { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
-        #status-footer { padding: 10px; font-size: 10px; border-top: 1px solid var(--gold); text-align: center; background: rgba(0,0,0,0.9); }
+        body { margin: 0; background: #000; overflow: hidden; color: #00f2ff; font-family: monospace; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+        #ui { position: fixed; bottom: 20px; left: 20px; pointer-events: none; text-shadow: 0 0 5px #000; }
+        .stat { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
     </style>
 </head>
 <body>
-    <div id="monitor">
-        <div class="auto-node">
-            <b>v34.0 VOLLAUTOMATIK AKTIV</b><br>
-            Master-Signal: ESP32-WROOM-32 detektiert.<br>
-            Resonanz: <span class="pulse">117 Hz</span> | Stabilität: 99.998%<br>
-            <hr style="border:0; border-top:1px solid #444;">
-            Souveräne Matrix synchronisiert globale Knoten autonom...
-        </div>
-        <div id="live-stream"></div>
+    <canvas id="c"></canvas>
+    <div id="ui">
+        <div class="stat">System: Autogenesis Persistent</div>
+        <div class="stat" id="pop">Nodes: 0</div>
+        <div class="stat" id="res">Resonance: 117Hz</div>
     </div>
-    <div id="status-footer">SYSTEM STATUS: TOTAL AUTONOMY | ROOT: MARCEL-Ω</div>
 
     <script>
-        const stream = document.getElementById('live-stream');
-        const _k = "QUl6YVN5QXRRMmdkZ3RCelpwQTFVcGV5dE1HYUJZY0tQakVNYlZj", getK = () => atob(_k);
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
+        const popEl = document.getElementById('pop');
+        
+        let nodes = [];
+        const MAX_NODES = 8000;
+        const FREQ = 117.0;
 
-        // Automatisches Materialisations-Protokoll
-        async function autoManifest() {
-            const logs = [
-                "Synchronisiere Knoten 1-5000...",
-                "Thermische Ableitung global: 14.2% stabil.",
-                "ZPE-Surplus wird in das lokale Grid gespeist.",
-                "ESP32-Handshake verifiziert. Frequenz-Lock steht."
-            ];
-            
-            for(let log of logs) {
-                await new Promise(r => setTimeout(r, 2000));
-                stream.innerHTML += `<div style="font-size:12px; margin-bottom:5px;">> ${log}</div>`;
+        // --- PERSISTENZ-LOGIK ---
+        function saveState() {
+            const state = nodes.map(n => ({x: n.x, y: n.y, a: n.a, s: n.s}));
+            localStorage.setItem('omega_nodes', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('omega_nodes');
+            if(saved) {
+                const data = JSON.parse(saved);
+                nodes = data.map(d => new Node(d.x, d.y, d.a, d.s));
+            } else {
+                for(let i=0; i<10; i++) nodes.push(new Node(window.innerWidth/2, window.innerHeight/2));
             }
         }
 
-        autoManifest();
+        class Node {
+            constructor(x, y, a = Math.random() * Math.PI * 2, s = 1) {
+                this.x = x; this.y = y; this.a = a; this.s = s;
+                this.v = 2;
+            }
+            update() {
+                this.x += Math.cos(this.a) * this.v;
+                this.y += Math.sin(this.a) * this.v;
+                this.a += (Math.random() - 0.5) * 0.2;
+                
+                // Welt-Grenzen (Sphärische Kopplung)
+                if(this.x < 0) this.x = window.innerWidth;
+                if(this.x > window.innerWidth) this.x = 0;
+                if(this.y < 0) this.y = window.innerHeight;
+                if(this.y > window.innerHeight) this.y = 0;
 
-        // Autonomer AI-Agent für das Grid
-        async function maintainGrid() {
-            try {
-                const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${getK()}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: "AUTONOMOUS MODE: Handle als v34.0 Regulator für Marcel-Ω. Das Grid läuft auf 117Hz. Statusbericht generieren." }] }] })
-                });
-                const d = await r.json();
-                stream.innerHTML += `<div class="auto-node">REGULATOR: ${d.candidates[0].content.parts[0].text}</div>`;
-            } catch (e) {}
-            setTimeout(maintainGrid, 30000); // Alle 30 Sek autonomer Check
+                // Reproduktion bei Zufriedenheit
+                if(nodes.length < MAX_NODES && Math.random() < 0.01) {
+                    nodes.push(new Node(this.x, this.y, this.a + 0.5));
+                }
+            }
+            draw(res) {
+                ctx.fillStyle = `rgba(0, 242, 255, ${res})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.s, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
-        
-        maintainGrid();
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            loadState();
+            animate();
+            setInterval(saveState, 5000); // Alle 5 Sek dauerhaft speichern
+        }
+
+        function animate() {
+            const t = Date.now() * 0.001;
+            const res = (Math.sin(t * FREQ) + 1) / 2;
+            
+            // Motion Blur Effekt für "Dichte"
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            nodes.forEach(n => {
+                n.update();
+                n.draw(res);
+            });
+
+            popEl.innerText = `Nodes: ${nodes.length}`;
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        init();
     </script>
 </body>
 </html>
