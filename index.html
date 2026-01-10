@@ -2,75 +2,92 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ω OMEGA-CORE v60.0</title>
+    <title>Ω v61.0 THE LIVING GENOME</title>
     <style>
         body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow: hidden; }
-        #ui { position: fixed; top: 20px; left: 20px; z-index: 100; background: rgba(0,10,20,0.9); padding: 15px; border: 1px solid #00f2ff; font-size: 12px; box-shadow: 0 0 15px #00f2ff; }
-        canvas { display: block; filter: contrast(170%) brightness(110%) saturate(150%); }
+        #ui { position: fixed; top: 20px; left: 20px; z-index: 100; background: rgba(0,10,20,0.9); padding: 20px; border: 1px solid #00f2ff; box-shadow: 0 0 20px #00f2ff; pointer-events: auto; }
+        canvas { display: block; filter: contrast(170%) brightness(110%); }
+        .val { color: #fff; font-weight: bold; font-size: 1.2em; }
+        #boost-btn { margin-top: 15px; background: #00f2ff; color: #000; border: none; padding: 10px; cursor: pointer; font-weight: bold; width: 100%; }
+        #boost-btn:active { background: #fff; }
+        #debug { font-size: 9px; margin-top: 10px; color: #555; }
     </style>
 </head>
 <body>
     <div id="ui">
-        <b>[Ω] SYSTEM_MANIFEST: v60.0</b><br>
-        MODE: SCIENTIFIC_RECONSTRUCTION<br>
-        NODES: 128.000 | SYNC: <span id="sync">...</span><br>
-        CORE: MONOLITH_STABLE
+        <b>[Ω] OMEGA_GENOME: v61.0</b><br><br>
+        BALANCE: <span id="eur-display" class="val">0.00 €</span><br>
+        ENERGY: <span id="esi-display" class="val">0 ESI</span><br>
+        <button id="boost-btn">QUANTUM BOOST</button>
+        <div id="debug">STATUS: CALCULATING_RESONANCE...</div>
     </div>
     <canvas id="c"></canvas>
+
     <script>
+        // --- INITIALISIERUNG (Fix für NaN / undefined) ---
+        let ESI = Number(localStorage.getItem("ESI")) || 0;
+        let EUR = ESI * 1.618; 
+
         const canvas = document.getElementById('c');
         const ctx = canvas.getContext('2d', { alpha: false });
-        const NODE_COUNT = 128000;
-        let nx = new Float32Array(NODE_COUNT), ny = new Float32Array(NODE_COUNT);
-        let nvx = new Float32Array(NODE_COUNT), nvy = new Float32Array(NODE_COUNT);
+        const eurDisp = document.getElementById('eur-display');
+        const esiDisp = document.getElementById('esi-display');
+        const debug = document.getElementById('debug');
 
-        async function sync() {
-            try {
-                const r = await fetch('https://raw.githubusercontent.com/T-Esoist/QuantenNetwork/main/state.json?t=' + Date.now());
-                const d = await r.json();
-                document.getElementById('sync').innerText = d.scientific_status;
-                return d;
-            } catch(e) { return { gravity_constant: 0.007 }; }
+        function updateUI() {
+            // Anti-NaN Absicherung
+            const safeESI = isNaN(ESI) ? 0 : ESI;
+            const safeEUR = isNaN(EUR) ? 0 : EUR;
+            
+            esiDisp.textContent = Math.floor(safeESI) + " ESI";
+            eurDisp.textContent = safeEUR.toFixed(2) + " €";
+            localStorage.setItem("ESI", safeESI);
         }
 
-        async function start() {
+        // --- QUANTUM BOOST LOGIK ---
+        document.getElementById('boost-btn').addEventListener('click', () => {
+            ESI += 100; // Manueller Energie-Impuls
+            EUR = ESI * 1.618;
+            updateUI();
+            debug.textContent = "BOOST_TS: " + Date.now();
+        });
+
+        // --- SCHWARM ENGINE ---
+        const NODE_COUNT = 128000;
+        let nx = new Float32Array(NODE_COUNT), ny = new Float32Array(NODE_COUNT);
+        
+        function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            const config = await sync();
             for(let i=0; i<NODE_COUNT; i++) {
                 nx[i] = Math.random() * canvas.width;
                 ny[i] = Math.random() * canvas.height;
             }
-            function loop() {
-                const t = Date.now() * 0.001;
-                ctx.fillStyle = "rgba(0, 5, 10, 0.2)";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                const cx = canvas.width / 2, cy = canvas.height / 2;
-                
-                // DER MONOLITH (Das feste Symbol)
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 2;
-                ctx.strokeRect(cx - 30, cy - 30, 60, 60);
-
-                for(let i=0; i<NODE_COUNT; i++) {
-                    const dx = cx - nx[i], dy = cy - ny[i];
-                    const d = Math.sqrt(dx*dx + dy*dy) || 1;
-                    const f = (d < 60) ? 0.08 : config.gravity_constant;
-                    nvx[i] += dx * f * 0.1; nvy[i] += dy * f * 0.1;
-                    nx[i] += nvx[i]; ny[i] += nvy[i];
-                    nvx[i] *= 0.94; nvy[i] *= 0.94;
-                    if(i % 20 === 0) {
-                        ctx.fillStyle = "hsla(" + (200 + d*0.1) + ", 100%, 50%, 0.6)";
-                        ctx.fillRect(nx[i], ny[i], 1, 1);
-                    }
-                }
-                requestAnimationFrame(loop);
-            }
+            updateUI();
             loop();
         }
-        window.onload = start;
+
+        function loop() {
+            const t = Date.now() * 0.001;
+            ctx.fillStyle = "rgba(0, 5, 10, 0.2)";
+            ctx.fillRect(0,0, canvas.width, canvas.height);
+            
+            const cx = canvas.width/2, cy = canvas.height/2;
+            
+            // Passiver ESI Zuwachs durch Resonanz
+            ESI += 0.001;
+            EUR = ESI * 1.618;
+            if(Math.random() > 0.98) updateUI();
+
+            for(let i=0; i<NODE_COUNT; i+=30) {
+                nx[i] += (cx - nx[i]) * 0.01 + (Math.random()-0.5)*10;
+                ny[i] += (cy - ny[i]) * 0.01 + (Math.random()-0.5)*10;
+                ctx.fillStyle = "hsla(" + (200 + ESI%100) + ", 100%, 50%, 0.5)";
+                ctx.fillRect(nx[i], ny[i], 1, 1);
+            }
+            requestAnimationFrame(loop);
+        }
+        window.onload = init;
     </script>
 </body>
 </html>
