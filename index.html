@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω v40.0 SILICON ARCHITECT</title>
+    <title>Ω v41.0 THE LIVING CANVAS</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; color: #00f2ff; font-family: monospace; }
-        canvas { display: block; width: 100vw; height: 100vh; }
-        #stats { position: fixed; top: 10px; left: 10px; font-size: 10px; pointer-events: none; z-index: 100; }
+        body { margin: 0; background: #000; overflow: hidden; color: #fff; font-family: 'Courier New', monospace; }
+        canvas { display: block; filter: contrast(120%) brightness(110%); }
+        #overlay { position: fixed; top: 10px; left: 10px; font-size: 9px; pointer-events: none; letter-spacing: 2px; opacity: 0.7; }
     </style>
 </head>
 <body>
-    <div id="stats">DIMENSION: MULTI | NODES: 32000 | BUILD: ACTIVE</div>
+    <div id="overlay">CANVAS: LIVING | MODE: ADDITIVE BLEND | DNA: ACTIVE</div>
     <canvas id="c"></canvas>
 
     <script>
@@ -21,70 +21,62 @@
         const DNA = [1,1,2,3,5,8,4,3,7,1,8,9,8,8,7,6,4,1,5,6,2,8,1,9];
         
         let voxels = [];
-        let builders = [];
-        const MAX_BUILDERS = 200;
-        const GRID_SIZE = 25;
-
-        class Builder {
-            constructor() {
-                this.x = Math.random() * window.innerWidth;
-                this.y = Math.random() * window.innerHeight;
-                this.z = 0;
-                this.targetX = this.x;
-                this.targetY = this.y;
-                this.dnaIndex = 0;
-            }
-
-            work() {
-                const step = DNA[this.dnaIndex % DNA.length];
-                this.x += (Math.random() - 0.5) * step * 10;
-                this.y += (Math.random() - 0.5) * step * 10;
-                this.z = (this.z + 1) % 50; // Dimensionale Schichtung
-
-                // Baue Voxel (Minecraft-Prinzip)
-                if (Math.random() < 0.1) {
-                    voxels.push({
-                        x: Math.round(this.x / GRID_SIZE) * GRID_SIZE,
-                        y: Math.round(this.y / GRID_SIZE) * GRID_SIZE,
-                        z: this.z,
-                        c: `hsla(${step * 40}, 100%, 50%, 0.8)`
-                    });
-                }
-                this.dnaIndex++;
-                if (voxels.length > 5000) voxels.shift(); // Speicher-Optimierung
-            }
-        }
+        const MAX_VOXELS = 12000; // Erhöhte Dichte für Leinwand-Effekt
+        const GRID = 15; // Feinere Körnung
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            for(let i=0; i<MAX_BUILDERS; i++) builders.push(new Builder());
             animate();
         }
 
-        function drawVoxel(v, res) {
-            const scale = 1 - (v.z * 0.01);
-            const size = GRID_SIZE * scale;
-            const x = (v.x - window.innerWidth/2) * scale + window.innerWidth/2;
-            const y = (v.y - window.innerHeight/2) * scale + window.innerHeight/2;
-
-            ctx.fillStyle = v.c;
-            ctx.shadowBlur = 10 * res;
-            ctx.shadowColor = v.c;
-            ctx.fillRect(x, y, size, size);
-            ctx.strokeStyle = "rgba(255,255,255,0.1)";
-            ctx.strokeRect(x, y, size, size);
+        function createVoxel(t) {
+            const idx = Math.floor(t % DNA.length);
+            const val = DNA[idx];
+            // Die DNA bestimmt die Position und die Pigment-Basis
+            const x = Math.round((Math.random() * canvas.width) / GRID) * GRID;
+            const y = Math.round((Math.random() * canvas.height) / GRID) * GRID;
+            
+            // Komplementär-Farben basierend auf DNA-Wert
+            const hue = (val * 40 + t * 10) % 360;
+            voxels.push({ x, y, h: hue, life: 1.0, size: GRID * (val * 0.5) });
         }
 
         function animate() {
             const t = Date.now() * 0.001;
             const res = (Math.sin(t * 117) + 1) / 2;
 
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Motion Blur
+            // Transparentes Schwarz für sanftes Verblassen (Leinwand-Effekt)
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = `rgba(0, 0, 0, ${0.05 + (1 - res) * 0.1})`;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            builders.forEach(b => b.work());
-            voxels.forEach(v => drawVoxel(v, res));
+            // Additive Überlagerung aktivieren
+            ctx.globalCompositeOperation = 'screen';
+
+            // Erzeuge neue "Pinselstriche"
+            for(let i=0; i<15; i++) createVoxel(t);
+
+            for(let i = voxels.length - 1; i >= 0; i--) {
+                const v = voxels[i];
+                v.life -= 0.005;
+
+                if(v.life <= 0) {
+                    voxels.splice(i, 1);
+                    continue;
+                }
+
+                // Zeichne Licht-Struktur
+                ctx.fillStyle = `hsla(${v.h}, 80%, 50%, ${v.life * res})`;
+                ctx.shadowBlur = 15 * res;
+                ctx.shadowColor = `hsl(${v.h}, 80%, 50%)`;
+                
+                ctx.beginPath();
+                ctx.rect(v.x, v.y, v.size, v.size);
+                ctx.fill();
+            }
+
+            if(voxels.length > MAX_VOXELS) voxels.shift();
 
             requestAnimationFrame(animate);
         }
