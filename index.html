@@ -1,61 +1,28 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST Technology | Global Mainframe</title>
+    <title>T-ESOIST | Secure Bridge</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow: hidden; }
-        canvas { position: absolute; top: 0; left: 0; z-index: 1; }
-        #mainframe { position: relative; z-index: 10; display: flex; justify-content: space-between; padding: 20px; pointer-events: none; }
-        .panel { background: rgba(0, 10, 25, 0.85); border: 1px solid #00f2ff; padding: 15px; pointer-events: all; box-shadow: 0 0 20px rgba(0, 242, 255, 0.2); }
-        .wallet-info { width: 350px; }
-        .transfer-box { margin-top: 15px; border-top: 1px solid #00f2ff; padding-top: 10px; }
-        input { background: #000; border: 1px solid #00f2ff; color: #00f2ff; width: 100%; margin: 5px 0; padding: 5px; box-sizing: border-box; }
-        .btn { background: #00f2ff; color: #000; border: none; padding: 10px; width: 100%; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn:hover { background: #fff; box-shadow: 0 0 15px #fff; }
-        .status-bar { position: fixed; bottom: 0; width: 100%; background: #00f2ff; color: #000; font-size: 10px; padding: 2px 10px; font-weight: bold; }
+        body { background: #000; color: #00f2ff; font-family: monospace; padding: 20px; }
+        .bridge-status { border: 1px solid #00f2ff; padding: 20px; background: rgba(0,242,255,0.05); }
+        .blink { animation: blinker 1s linear infinite; color: #ff0055; }
+        @keyframes blinker { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
-    <canvas id="c"></canvas>
-    <div id="mainframe">
-        <div class="panel wallet-info">
-            <div style="font-size: 18px; font-weight: bold; border-bottom: 2px solid #00f2ff; margin-bottom: 10px;">Marcel Kantimm</div>
-            <div style="font-size: 10px; color: #888;">OFFICIAL WALLET ADDRESS:</div>
-            <div style="font-size: 12px; color: #fff; margin-bottom: 15px;">Ω-19d4-50a8-MARC</div>
-            <div style="display: flex; justify-content: space-between;"><span>ESI BALANCE:</span><span id="esi-val" style="color: #fff; font-weight: bold;">0.00</span></div>
-            <div style="display: flex; justify-content: space-between;"><span>VALUATION:</span><span id="eur-val" style="color: #00f2ff;">0.00 &euro;</span></div>
-            <div class="transfer-box">
-                <div style="font-size: 12px; margin-bottom: 5px;">SEND ESI TRANSFER</div>
-                <input type="text" id="target-addr" placeholder="Empfaenger Adresse">
-                <input type="number" id="send-amount" placeholder="Betrag">
-                <button class="btn" onclick="executeTransfer()">SEND TRANSACTION</button>
-            </div>
-        </div>
-        <div class="panel" style="width: 200px;">
-            <div style="font-size: 14px; border-bottom: 1px solid #00f2ff;">SYSTEM STATUS</div>
-            <p style="font-size: 11px;">NODES: 128,000<br>CORE: ACTIVE<br>SYNC: 117Hz</p>
-            <button class="btn" style="background: #ff0055; color: #fff;" onclick="alert('Quantum Boost Active!')">QUANTUM BOOST</button>
-        </div>
+    <div class="bridge-status">
+        <h2>T-ESOIST RELAY BRIDGE v72.0</h2>
+        <p>PROTOCOL: irn (WalletConnect v2)</p>
+        <p>SYM_KEY: <span style="font-size:10px;">ffe403ee4cc3ba2474de11b21a90dbc5f3a9acba6263a18b89dc9cb9cbd6296a</span></p>
+        <div id="status">STATUS: <span class="blink">WAITING FOR HANDSHAKE...</span></div>
     </div>
-    <div class="status-bar">SECURED BY T-ESOIST ENCRYPTION | ARCHITECT: Marcel Kantimm | KEY: 5ed70c4ca813c9b2</div>
     <script>
-        const canvas = document.getElementById('c');
-        const ctx = canvas.getContext('2d');
-        let esi = parseFloat(localStorage.getItem('ESI')) || 1000.0;
-        const PHI = 1.61803398875;
-        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; animate(); }
-        function animate() { ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; ctx.fillRect(0, 0, canvas.width, canvas.height); requestAnimationFrame(animate); }
-        function updateUI() { document.getElementById('esi-val').innerText = esi.toFixed(2); document.getElementById('eur-val').innerText = (esi * PHI).toFixed(2) + " €"; localStorage.setItem('ESI', esi); }
-        function executeTransfer() { 
-            const target = document.getElementById('target-addr').value;
-            const amount = parseFloat(document.getElementById('send-amount').value);
-            if (amount > 0 && esi >= amount) { esi -= amount; alert("TRANSFER OK: " + amount + " ESI an " + target); updateUI(); }
-            else { alert("Fehler: Guthaben prüfen."); }
-        }
-        setInterval(() => { esi += 0.05; updateUI(); }, 1000);
-        window.addEventListener('resize', init); init(); updateUI();
+        console.log("Relay Protocol initialized.");
+        // Hier würde die Verbindung zum WalletConnect Provider (Sign Client) stehen
+        setTimeout(() => {
+            document.getElementById('status').innerHTML = "STATUS: <span style='color:#00ff00'>CONNECTED VIA SYM_KEY</span>";
+        }, 3000);
     </script>
 </body>
 </html>
