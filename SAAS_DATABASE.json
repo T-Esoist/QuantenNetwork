@@ -1,0 +1,11 @@
+{
+  "users": {
+    "19d450a8": {
+      "username": "Marcel_Omega_Admin",
+      "plan": "Starter",
+      "esi_balance": 100.0,
+      "nodes": 128000,
+      "created_at": 1768018930
+    }
+  }
+}
