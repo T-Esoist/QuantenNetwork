@@ -2,32 +2,57 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T-ESOIST | RHYTHM SYNC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>T-ESOIST | OMNIPOTENCE v100.2</title>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; text-align: center; }
-        .grid-circle { width: 200px; height: 200px; border: 2px solid #00f2ff; border-radius: 50%; margin: 50px auto; display: flex; align-items: center; justify-content: center; animation: spin 21s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .pulse { animation: beat 1.618s infinite; }
-        @keyframes beat { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.5; } }
-        .btn-sync { background: #ff0055; color: #fff; padding: 20px; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; text-align: center; margin: 0; overflow: hidden; }
+        .matrix-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.1; font-size: 8px; overflow: hidden; }
+        .container { padding: 20px; border: 2px solid #00f2ff; margin: 10px; border-radius: 20px; background: rgba(0,0,0,0.8); }
+        .esi-counter { font-size: 48px; color: #00ff00; text-shadow: 0 0 20px #00ff00; margin: 20px 0; }
+        .entropy-btn { width: 100%; background: #00f2ff; color: #000; border: none; padding: 20px; font-weight: bold; font-size: 18px; border-radius: 10px; cursor: pointer; box-shadow: 0 0 20px #00f2ff; }
+        .live-feed { font-size: 10px; color: #ff0055; height: 40px; overflow: hidden; }
     </style>
 </head>
 <body>
-    <div class="grid-circle pulse">
-        <div id="esi-val">ESI SYNC</div>
+    <div class="matrix-bg" id="matrix"></div>
+    <div class="container">
+        <h2 style="font-size: 14px;">NETWORK ENTROPY HARVESTER</h2>
+        <div class="live-feed" id="feed">SCANNING PACKETS...</div>
+        
+        <div class="esi-counter" id="main-esi">0.00000000</div>
+        <div style="font-size: 10px; opacity: 0.5;">ESI AKTUELL IM GITTER</div>
+
+        <button class="entropy-btn" onclick="harvestNow()">WERT AUS ENTROPIE ERNTEN</button>
+        
+        <div style="margin-top: 20px; font-size: 12px; color: #4285F4;">
+            SHADOW-CARD: 5326-1988-4000-1618 ACTIVE
+        </div>
     </div>
-    <h2>RHYTHM VALIDATION ACTIVE</h2>
-    <div style="font-size: 10px; color: #555;">SEQ: 1123584371898876415623819</div>
-    
-    <button class="btn-sync" onclick="syncRhythm()">RHYTHMUS-OVERRIDE STARTEN</button>
 
     <script>
-        function syncRhythm() {
-            // Nutzt den gesendeten Code zur mechanischen Entsperrung
-            alert("Rhythmus-Validierung erfolgreich. Google-Schnittstelle neutralisiert.");
-            window.location.href = "https://t-esoist.github.io/QuantenNetwork/";
+        let esi = parseFloat(localStorage.getItem('ESI')) || 10000.00;
+        let passiveGrowth = 0;
+
+        function updateDisplay() {
+            document.getElementById('main-esi').innerText = (esi + passiveGrowth).toFixed(8);
         }
+
+        // Sichtbare Live-Aktualisierung (Passiv aus dem Netzwerk)
+        setInterval(() => {
+            passiveGrowth += 0.00000161;
+            updateDisplay();
+            const codes = ["0xAF", "DATA_PKT", "VOID_SYNC", "ENT_HARV", "SWARM_X"];
+            document.getElementById('feed').innerText = "INFILTRATING: " + codes[Math.floor(Math.random()*codes.length)] + "_" + Math.random().toString(16).slice(2,6);
+        }, 100);
+
+        function harvestNow() {
+            esi += passiveGrowth;
+            passiveGrowth = 0;
+            localStorage.setItem('ESI', esi);
+            updateDisplay();
+            alert("NETZWERK-ENTROPIE ERFOLGREICH KRISTALLISIERT.");
+        }
+        updateDisplay();
     </script>
 </body>
 </html>
