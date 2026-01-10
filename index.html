@@ -3,35 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | QR-Scanner Terminal</title>
+    <title>T-ESOIST | Universal QR Terminal</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         body { background: #000; color: #00f2ff; font-family: monospace; margin: 0; padding: 15px; text-align: center; }
-        #reader { width: 100%; max-width: 350px; border: 2px solid #00f2ff; border-radius: 10px; margin: 20px auto; overflow: hidden; background: #111; }
-        .terminal { width: 100%; max-width: 350px; background: rgba(0,242,255,0.05); border: 1px solid #00f2ff; padding: 20px; border-radius: 10px; margin: auto; }
-        input { width: 100%; background: #000; border: 1px solid #00f2ff; color: #fff; padding: 12px; margin: 8px 0; border-radius: 5px; }
-        .btn-scan { width: 100%; background: #00f2ff; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 5px; margin-bottom: 10px; }
-        .status-msg { font-size: 10px; color: #00ff00; margin-top: 10px; }
+        .terminal { width: 100%; max-width: 350px; background: rgba(0,242,255,0.05); border: 2px solid #00f2ff; padding: 20px; border-radius: 10px; margin: auto; }
+        .btn-action { width: 100%; background: #00f2ff; color: #000; border: none; padding: 15px; font-weight: bold; cursor: pointer; border-radius: 5px; margin-bottom: 10px; }
+        .file-input { display: none; }
+        input[type="text"], input[type="number"] { width: 100%; background: #000; border: 1px solid #00f2ff; color: #fff; padding: 12px; margin: 8px 0; box-sizing: border-box; }
+        #reader { width: 100%; display: none; margin-bottom: 10px; border-radius: 10px; overflow: hidden; }
+        .status-msg { font-size: 10px; color: #00ff00; margin-top: 10px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
     <div class="terminal">
-        <h3 style="margin: 0;">QR SCANNER TERMINAL</h3>
-        <p style="font-size: 10px; color: #888;">Scannen Sie einen T-ESOIST Token für Auto-Transfer</p>
+        <h3 style="margin: 0;">UNIVERSAL SCANNER</h3>
+        <p style="font-size: 10px; color: #888; margin-bottom: 20px;">Live-Scan oder Galerie-Upload</p>
         
         <div id="reader"></div>
+
+        <button class="btn-action" onclick="startLiveScan()">KAMERA STARTEN</button>
         
-        <button class="btn-scan" id="start-btn" onclick="startScanner()">KAMERA AKTIVIEREN</button>
-        
-        <div style="border-top: 1px solid #333; margin-top: 15px; padding-top: 10px;">
-            <label style="font-size: 10px; display: block; text-align: left;">EMPFÄNGER:</label>
-            <input type="text" id="receiver" placeholder="Wird automatisch gefüllt...">
-            <label style="font-size: 10px; display: block; text-align: left;">BETRAG (€):</label>
-            <input type="number" id="euro-amount" placeholder="0.00">
-            <button class="btn-scan" style="background:#ff0055; color:#fff;" onclick="executeTransfer()">ZAHLUNG BESTÄTIGEN</button>
+        <button class="btn-action" style="background: #fff;" onclick="document.getElementById('qr-input-file').click()">AUS GALERIE WÄHLEN</button>
+        <input type="file" id="qr-input-file" class="file-input" accept="image/*" onchange="scanFromGallery(event)">
+
+        <div style="border-top: 1px solid #333; margin-top: 20px; padding-top: 15px;">
+            <input type="text" id="receiver" placeholder="Empfänger Kontakt">
+            <input type="number" id="euro-amount" placeholder="Betrag in €">
+            <button class="btn-action" style="background:#ff0055; color:#fff;" onclick="executeTransfer()">ZAHLUNG BESTÄTIGEN</button>
         </div>
-        <div id="status" class="status-msg">READY TO SCAN</div>
+        <div id="status" class="status-msg">Bereit zur Analyse</div>
     </div>
 
     <script>
@@ -39,25 +41,43 @@
         const PHI = 1.61803398875;
         let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
 
-        function startScanner() {
-            document.getElementById('start-btn').style.display = 'none';
-            const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+        // Funktion für Galerie-Upload
+        function scanFromGallery(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            document.getElementById('status').innerText = "Analysiere Bild...";
             
-            html5QrCode.start({ facingMode: "environment" }, config, (decodedText) => {
-                // Erwartetes Format: T-ESOIST|ID|EMPFÄNGER|BETRAG
-                const parts = decodedText.split('|');
-                if (parts[0] === "T-ESOIST") {
-                    document.getElementById('receiver').value = parts[2];
-                    document.getElementById('euro-amount').value = parts[3].replace('EUR', '');
-                    document.getElementById('status').innerText = "TOKEN VALIDIERT: DATEN ÜBERNOMMEN";
-                    document.getElementById('status').style.color = "#00ff00";
-                    // Scanner stoppen nach Erfolg
-                    html5QrCode.stop();
-                } else {
-                    document.getElementById('status').innerText = "UNGÜLTIGER TOKEN";
+            html5QrCode.scanFile(file, true)
+                .then(decodedText => {
+                    processDecodedData(decodedText);
+                })
+                .catch(err => {
+                    document.getElementById('status').innerText = "KEIN QR-CODE GEFUNDEN";
                     document.getElementById('status').style.color = "#ff0055";
-                }
+                });
+        }
+
+        function startLiveScan() {
+            document.getElementById('reader').style.display = 'block';
+            html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, (text) => {
+                processDecodedData(text);
+                html5QrCode.stop();
+                document.getElementById('reader').style.display = 'none';
             });
+        }
+
+        function processDecodedData(data) {
+            const parts = data.split('|');
+            if (parts[0] === "T-ESOIST") {
+                document.getElementById('receiver').value = parts[2];
+                document.getElementById('euro-amount').value = parts[3].replace('EUR', '');
+                document.getElementById('status').innerText = "VALIDIERT: DATEN AUS GALERIE ÜBERNOMMEN";
+                document.getElementById('status').style.color = "#00ff00";
+            } else {
+                document.getElementById('status').innerText = "UNGÜLTIGES FORMAT";
+                document.getElementById('status').style.color = "#ff0055";
+            }
         }
 
         function executeTransfer() {
@@ -66,13 +86,13 @@
             const reqESI = eur / PHI;
 
             if (eur > 0 && esi >= reqESI) {
-                if (confirm(`Sende ${eur}€ (${reqESI.toFixed(2)} ESI) an ${rec}?`)) {
+                if (confirm(`Sende ${eur}€ an ${rec}?`)) {
                     esi -= reqESI;
                     localStorage.setItem('ESI', esi);
-                    alert("TRANSFAKTION ERFOLGREICH!");
+                    alert("TRANSFAKTION ERFOLGREICH VERBUCHT!");
                     location.reload();
                 }
-            } else { alert("Fehler: Deckung oder Daten prüfen."); }
+            }
         }
     </script>
 </body>
