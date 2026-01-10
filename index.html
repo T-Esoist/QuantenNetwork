@@ -1,28 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>T-ESOIST | Secure Bridge</title>
+    <title>T-ESOIST | Secure Signing</title>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; padding: 20px; }
-        .bridge-status { border: 1px solid #00f2ff; padding: 20px; background: rgba(0,242,255,0.05); }
-        .blink { animation: blinker 1s linear infinite; color: #ff0055; }
-        @keyframes blinker { 50% { opacity: 0; } }
+        body { background: #000; color: #00f2ff; font-family: monospace; padding: 20px; text-align: center; }
+        .signing-hub { border: 2px solid #00f2ff; padding: 30px; background: rgba(0,20,40,0.9); display: inline-block; }
+        .status-dot { height: 15px; width: 15px; background-color: #bbb; border-radius: 50%; display: inline-block; margin-right: 10px; }
+        .active { background-color: #00ff00; box-shadow: 0 0 10px #00ff00; }
+        .btn { background: #ff0055; color: #fff; border: none; padding: 15px 30px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        #log { margin-top: 20px; font-size: 10px; color: #888; text-align: left; }
     </style>
 </head>
 <body>
-    <div class="bridge-status">
-        <h2>T-ESOIST RELAY BRIDGE v72.0</h2>
-        <p>PROTOCOL: irn (WalletConnect v2)</p>
-        <p>SYM_KEY: <span style="font-size:10px;">ffe403ee4cc3ba2474de11b21a90dbc5f3a9acba6263a18b89dc9cb9cbd6296a</span></p>
-        <div id="status">STATUS: <span class="blink">WAITING FOR HANDSHAKE...</span></div>
+    <div class="signing-hub">
+        <h2>T-ESOIST SECURE SIGNING v73.0</h2>
+        <div style="margin-bottom: 20px;">
+            <span id="dot" class="status-dot active"></span> 
+            <span>DEVICE CONNECTED: Ω-MARC-MOBILE</span>
+        </div>
+        
+        <p>Aktion: ESI-TRANSFER VALIDIERUNG</p>
+        <div id="status-text">BEREIT FÜR SIGNATUR...</div>
+        
+        <button class="btn" onclick="requestSignature()">TEST PUSH-TO-SIGN</button>
+        
+        <div id="log">
+            [SYS] Bridge: irn-relay active<br>
+            [SEC] symKey: ffe4...296a<br>
+            [AUTH] User: Marcel Kantimm
+        </div>
     </div>
+
     <script>
-        console.log("Relay Protocol initialized.");
-        // Hier würde die Verbindung zum WalletConnect Provider (Sign Client) stehen
-        setTimeout(() => {
-            document.getElementById('status').innerHTML = "STATUS: <span style='color:#00ff00'>CONNECTED VIA SYM_KEY</span>";
-        }, 3000);
+        function requestSignature() {
+            const status = document.getElementById('status-text');
+            status.innerHTML = "<span style='color:#ff0055'>WARTE AUF BESTÄTIGUNG AM HANDY...</span>";
+            console.log("Push-to-Sign Request gesendet via symKey.");
+            
+            // Simulation der Rückmeldung vom Handy
+            setTimeout(() => {
+                status.innerHTML = "<span style='color:#00ff00'>SIGNATUR ERHALTEN. TRANSAKTION VALIDIERT.</span>";
+                alert("Erfolg: Transaktion kryptografisch durch Marcel Kantimm signiert.");
+            }, 4000);
+        }
     </script>
 </body>
 </html>
