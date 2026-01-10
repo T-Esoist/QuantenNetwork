@@ -4,15 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω v46.0 QUANTUM IRIS</title>
+    <title>Ω v48.0 REALITY SYNTHESIS</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; }
-        canvas { display: block; width: 100vw; height: 100vh; filter: contrast(140%) saturate(150%); }
-        #ui { position: fixed; top: 10px; left: 10px; color: #00f2ff; font-family: monospace; font-size: 9px; pointer-events: none; }
+        /* Realitäts-Filter: Bloom, Grain und Schärfe */
+        canvas { 
+            display: block; width: 100vw; height: 100vh; 
+            filter: contrast(130%) brightness(85%) saturate(110%) blur(0.4px);
+        }
+        #ui { position: fixed; bottom: 10px; right: 10px; color: #fff; font-family: serif; font-size: 10px; opacity: 0.4; letter-spacing: 3px; }
     </style>
 </head>
 <body>
-    <div id="ui">IRIS: ADAPTIVE | NODES: 128.000 | DNA: PERSISTENT</div>
+    <div id="ui">REALITY SYNTHESIS ACTIVE</div>
     <canvas id="c"></canvas>
 
     <script>
@@ -21,59 +25,61 @@
         const DNA = [1,1,2,3,5,8,4,3,7,1,8,9,8,8,7,6,4,1,5,6,2,8,1,9];
         
         const NODE_COUNT = 128000;
-        let nodesX = new Float32Array(NODE_COUNT);
-        let nodesY = new Float32Array(NODE_COUNT);
-        let nodesVX = new Float32Array(NODE_COUNT);
-        let nodesVY = new Float32Array(NODE_COUNT);
+        let nx = new Float32Array(NODE_COUNT);
+        let ny = new Float32Array(NODE_COUNT);
+        let nvx = new Float32Array(NODE_COUNT);
+        let nvy = new Float32Array(NODE_COUNT);
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             for(let i=0; i<NODE_COUNT; i++) {
-                nodesX[i] = Math.random() * canvas.width;
-                nodesY[i] = Math.random() * canvas.height;
-                nodesVX[i] = (Math.random() - 0.5) * 2;
-                nodesVY[i] = (Math.random() - 0.5) * 2;
+                nx[i] = Math.random() * canvas.width;
+                ny[i] = Math.random() * canvas.height;
             }
             animate();
         }
 
         function animate() {
-            const t = Date.now() * 0.001;
+            const t = Date.now() * 0.0008;
             const res = (Math.sin(t * 117) + 1) / 2;
-            const dnaVal = DNA[Math.floor(t * 2) % DNA.length];
+            const dna = DNA[Math.floor(t * 5) % DNA.length];
 
-            // --- ADAPTIVE IRIS LOGIK ---
-            // Wenn res hoch ist (sehr hell), erhöhen wir die Verdunklung des Hintergrunds
-            const iris_alpha = 0.05 + (res * 0.2);
+            // 1. ORGANISCHER FADE (Simuliert Netzhaut-Nachleuchten)
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = `rgba(0, 0, 0, ${iris_alpha})`;
+            ctx.fillStyle = `rgba(0, 3, 5, 0.2)`; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Umschalten zwischen Kontrast (Overlay) und Farbe (Screen)
-            ctx.globalCompositeOperation = res > 0.7 ? 'overlay' : 'screen';
+            // 2. REALITÄTS-LICHT (Subtraktive Tiefe)
+            ctx.globalCompositeOperation = 'lighter';
             
-            ctx.fillStyle = `hsla(${(t*20)%360}, 100%, 50%, 0.5)`;
-            
-            // Render 128.000 in Blöcken für Stabilität
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
             for(let i=0; i<NODE_COUNT; i++) {
-                // Physik
-                const dx = (canvas.width/2) - nodesX[i];
-                const dy = (canvas.height/2) - nodesY[i];
+                // Physikalische Strömung (Laminarer Fluss)
+                const dx = cx - nx[i];
+                const dy = cy - ny[i];
                 const d = Math.sqrt(dx*dx + dy*dy) || 1;
                 
-                nodesVX[i] += (dx/d) * 0.01 * dnaVal;
-                nodesVY[i] += (dy/d) * 0.01 * dnaVal;
-                nodesX[i] += nodesVX[i];
-                nodesY[i] += nodesVY[i];
-                nodesVX[i] *= 0.95;
-                nodesVY[i] *= 0.95;
+                // Kraftvektoren basierend auf Realitäts-Dichte
+                nvx[i] += (dx/d) * 0.02 * dna + (Math.random()-0.5) * 0.1;
+                nvy[i] += (dy/d) * 0.02 * dna + (Math.random()-0.5) * 0.1;
+                
+                nx[i] += nvx[i];
+                ny[i] += nvy[i];
+                nvx[i] *= 0.96;
+                nvy[i] *= 0.96;
 
-                // Zeichne nur jeden n-ten Node pro Frame (Interlaced)
-                if(i % 16 === 0) {
-                    const hue = (i * 0.003 + t * 10) % 360;
-                    ctx.fillStyle = `hsla(${hue}, 100%, ${50 + res * 20}%, 0.8)`;
-                    ctx.fillRect(nodesX[i], nodesY[i], 1, 1);
+                // 3. NANO-PHOTONIK
+                if(i % 14 === 0) {
+                    const distRatio = Math.min(1, d / (canvas.width * 0.5));
+                    // Farbe wechselt von Kern-Weiß zu Tief-Blau/Rot (Doppler-Effekt)
+                    const hue = (200 + distRatio * 100 + dna * 10) % 360;
+                    const brightness = (1 - distRatio) * 40 + res * 20;
+                    
+                    ctx.fillStyle = `hsla(${hue}, 80%, ${brightness}%, ${0.3 + (1-distRatio) * 0.5})`;
+                    ctx.fillRect(nx[i], ny[i], 1, 1);
                 }
             }
 
