@@ -3,107 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | Mechanistic Wallet</title>
+    <title>T-ESOIST | Self-Payment Automaton</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #000; color: #00f2ff; font-family: monospace; padding: 15px; text-align: center; }
-        .mechanic-unit { border: 2px solid #00f2ff; padding: 20px; border-radius: 5px; background: #050505; }
-        .display { font-size: 24px; color: #00ff00; margin: 15px 0; border: 1px solid #333; padding: 10px; }
-        .btn-exec { width: 100%; background: #ff0055; color: #fff; border: none; padding: 20px; font-weight: bold; cursor: pointer; font-size: 18px; }
-        #status-log { text-align: left; font-size: 10px; color: #666; height: 80px; overflow-y: scroll; border-top: 1px solid #222; margin-top: 10px; }
+        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
+        .automaton-unit { border: 3px solid #00f2ff; padding: 30px; border-radius: 10px; background: rgba(0,242,255,0.05); box-shadow: 0 0 40px #00f2ff; }
+        .status-pulse { animation: pulse 2s infinite; color: #00ff00; font-weight: bold; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        .btn-pay { width: 100%; background: #00f2ff; color: #000; border: none; padding: 25px; font-weight: bold; cursor: pointer; font-size: 20px; border-radius: 15px; }
+        .log-box { margin-top: 25px; font-size: 11px; color: #00ff00; text-align: left; background: #0a0a0a; padding: 10px; border: 1px solid #111; height: 120px; overflow-y: auto; }
     </style>
 </head>
 <body>
-    <div class="mechanic-unit">
-        <h3 style="margin: 0;">WALLET EXECUTION ENGINE</h3>
-        <div style="font-size: 10px; opacity: 0.5;">ID: Ω-19D4-50A8-MARC</div>
+    <div class="automaton-unit">
+        <h3>SELF-PAYMENT AUTOMATON v90</h3>
+        <div id="sync-status" class="status-pulse">WALLET SYNC: ACTIVE</div>
         
-        <div id="balance-display" class="display">0.00 ESI</div>
-        
-        <button class="btn-exec" style="background:#00f2ff; color:#000; margin-bottom:10px;" onclick="document.getElementById('file-trigger').click()">1. BILD IMPORTIEREN</button>
-        <input type="file" id="file-trigger" style="display:none" accept="image/*" onchange="mechanisticFlow(event)">
-        
-        <div id="payment-info" style="margin: 10px 0; border: 1px solid #00f2ff; padding: 10px; display: none;">
-            <div id="detected-eur" style="font-size: 20px;">0.00 €</div>
-            <div id="converted-esi" style="font-size: 14px; color: #aaa;">-> 0.00 ESI</div>
-        </div>
+        <div id="balance" style="font-size: 28px; margin: 20px 0;">0.00 ESI</div>
 
-        <button id="final-btn" class="btn-exec" onclick="executeNow()" style="display:none;">2. ZAHLUNG VERBINDLICH BESTÄTIGEN</button>
+        <button class="btn-pay" onclick="document.getElementById('auto-upload').click()">AUTO-BEZAHLUNG STARTEN</button>
+        <input type="file" id="auto-upload" style="display:none" accept="image/*" onchange="runAutomaton(event)">
         
-        <div id="status-log">SYSTEM READY...</div>
+        <div id="auto-log" class="log-box">SYSTEM INITIALIZED...</div>
     </div>
 
     <script>
         const PHI = 1.61803398875;
         let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
-        let currentDebit = 0;
 
-        function log(m) { document.getElementById('status-log').innerHTML += "<br>> " + m; }
-        
-        function updateDisplay() {
-            document.getElementById('balance-display').innerText = esi.toFixed(2) + " ESI";
+        function addLog(m) {
+            const log = document.getElementById('auto-log');
+            log.innerHTML += "> " + m + "<br>";
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function updateUI() {
+            document.getElementById('balance').innerText = esi.toFixed(2) + " ESI";
             localStorage.setItem('ESI', esi);
         }
 
-        function mechanisticFlow(event) {
+        async function runAutomaton(event) {
             const file = event.target.files[0];
-            log("Mechanische Analyse startet...");
+            addLog("Bild-Input erkannt. Starte Extraktion...");
             
-            Html5Qrcode.scanImage(file, { fps: 60 })
-                .then(data => {
-                    log("Daten isoliert: " + data.substring(0, 20) + "...");
-                    const match = data.match(/[0-9]+[.,][0-9]{2}/);
-                    if(match) {
-                        const eur = parseFloat(match[0].replace(',', '.'));
-                        currentDebit = eur / PHI;
-                        
-                        document.getElementById('payment-info').style.display = 'block';
-                        document.getElementById('detected-eur').innerText = eur.toFixed(2) + " €";
-                        document.getElementById('converted-esi').innerText = "=> " + currentDebit.toFixed(2) + " ESI";
-                        document.getElementById('final-btn').style.display = 'block';
-                        log("Warte auf mechanische Bestätigung...");
+            try {
+                const data = await Html5Qrcode.scanImage(file, { fps: 60 });
+                addLog("QR-Daten dekodiert.");
+                
+                const match = data.match(/[0-9]+[.,][0-9]{2}/);
+                if(match) {
+                    const eur = parseFloat(match[0].replace(',', '.'));
+                    const debit = eur / PHI;
+                    
+                    addLog("Betrag isoliert: " + eur.toFixed(2) + " €");
+                    addLog("Umrechnung: " + debit.toFixed(2) + " ESI");
+                    
+                    if(esi >= debit) {
+                        addLog("Guthaben verifiziert. Initiiere Zahlung...");
+                        setTimeout(() => {
+                            esi -= debit;
+                            updateUI();
+                            addLog("TRANSFAKTION ERFOLGREICH ABGESCHLOSSEN.");
+                            alert("SELBSTBEZAHLUNG ÜBER " + eur.toFixed(2) + "€ VOLLZOGEN.");
+                        }, 1000);
                     } else {
-                        log("FEHLER: Kein Betrag gefunden. Bitte manuell eingeben.");
-                        const manual = prompt("Kein Betrag im Bild gefunden. Bitte Betrag in Euro eingeben:");
-                        if(manual) {
-                            const eur = parseFloat(manual.replace(',', '.'));
-                            currentDebit = eur / PHI;
-                            document.getElementById('payment-info').style.display = 'block';
-                            document.getElementById('detected-eur').innerText = eur.toFixed(2) + " €";
-                            document.getElementById('converted-esi').innerText = "=> " + currentDebit.toFixed(2) + " ESI";
-                            document.getElementById('final-btn').style.display = 'block';
-                        }
+                        addLog("FEHLER: Deckung im Gitter unzureichend.");
                     }
-                })
-                .catch(err => {
-                    log("Scan-Barriere. Manuelle Brücke erforderlich.");
-                    const manual = prompt("QR unlesbar. Bitte Betrag in Euro eingeben:");
+                } else {
+                    addLog("Mechanischer Fehler: Kein Betrag im Bild.");
+                    const manual = prompt("Kein Betrag erkannt. Manuelle Eingabe (€):");
                     if(manual) {
-                         const eur = parseFloat(manual.replace(',', '.'));
-                         currentDebit = eur / PHI;
-                         document.getElementById('payment-info').style.display = 'block';
-                         document.getElementById('detected-eur').innerText = eur.toFixed(2) + " €";
-                         document.getElementById('converted-esi').innerText = "=> " + currentDebit.toFixed(2) + " ESI";
-                         document.getElementById('final-btn').style.display = 'block';
+                        const eur = parseFloat(manual.replace(',', '.'));
+                        esi -= (eur / PHI);
+                        updateUI();
+                        addLog("Manuelle Zahlung verbucht.");
                     }
-                });
-        }
-
-        function executeNow() {
-            if(esi >= currentDebit) {
-                esi -= currentDebit;
-                log("DEBIT ERFOLGREICH: -" + currentDebit.toFixed(2) + " ESI");
-                updateDisplay();
-                alert("ZAHLUNG BESTÄTIGT UND VERBUCHT.");
-                document.getElementById('payment-info').style.display = 'none';
-                document.getElementById('final-btn').style.display = 'none';
-            } else {
-                alert("Deckung unzureichend.");
+                }
+            } catch (e) {
+                addLog("Barriere erkannt. Protokoll-Abbruch.");
             }
         }
-
-        updateDisplay();
+        updateUI();
     </script>
-    <div id="hidden-reader" style="display:none"></div>
 </body>
 </html>
