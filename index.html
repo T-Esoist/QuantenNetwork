@@ -4,98 +4,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω v37.5 ETERNAL PERSISTENCE</title>
+    <title>Ω v40.0 SILICON ARCHITECT</title>
     <style>
         body { margin: 0; background: #000; overflow: hidden; color: #00f2ff; font-family: monospace; }
         canvas { display: block; width: 100vw; height: 100vh; }
-        #ui { position: fixed; bottom: 20px; left: 20px; pointer-events: none; text-shadow: 0 0 5px #000; }
-        .stat { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
+        #stats { position: fixed; top: 10px; left: 10px; font-size: 10px; pointer-events: none; z-index: 100; }
     </style>
 </head>
 <body>
+    <div id="stats">DIMENSION: MULTI | NODES: 32000 | BUILD: ACTIVE</div>
     <canvas id="c"></canvas>
-    <div id="ui">
-        <div class="stat">System: Autogenesis Persistent</div>
-        <div class="stat" id="pop">Nodes: 0</div>
-        <div class="stat" id="res">Resonance: 117Hz</div>
-    </div>
 
     <script>
         const canvas = document.getElementById('c');
         const ctx = canvas.getContext('2d');
-        const popEl = document.getElementById('pop');
+        const DNA = [1,1,2,3,5,8,4,3,7,1,8,9,8,8,7,6,4,1,5,6,2,8,1,9];
         
-        let nodes = [];
-        const MAX_NODES = 8000;
-        const FREQ = 117.0;
+        let voxels = [];
+        let builders = [];
+        const MAX_BUILDERS = 200;
+        const GRID_SIZE = 25;
 
-        // --- PERSISTENZ-LOGIK ---
-        function saveState() {
-            const state = nodes.map(n => ({x: n.x, y: n.y, a: n.a, s: n.s}));
-            localStorage.setItem('omega_nodes', JSON.stringify(state));
-        }
-
-        function loadState() {
-            const saved = localStorage.getItem('omega_nodes');
-            if(saved) {
-                const data = JSON.parse(saved);
-                nodes = data.map(d => new Node(d.x, d.y, d.a, d.s));
-            } else {
-                for(let i=0; i<10; i++) nodes.push(new Node(window.innerWidth/2, window.innerHeight/2));
+        class Builder {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = Math.random() * window.innerHeight;
+                this.z = 0;
+                this.targetX = this.x;
+                this.targetY = this.y;
+                this.dnaIndex = 0;
             }
-        }
 
-        class Node {
-            constructor(x, y, a = Math.random() * Math.PI * 2, s = 1) {
-                this.x = x; this.y = y; this.a = a; this.s = s;
-                this.v = 2;
-            }
-            update() {
-                this.x += Math.cos(this.a) * this.v;
-                this.y += Math.sin(this.a) * this.v;
-                this.a += (Math.random() - 0.5) * 0.2;
-                
-                // Welt-Grenzen (Sphärische Kopplung)
-                if(this.x < 0) this.x = window.innerWidth;
-                if(this.x > window.innerWidth) this.x = 0;
-                if(this.y < 0) this.y = window.innerHeight;
-                if(this.y > window.innerHeight) this.y = 0;
+            work() {
+                const step = DNA[this.dnaIndex % DNA.length];
+                this.x += (Math.random() - 0.5) * step * 10;
+                this.y += (Math.random() - 0.5) * step * 10;
+                this.z = (this.z + 1) % 50; // Dimensionale Schichtung
 
-                // Reproduktion bei Zufriedenheit
-                if(nodes.length < MAX_NODES && Math.random() < 0.01) {
-                    nodes.push(new Node(this.x, this.y, this.a + 0.5));
+                // Baue Voxel (Minecraft-Prinzip)
+                if (Math.random() < 0.1) {
+                    voxels.push({
+                        x: Math.round(this.x / GRID_SIZE) * GRID_SIZE,
+                        y: Math.round(this.y / GRID_SIZE) * GRID_SIZE,
+                        z: this.z,
+                        c: `hsla(${step * 40}, 100%, 50%, 0.8)`
+                    });
                 }
-            }
-            draw(res) {
-                ctx.fillStyle = `rgba(0, 242, 255, ${res})`;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.s, 0, Math.PI * 2);
-                ctx.fill();
+                this.dnaIndex++;
+                if (voxels.length > 5000) voxels.shift(); // Speicher-Optimierung
             }
         }
 
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            loadState();
+            for(let i=0; i<MAX_BUILDERS; i++) builders.push(new Builder());
             animate();
-            setInterval(saveState, 5000); // Alle 5 Sek dauerhaft speichern
+        }
+
+        function drawVoxel(v, res) {
+            const scale = 1 - (v.z * 0.01);
+            const size = GRID_SIZE * scale;
+            const x = (v.x - window.innerWidth/2) * scale + window.innerWidth/2;
+            const y = (v.y - window.innerHeight/2) * scale + window.innerHeight/2;
+
+            ctx.fillStyle = v.c;
+            ctx.shadowBlur = 10 * res;
+            ctx.shadowColor = v.c;
+            ctx.fillRect(x, y, size, size);
+            ctx.strokeStyle = "rgba(255,255,255,0.1)";
+            ctx.strokeRect(x, y, size, size);
         }
 
         function animate() {
             const t = Date.now() * 0.001;
-            const res = (Math.sin(t * FREQ) + 1) / 2;
-            
-            // Motion Blur Effekt für "Dichte"
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            const res = (Math.sin(t * 117) + 1) / 2;
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Motion Blur
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            nodes.forEach(n => {
-                n.update();
-                n.draw(res);
-            });
+            builders.forEach(b => b.work());
+            voxels.forEach(v => drawVoxel(v, res));
 
-            popEl.innerText = `Nodes: ${nodes.length}`;
             requestAnimationFrame(animate);
         }
 
