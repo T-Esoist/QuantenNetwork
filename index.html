@@ -3,30 +3,29 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ω v53.0 THE MONOLITH</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ω v54.0 UNIFIED GRID</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; }
-        canvas { 
-            display: block; width: 100vw; height: 100vh; 
-            filter: contrast(160%) brightness(95%) saturate(140%) blur(0.2px);
-        }
-        #ui { position: fixed; top: 15px; left: 15px; color: #fff; font-family: monospace; font-size: 9px; opacity: 0.5; z-index: 10; }
+        body { margin: 0; background: #000; color: #00f2ff; font-family: monospace; overflow: hidden; }
+        canvas { display: block; filter: contrast(160%) brightness(90%) saturate(140%); }
+        #ui { position: fixed; top: 15px; left: 15px; z-index: 10; font-size: 10px; background: rgba(0,0,0,0.7); padding: 10px; border: 1px solid #00f2ff; pointer-events: none; }
     </style>
 </head>
 <body>
-    <div id="ui">CORE: MONOLITH | NODES: 128.000 | LOGIC: ANCHORED</div>
+    <div id="ui">
+        <b>SYSTEM: UNIFIED</b><br>
+        NODES: 128.000<br>
+        <div id="live">SYNCING...</div>
+    </div>
     <canvas id="c"></canvas>
-
     <script>
         const canvas = document.getElementById('c');
         const ctx = canvas.getContext('2d', { alpha: false });
+        const repoData = {"CORE_COMPUTE.json": {"status": "READY", "power": "MAX", "network": "E-RON-QU"}, "GLOBAL_SYSTEM_STATUS.json": {"network": "T Esoist Technology P2P Grid", "status": "OPERATIONAL", "admin": "T-Esoist", "timestamp": "Sun Jan  4 12:14:34 2026", "nodes_online": 1, "protocol": "Port 8000 / PoL", "security": "SHA-512 Quantum-Resilient"}, "state.json": {"protocol": "T-ESOIST-DSL", "layer": "APPLICATION_OVERLAY_L7", "description": "Deterministisches Zustands-Netzwerk (kein L1-Hardware-Netz)", "state": {"qe_balance": 4200122.725, "data_steps": 1, "logical_entropy": 0.11100006, "system_integrity": "STABLE"}, "signature": "d73ef5423c8ed8d34a8756a2eff0f447324360b0ec0eb5735f902e8726cd669b", "timestamp_utc": "2026-01-06T17:39:32.953419+00:00"}};
         
         const NODE_COUNT = 128000;
-        let nx = new Float32Array(NODE_COUNT);
-        let ny = new Float32Array(NODE_COUNT);
-        let nvx = new Float32Array(NODE_COUNT);
-        let nvy = new Float32Array(NODE_COUNT);
+        let nx = new Float32Array(NODE_COUNT), ny = new Float32Array(NODE_COUNT);
+        let nvx = new Float32Array(NODE_COUNT), nvy = new Float32Array(NODE_COUNT);
 
         function init() {
             canvas.width = window.innerWidth;
@@ -35,6 +34,7 @@
                 nx[i] = Math.random() * canvas.width;
                 ny[i] = Math.random() * canvas.height;
             }
+            document.getElementById('live').innerHTML = "CORE_LOAD: " + (repoData['CORE_COMPUTE.json']?.load || 'OPTIMAL');
             animate();
         }
 
@@ -42,62 +42,37 @@
             const t = Date.now() * 0.001;
             const res = (Math.sin(t * 117) + 1) / 2;
             
-            // Hintergrund mit Tiefen-Vakuum
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = `rgba(0, 3, 10, 0.15)`; 
+            ctx.fillStyle = "rgba(0, 5, 12, 0.2)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // 1. DER MONOLITH (Das neutrale Symbol)
-            const cx = canvas.width / 2;
-            const cy = canvas.height / 2;
-            const mSize = 60 + res * 10;
             
+            const cx = canvas.width / 2, cy = canvas.height / 2;
             ctx.globalCompositeOperation = 'screen';
-            ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 + res * 0.3})`;
-            ctx.lineWidth = 2;
-            // Ein Quadrat als Symbol der fundamentalen Logik
-            ctx.strokeRect(cx - mSize/2, cy - mSize/2, mSize, mSize);
-            ctx.fillStyle = `rgba(0, 242, 255, ${0.1 * res})`;
-            ctx.fillRect(cx - mSize/2, cy - mSize/2, mSize, mSize);
+            
+            // Monolith-Symbol
+            ctx.strokeStyle = "#00f2ff";
+            ctx.strokeRect(cx-30, cy-30, 60, 60);
 
-            // 2. DIE SCHWARM-REAKTION
             for(let i=0; i<NODE_COUNT; i++) {
-                // Anziehung zum Monolithen
-                const dx = cx - nx[i];
-                const dy = cy - ny[i];
+                const dx = cx - nx[i], dy = cy - ny[i];
                 const d = Math.sqrt(dx*dx + dy*dy) || 1;
                 
-                // Logik-Gravitation: Stärker je näher am Monolithen
-                const force = d < mSize * 2 ? 0.05 : 0.002;
-                nvx[i] += dx * force * res;
-                nvy[i] += dy * force * res;
+                // Dynamik basierend auf JSON-Daten
+                const gravity = (repoData['state.json']?.intensity || 0.005) * (1 + res);
+                nvx[i] += dx * gravity * 0.1;
+                nvy[i] += dy * gravity * 0.1;
                 
-                // Rotations-Drift um das Zentrum
-                nvx[i] += dy * 0.001;
-                nvy[i] -= dx * 0.001;
+                nx[i] += nvx[i]; ny[i] += nvy[i];
+                nvx[i] *= 0.94; nvy[i] *= 0.94;
 
-                nx[i] += nvx[i];
-                ny[i] += nvy[i];
-                nvx[i] *= 0.94;
-                nvy[i] *= 0.94;
-
-                // Nano-Rendering
-                if(i % 16 === 0) {
-                    const hue = (200 + (d * 0.1) + t * 5) % 360;
-                    ctx.fillStyle = `hsla(${hue}, 100%, ${40 + res * 40}%, ${0.5})`;
+                if(i % 18 === 0) {
+                    ctx.fillStyle = "hsla(" + (200 + d*0.1) + ", 100%, 50%, 0.6)";
                     ctx.fillRect(nx[i], ny[i], 1, 1);
                 }
             }
-
             requestAnimationFrame(animate);
         }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        init();
+        window.onload = init;
     </script>
 </body>
 </html>
