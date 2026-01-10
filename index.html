@@ -2,26 +2,45 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>OMEGA SaaS Dashboard</title>
+    <title>T-ESOIST Technology | OMEGA Wallet</title>
     <style>
-        body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; overflow: hidden; }
-        #dashboard { position: fixed; top: 10px; right: 10px; border: 1px solid #00f2ff; padding: 15px; background: rgba(0,10,20,0.9); z-index: 100; }
-        .val { color: #fff; font-weight: bold; }
+        body { margin: 0; background: #000; color: #00f2ff; font-family: 'Courier New', monospace; }
+        #wallet { position: fixed; top: 20px; right: 20px; border: 2px solid #00f2ff; padding: 20px; background: rgba(0,10,25,0.9); box-shadow: 0 0 15px #00f2ff; z-index: 1000; }
+        .header { font-weight: bold; border-bottom: 1px solid #00f2ff; margin-bottom: 10px; padding-bottom: 5px; }
+        .btn { background: #00f2ff; color: #000; border: none; padding: 10px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 10px; }
         canvas { display: block; }
     </style>
 </head>
 <body>
-    <div id="dashboard">
-        <h3>OMEGA SaaS v1.0</h3>
-        <p>ACCOUNT: <span class="val">19d450a8</span></p>
-        <p>ESI: <span id="esi-val" class="val">1000</span></p>
-        <p>EUR: <span id="eur-val" class="val">1618.03</span> &euro;</p>
-        <button onclick="location.reload()" style="width:100%; cursor:pointer;">REFRESH SYNC</button>
+    <div id="wallet">
+        <div class="header">T-ESOIST Technology WALLET</div>
+        <p>USER_ID: <span id="uid">19d450a8</span></p>
+        <p>BALANCE: <span id="esi-display">0.00</span> ESI</p>
+        <p>VALUE: <span id="eur-display">0.00</span> &euro;</p>
+        <button class="btn" onclick="syncWallet()">SYNC TO GENOME</button>
     </div>
     <canvas id="c"></canvas>
     <script>
-        console.log("SaaS Manifestation Active.");
-        // Hier ist Platz für die 128.000 Node-Engine
+        let esi = parseFloat(localStorage.getItem('ESI')) || 100.0;
+        const PHI = 1.61803398875;
+
+        function updateDisplay() {
+            document.getElementById('esi-display').innerText = esi.toFixed(2);
+            document.getElementById('eur-display').innerText = (esi * PHI).toFixed(2);
+            localStorage.setItem('ESI', esi);
+        }
+
+        function syncWallet() {
+            alert("Synchronisiere mit T-ESOIST Technology Datenbank...");
+            // Hier wird der API-Call an die SaaS_ENGINE.py simuliert
+        }
+
+        setInterval(() => {
+            esi += 0.01; // Passives Einkommen durch Schwarm-Resonanz
+            updateDisplay();
+        }, 1000);
+
+        updateDisplay();
     </script>
 </body>
 </html>
