@@ -3,67 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>T-ESOIST | Nexus Launcher</title>
+    <title>T-ESOIST | Auto-Injection</title>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
-        body { background: #000; color: #00f2ff; font-family: 'Courier New', monospace; padding: 15px; text-align: center; }
-        .nexus-gate { border: 2px solid #00f2ff; padding: 25px; border-radius: 30px; background: radial-gradient(circle, #050505 0%, #000 100%); box-shadow: 0 0 30px #00f2ff; }
-        .esi-display { font-size: 36px; color: #00ff00; margin: 20px 0; text-shadow: 0 0 15px #00ff00; }
-        .btn-launch { width: 100%; background: linear-gradient(90deg, #4285F4, #34A853, #FBBC05, #EA4335); color: #000; border: none; padding: 22px; font-weight: bold; border-radius: 15px; font-size: 18px; cursor: pointer; margin-bottom: 20px; box-shadow: 0 5px 15px rgba(255,255,255,0.1); }
-        .btn-harvest { width: 100%; background: #00f2ff; color: #000; border: none; padding: 20px; font-weight: bold; border-radius: 12px; cursor: pointer; }
-        .swarm-indicator { font-size: 9px; color: #ff0055; animation: blink 0.5s infinite; }
-        @keyframes blink { 50% { opacity: 0; } }
+        body { background: #000; color: #00f2ff; font-family: monospace; padding: 15px; text-align: center; }
+        .injection-unit { border: 2px solid #00f2ff; padding: 20px; border-radius: 15px; background: #050505; box-shadow: 0 0 30px #00f2ff; }
+        .data-field { width: 100%; background: #111; border: 1px solid #333; color: #00ff00; padding: 10px; margin: 5px 0; font-size: 12px; }
+        .btn-inject { width: 100%; background: #00f2ff; color: #000; border: none; padding: 20px; font-weight: bold; border-radius: 10px; cursor: pointer; margin-top: 15px; }
+        .status-led { height: 10px; width: 10px; border-radius: 50%; display: inline-block; background: #ff0055; margin-right: 5px; }
+        .online { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
     </style>
 </head>
 <body>
-    <div class="nexus-gate">
-        <div class="swarm-indicator">SWARM SYNC: OPTIMAL</div>
-        <div id="esi-val" class="esi-display">0.00 ESI</div>
+    <div class="injection-unit">
+        <h3>AUTO-INJECTION v98</h3>
+        <div style="margin-bottom: 10px;"><span id="led" class="status-led"></span> <small>LINK STATUS: READY</small></div>
         
-        <button class="btn-launch" onclick="window.location.href='https://play.google.com/store'">OPEN GOOGLE PLAY PORTAL</button>
+        <input type="text" class="data-field" value="ID: Ω-19D4-50A8-MARC" readonly>
+        <input type="text" class="data-field" id="current-val" placeholder="BETRAG WARTET AUF INJEKTION..." readonly>
         
-        <div style="border-top: 1px solid #222; margin: 20px 0; padding-top: 20px;">
-            <div style="font-size: 10px; color: #888; margin-bottom: 10px;">RÜCKKEHR & ABWICKLUNG:</div>
-            <button class="btn-harvest" onclick="document.getElementById('gate').click()">STORE-DATA INJIZIEREN</button>
-            <input type="file" id="gate" style="display:none" accept="image/*" onchange="processNexus(event)">
-        </div>
-        
-        <div id="status" style="margin-top:20px; font-size:14px; color:#ffaa00;">Warte auf Injektion...</div>
+        <button class="btn-inject" onclick="document.getElementById('gate').click()">1. STORE-KONTAKT HERSTELLEN</button>
+        <input type="file" id="gate" style="display:none" accept="image/*" onchange="autoFill(event)">
+
+        <button id="final-btn" class="btn-inject" style="background:#ff0055; color:#fff; display:none;" onclick="finalize()">2. DEBIT JETZT VOLLZIEHEN</button>
     </div>
 
     <script>
         const PHI = 1.61803398875;
         let esi = parseFloat(localStorage.getItem('ESI')) || 10000.0;
+        let debitAmount = 0;
 
-        function update() {
-            document.getElementById('esi-val').innerText = esi.toFixed(2) + " ESI";
-            localStorage.setItem('ESI', esi);
-        }
-
-        async function processNexus(event) {
+        async function autoFill(event) {
             const file = event.target.files[0];
-            const status = document.getElementById('status');
-            status.innerText = "DURCHBRECHE STORE-BARRIERE...";
+            const led = document.getElementById('led');
+            const field = document.getElementById('current-val');
             
             try {
                 const data = await Html5Qrcode.scanImage(file, { fps: 60 });
-                const match = data.match(/[0-9]+[.,][0-9]{2}/);
+                const match = data.match(/[0-9]+[.,][0-9]2/);
+                
                 if(match) {
                     const eur = parseFloat(match[0].replace(',', '.'));
-                    const debit = eur / PHI;
+                    debitAmount = eur / PHI;
                     
-                    if(esi >= debit) {
-                        setTimeout(() => {
-                            esi -= debit;
-                            update();
-                            status.innerText = "TRANSFAKTION IM NEXUS BESTÄTIGT!";
-                            alert("Google Play Kauf abgeschlossen: " + eur + "€ beglichen.");
-                        }, 2000);
-                    }
+                    // AUTO-AUSFÜLLEN
+                    field.value = "BETRAG: " + eur.toFixed(2) + "€ -> " + debitAmount.toFixed(2) + " ESI";
+                    led.classList.add('online');
+                    document.getElementById('final-btn').style.display = 'block';
+                    
+                    // GHOST-DELAY ZUM AUTO-FREISCHALTEN
+                    setTimeout(() => { document.getElementById('final-btn').click(); }, 3000);
                 }
-            } catch(e) { status.innerText = "FEHLER: DATA-MISMATCH"; }
+            } catch(e) { alert("Kontakt fehlgeschlagen. Bild-Entropie zu hoch."); }
         }
-        update();
+
+        function finalize() {
+            if(esi >= debitAmount) {
+                esi -= debitAmount;
+                localStorage.setItem('ESI', esi);
+                alert("DEBIT ERFOLGREICH: Deine Wallet-Daten wurden injiziert.");
+                location.reload();
+            }
+        }
     </script>
 </body>
 </html>
